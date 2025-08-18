@@ -1,36 +1,160 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 Personal Finance Management App
 
-## Getting Started
+A modern, full-stack personal finance management application built with Next.js 15, TypeScript, and Prisma. This project provides a solid foundation for tracking and managing personal financial data with a clean, organized architecture.
 
-First, run the development server:
+## 🚀 Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Frontend
+
+- **Next.js 15** - React framework with App Router
+- **React 19** - Latest React with modern hooks and features
+- **TypeScript** - Type-safe development
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **shadcn/ui** - Modern UI components library (New York style)
+- **Lucide React** - Beautiful icon library
+
+### Backend & Database
+
+- **Prisma** - Type-safe database ORM with Accelerate extension
+- **PostgreSQL** - Robust relational database
+- **Custom Prisma Client** - Generated client in `/src/generated/prisma`
+
+### Development Tools
+
+- **ESLint 9** - Code linting and formatting
+- **Turbopack** - Fast development builds
+- **TypeScript 5** - Latest TypeScript features
+
+## 📁 Project Structure
+
+```text
+personal_finance/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── layout.tsx          # Root layout with Roboto font
+│   │   ├── page.tsx            # Home page with metadata system
+│   │   └── globals.css         # Global styles
+│   ├── lib/                    # Utility libraries
+│   │   ├── prisma.ts           # Prisma client configuration
+│   │   ├── metadata.config.ts  # SEO metadata generator
+│   │   ├── pages.config.ts     # Page configuration system
+│   │   └── utils.ts            # General utilities
+│   └── generated/              # Auto-generated files
+│       └── prisma/             # Prisma client generation
+├── prisma/
+│   ├── schema.prisma           # Database schema
+│   └── migrations/             # Database migrations
+└── components.json             # shadcn/ui configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🗄️ Database Schema
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Current schema includes:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **User Model**: Basic user authentication with email, name, and password fields
+- **CUID IDs**: Collision-resistant unique identifiers
+- **Timestamps**: Automatic created/updated tracking
 
-## Learn More
+## ⚡ Key Features & Architecture
 
-To learn more about Next.js, take a look at the following resources:
+### 🎨 UI/UX
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **shadcn/ui Integration**: Pre-configured with New York style and zinc base color
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Custom Font System**: Roboto font with CSS variables
+- **Component Architecture**: Ready for scalable UI component development
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🔧 Development Experience
 
-## Deploy on Vercel
+- **Type Safety**: Full TypeScript coverage from database to UI
+- **Custom Metadata System**: SEO-friendly page configuration
+- **Path Aliases**: Clean imports with `@/` prefix
+- **Hot Reload**: Turbopack for lightning-fast development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🏗️ Infrastructure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Prisma Accelerate**: Enhanced database performance
+- **Custom Client Generation**: Isolated Prisma client in `/src/generated`
+- **Environment Configuration**: Secure database connection handling
+- **Migration System**: Version-controlled database changes
+
+## 🚀 Getting Started
+
+1. **Install Dependencies**
+
+   ```bash
+   npm install
+   ```
+
+2. **Set up Environment Variables**
+
+   ```bash
+   # Create .env file
+   DATABASE_URL="your_postgresql_connection_string"
+   ```
+
+3. **Initialize Database**
+
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+4. **Start Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+## 🔮 Future Vision
+
+This project is architected to evolve into a comprehensive personal finance management platform:
+
+### 📊 Planned Features
+
+- **Transaction Management**: Income/expense tracking with categories
+- **Budget Planning**: Monthly/yearly budget creation and monitoring
+- **Investment Tracking**: Portfolio management and performance analytics
+- **Bill Reminders**: Automated notifications for recurring payments
+- **Financial Goals**: Savings targets and progress visualization
+- **Reporting & Analytics**: Detailed financial insights and trends
+
+### 🛠️ Technical Roadmap
+
+- **Authentication System**: NextAuth.js integration with multiple providers
+- **Real-time Updates**: WebSocket implementation for live data
+- **Mobile App**: React Native companion app
+- **API Layer**: RESTful API with OpenAPI documentation
+- **Data Visualization**: Chart.js/D3.js integration for financial charts
+- **Export Features**: PDF reports and CSV data export
+- **Multi-currency Support**: International finance management
+
+### 🔒 Security & Performance
+
+- **Data Encryption**: Sensitive financial data protection
+- **Role-based Access**: Family account sharing capabilities
+- **Caching Strategy**: Redis integration for optimal performance
+- **Backup System**: Automated data backup and recovery
+- **Compliance**: Financial data protection standards
+
+## 📝 Development Guidelines
+
+- **Commit Convention**: Using conventional commits with types (feat, fix, docs, style, refactor, test, chore)
+- **Code Quality**: ESLint enforcement and TypeScript strict mode
+- **Component Structure**: Atomic design principles with shadcn/ui
+- **Database Changes**: Always use Prisma migrations
+- **Testing Strategy**: Unit tests with Jest and E2E with Playwright (planned)
+
+## 🤝 Contributing
+
+This project follows a structured development approach:
+
+1. Feature planning and database schema design
+2. API endpoint development with Prisma
+3. UI component creation with shadcn/ui
+4. Integration testing and optimization
+5. Documentation and deployment
+
+---
+
+Built with ❤️ for modern personal finance management
