@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { generateMetadata } from "@/lib/metadata.config";
 import path from "path";
 import { fileURLToPath } from "url";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +18,9 @@ export default function Home() {
       <p className="text-lg text-muted-foreground mb-8">
         Manage your finances effectively with our app.
       </p>
+      <Link href="/auth/signin">
+        <Button variant="outline">Accedi</Button>
+      </Link>
     </section>
   );
 }
