@@ -41,3 +41,48 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# IDE/editor config
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.history/
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Backup & temp files
+*.bak
+*.tmp
+*.swp
+*.swo
+*~
+*.orig
+
+# Log files
+*.log
+logs/
+
+# Images
+docs/images/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.Trash-*/
