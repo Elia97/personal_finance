@@ -1,4 +1,4 @@
-# 🤝 Contributing Guide
+# Contributing Guide
 
 ## Welcome
 
@@ -16,7 +16,7 @@ We believe in:
 
 ## How to Contribute
 
-### 🐛 Reporting Bugs
+### Reporting Bugs
 
 1. Check if the bug has already been reported in Issues
 2. Create a new issue with:
@@ -26,7 +26,7 @@ We believe in:
    - Screenshots if applicable
    - Environment details (OS, browser, Node.js version)
 
-### 💡 Suggesting Features
+### Suggesting Features
 
 1. Check existing issues and discussions
 2. Create a feature request with:

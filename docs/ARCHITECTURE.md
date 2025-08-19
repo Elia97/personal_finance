@@ -1,4 +1,4 @@
-# 🏗️ Architecture Documentation
+# Architecture Documentation
 
 ## Overview
 
@@ -64,7 +64,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 
 ## Project Structure
 
-```text
+```tree
 personal_finance/
 ├── src/
 │   ├── app/                      # Next.js App Router
@@ -97,15 +97,17 @@ personal_finance/
 │   ├── ARCHITECTURE.md           # This file
 │   ├── SETUP.md                  # Development setup guide
 │   ├── API.md                    # API documentation
+│   ├── DATABASE.md               # DB documentation
 │   └── CONTRIBUTING.md           # Contribution guidelines
 │
 ├── components.json               # shadcn/ui configuration
-├── tsconfig.json                 # TypeScript configuration
-├── next.config.ts                # Next.js configuration
-├── postcss.config.mjs            # PostCSS configuration
 ├── eslint.config.mjs             # ESLint configuration
+├── LICENSE                       # MIT License file
+├── next.config.ts                # Next.js configuration
 ├── package.json                  # Project dependencies
-└── README.md                     # Project overview
+├── postcss.config.mjs            # PostCSS configuration
+├── README.md                     # Project overview
+└── tsconfig.json                 # TypeScript configuration
 ```
 
 ## Key Design Decisions

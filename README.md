@@ -1,8 +1,8 @@
-# 💰 Personal Finance Management App
+# Personal Finance Management App
 
 A modern, full-stack personal finance management application built with Next.js 15, TypeScript, and Prisma for comprehensive financial tracking and management.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Install dependencies
@@ -21,27 +21,28 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS 4, shadcn/ui
 - **Backend**: Prisma ORM with Accelerate, PostgreSQL
 - **Development**: ESLint 9, Turbopack, TypeScript 5
 
-## � Documentation
+## Documentation
 
 - **[Architecture](./docs/ARCHITECTURE.md)** - Detailed technical architecture and design decisions
 - **[Setup Guide](./docs/SETUP.md)** - Complete development environment setup
 - **[API Documentation](./docs/API.md)** - API endpoints and data models
+- **[Database Schema](./docs/DATABASE.md)** - Entity-relationship model and database structure
 - **[Contributing](./docs/CONTRIBUTING.md)** - Development guidelines and contribution process
 
-## 🎯 Current Features
+## Current Features
 
 - Clean, responsive UI with shadcn/ui components
 - Type-safe database layer with Prisma
 - SEO-optimized page structure
 - Development-ready environment with hot reload
 
-## 🔮 Roadmap
+## Roadmap
 
 - **Phase 1**: User authentication and profile management
 - **Phase 2**: Transaction tracking and categorization
@@ -49,26 +50,13 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 - **Phase 4**: Investment tracking and analytics
 - **Phase 5**: Reporting and data visualization
 
-## � Project Structure
-
-```text
-personal_finance/
-├── docs/                      # Documentation
-├── src/
-│   ├── app/                   # Next.js App Router
-│   ├── lib/                   # Utilities and configurations
-│   └── generated/prisma/      # Generated Prisma client
-├── prisma/                    # Database schema and migrations
-└── components.json            # shadcn/ui configuration
-```
-
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please read our [Contributing Guide](./docs/CONTRIBUTING.md) for details on our development process and coding standards.
 
-## 📄 License
+## License
 
-This project is private and proprietary.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

@@ -1,501 +1,248 @@
-# 📡 API Documentation
+# API Documentation
 
 ## Overview
 
-The Personal Finance Management App API is built with Next.js App Router, providing type-safe endpoints with full TypeScript integration. All API routes follow RESTful conventions and return JSON responses.
+The Personal Finance Management App API is built with Next.js (App Router), TypeScript, and Prisma ORM. All endpoints are RESTful and return JSON. This documentation is always aligned with the current database schema.
 
-## Base URL
+---
 
-```text
-Development: http://localhost:3000/api
-Production: https://your-domain.com/api
-```
+## Data Model Summary
 
-## Current Database Schema
-
-### User Model
+### User
 
 ```typescript
 model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String
+  password       String
+  role           UserRole?
+  phone          String?
+  avatarUrl      String?
+  language       String?
+  country        String?
+  dateOfBirth    DateTime?
+  status         UserStatus @default(ACTIVE)
+  lastLogin      DateTime?
+  emailVerified  Boolean   @default(false)
+  settings       Json?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  // ...relations
+}
+```
+
+### Account
+
+```typescript
+model Account {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  accountNumber String?
+  type          AccountType
+  currency      String   @default("EUR")
+  balance       Decimal  @db.Decimal(10, 2) @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  // ...relations
+}
+```
+
+### Category
+
+```typescript
+model Category {
+  id          String       @id @default(cuid())
+  type        CategoryType
+  name        String?
+  parentId    String?
+  userId      String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  // ...relations
+}
+```
+
+### Transaction
+
+```typescript
+model Transaction {
+  id          String          @id @default(cuid())
+  userId      String
+  accountId   String
+  categoryId  String
+  amount      Decimal         @db.Decimal(10, 2)
+  date        DateTime
+  description String?
+  type        TransactionType
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  // ...relations
+}
+```
+
+### Transfer
+
+```typescript
+model Transfer {
+  id              String    @id @default(cuid())
+  userId          String
+  fromAccountId   String
+  toAccountId     String
+  amount          Decimal   @db.Decimal(10, 2)
+  date            DateTime
+  description     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  // ...relations
+}
+```
+
+### Budget & BudgetCategory
+
+```typescript
+model Budget {
   id          String    @id @default(cuid())
-  email       String    @unique
+  userId      String
   name        String
-  password    String
+  periodStart DateTime
+  periodEnd   DateTime
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  // ...relations
+}
+
+model BudgetCategory {
+  id              String   @id @default(cuid())
+  budgetId        String
+  categoryId      String
+  allocatedAmount Decimal   @db.Decimal(10, 2)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  // ...relations
 }
 ```
 
-#### User Fields
-
-| Field       | Type     | Description                | Constraints       |
-| ----------- | -------- | -------------------------- | ----------------- |
-| `id`        | String   | Unique identifier          | CUID, Primary Key |
-| `email`     | String   | User email address         | Unique, Required  |
-| `name`      | String   | User display name          | Required          |
-| `password`  | String   | Hashed password            | Required          |
-| `createdAt` | DateTime | Account creation timestamp | Auto-generated    |
-| `updatedAt` | DateTime | Last update timestamp      | Auto-updated      |
-
-## Future API Endpoints
-
-The following endpoints are planned for implementation:
-
-### Authentication Endpoints
-
-#### POST /api/auth/register
-
-Register a new user account.
-
-**Request Body:**
+### Goal
 
 ```typescript
-{
-  email: string;
-  name: string;
-  password: string;
+model Goal {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  targetAmount  Decimal  @db.Decimal(10, 2)
+  currentAmount Decimal  @db.Decimal(10, 2) @default(0)
+  deadline      DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  // ...relations
 }
 ```
 
-**Response:**
+### Investment (Advanced Structure)
 
 ```typescript
-{
-  success: boolean;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    createdAt: string;
-  };
-  token?: string;
+model InvestmentAsset {
+  id        String   @id @default(cuid())
+  name      String
+  symbol    String?
+  isin      String?
+  type      AssetType
+  currency  String
+  exchange  String?
+  country   String?
+  sector    String?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // ...relations
+}
+
+enum AssetType {
+  STOCK
+  CRYPTO
+  ETF
+  FUND
+  BOND
+  DERIVATIVE
+  COMMODITY
+  OTHER
+}
+
+model Investment {
+  id            String   @id @default(cuid())
+  userId        String
+  assetId       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  // ...relations
+}
+
+model InvestmentTransaction {
+  id            String   @id @default(cuid())
+  investmentId  String
+  accountId     String
+  date          DateTime
+  type          InvestmentTransactionType
+  quantity      Decimal
+  price         Decimal
+  total         Decimal
+  fee           Decimal?
+  note          String?
+  // ...relations
+}
+
+enum InvestmentTransactionType {
+  BUY
+  SELL
+  DIVIDEND
+  FEE
+  INTEREST
+  OTHER
 }
 ```
 
-#### POST /api/auth/login
-
-Authenticate user credentials.
-
-**Request Body:**
-
-```typescript
-{
-  email: string;
-  password: string;
-}
-```
-
-**Response:**
-
-```typescript
-{
-  success: boolean;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  }
-  token: string;
-}
-```
-
-#### POST /api/auth/logout
-
-Invalidate user session.
-
-**Response:**
-
-```typescript
-{
-  success: boolean;
-  message: string;
-}
-```
-
-### User Management
-
-#### GET /api/users/profile
-
-Get current user profile.
-
-**Headers:**
-
-```http
-Authorization: Bearer <token>
-```
-
-**Response:**
-
-```typescript
-{
-  success: boolean;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-  }
-}
-```
-
-#### PUT /api/users/profile
-
-Update user profile information.
-
-**Headers:**
-
-```http
-Authorization: Bearer <token>
-```
-
-**Request Body:**
-
-```typescript
-{
-  name?: string;
-  email?: string;
-}
-```
-
-**Response:**
-
-```typescript
-{
-  success: boolean;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    updatedAt: string;
-  }
-}
-```
-
-### Transactions (Planned)
-
-#### GET /api/transactions
-
-Get user transactions with pagination and filtering.
-
-**Query Parameters:**
-
-- `page` (number): Page number (default: 1)
-- `limit` (number): Items per page (default: 50)
-- `category` (string): Filter by category
-- `type` (string): Filter by type (income/expense)
-- `startDate` (string): Filter from date (ISO 8601)
-- `endDate` (string): Filter to date (ISO 8601)
-
-**Response:**
-
-```typescript
-{
-  success: boolean;
-  data: {
-    transactions: Transaction[];
-    pagination: {
-      page: number;
-      limit: number;
-      total: number;
-      totalPages: number;
-    };
-  };
-}
-```
-
-#### POST /api/transactions
-
-Create a new transaction.
-
-**Request Body:**
-
-```typescript
-{
-  amount: number;
-  description: string;
-  category: string;
-  type: "income" | "expense";
-  date: string; // ISO 8601
-  tags?: string[];
-}
-```
-
-#### GET /api/transactions/:id
-
-Get a specific transaction by ID.
-
-#### PUT /api/transactions/:id
-
-Update a transaction.
-
-#### DELETE /api/transactions/:id
-
-Delete a transaction.
-
-### Categories (Planned)
-
-#### GET /api/categories
-
-Get all transaction categories.
-
-#### POST /api/categories
-
-Create a new category.
-
-#### PUT /api/categories/:id
-
-Update a category.
-
-#### DELETE /api/categories/:id
-
-Delete a category.
-
-### Budgets (Planned)
-
-#### GET /api/budgets
-
-Get user budgets.
-
-#### POST /api/budgets
-
-Create a new budget.
-
-#### PUT /api/budgets/:id
-
-Update a budget.
-
-#### DELETE /api/budgets/:id
-
-Delete a budget.
-
-### Analytics (Planned)
-
-#### GET /api/analytics/summary
-
-Get financial summary data.
-
-**Query Parameters:**
-
-- `period` (string): Time period (month/quarter/year)
-- `year` (number): Specific year
-- `month` (number): Specific month
-
-**Response:**
-
-```typescript
-{
-  success: boolean;
-  data: {
-    totalIncome: number;
-    totalExpenses: number;
-    netIncome: number;
-    topCategories: {
-      category: string;
-      amount: number;
-      percentage: number;
-    }
-    [];
-    monthlyTrend: {
-      month: string;
-      income: number;
-      expenses: number;
-    }
-    [];
-  }
-}
-```
-
-#### GET /api/analytics/trends
-
-Get spending trends and patterns.
+---
+
+## Main Endpoints (to implement)
+
+- Authentication: `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`
+- User management: `/api/users/profile` (GET/PUT)
+- Accounts: `/api/accounts` (CRUD)
+- Transactions: `/api/transactions` (CRUD, filters, pagination)
+- Transfers: `/api/transfers` (CRUD)
+- Categories: `/api/categories` (CRUD, hierarchy, customization)
+- Budgets: `/api/budgets` (CRUD)
+- Goals: `/api/goals` (CRUD)
+- Investments: `/api/investments`, `/api/investment-assets`, `/api/investment-transactions` (CRUD)
+- Analytics: `/api/analytics/summary`, `/api/analytics/trends`
+
+---
 
 ## Error Handling
 
-All API endpoints follow consistent error response format:
+All endpoints return errors in the following format:
 
 ```typescript
 {
-  success: false;
+  success: false,
   error: {
-    code: string;
-    message: string;
-    details?: any;
-  };
-}
-```
-
-### Common Error Codes
-
-| Code               | Status | Description              |
-| ------------------ | ------ | ------------------------ |
-| `VALIDATION_ERROR` | 400    | Invalid request data     |
-| `UNAUTHORIZED`     | 401    | Authentication required  |
-| `FORBIDDEN`        | 403    | Insufficient permissions |
-| `NOT_FOUND`        | 404    | Resource not found       |
-| `CONFLICT`         | 409    | Resource already exists  |
-| `RATE_LIMITED`     | 429    | Too many requests        |
-| `INTERNAL_ERROR`   | 500    | Server error             |
-
-## Authentication
-
-### JWT Token Structure
-
-```typescript
-{
-  sub: string; // User ID
-  email: string; // User email
-  name: string; // User name
-  iat: number; // Issued at
-  exp: number; // Expires at
-}
-```
-
-### Token Usage
-
-Include the JWT token in the Authorization header:
-
-```http
-Authorization: Bearer <your-jwt-token>
-```
-
-## Rate Limiting
-
-API endpoints are rate-limited to prevent abuse:
-
-- **Authentication endpoints**: 5 requests per minute
-- **General endpoints**: 100 requests per minute
-- **Analytics endpoints**: 50 requests per minute
-
-## Data Types
-
-### Common TypeScript Interfaces
-
-```typescript
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface Transaction {
-  id: string;
-  userId: string;
-  amount: number;
-  description: string;
-  category: string;
-  type: "income" | "expense";
-  date: Date;
-  tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  color: string;
-  icon: string;
-  type: "income" | "expense" | "both";
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface Budget {
-  id: string;
-  name: string;
-  amount: number;
-  period: "monthly" | "yearly";
-  categoryId: string;
-  userId: string;
-  startDate: Date;
-  endDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
-```
-
-## Development
-
-### Creating New Endpoints
-
-1. Create route handler in `src/app/api/[route]/route.ts`
-2. Implement HTTP methods (GET, POST, PUT, DELETE)
-3. Add input validation with Zod
-4. Update this documentation
-5. Add TypeScript types
-
-### Example Route Handler
-
-```typescript
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-import prisma from "@/lib/prisma";
-
-const createUserSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(1),
-  password: z.string().min(8),
-});
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const validatedData = createUserSchema.parse(body);
-
-    const user = await prisma.user.create({
-      data: validatedData,
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        createdAt: true,
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      user,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: "VALIDATION_ERROR",
-          message: "Invalid input data",
-        },
-      },
-      { status: 400 }
-    );
+    code: string,
+    message: string,
+    details?: any
   }
 }
 ```
 
-## Testing
+---
 
-### API Testing Tools
+## Development Notes
 
-- **Postman** - GUI-based API testing
-- **Insomnia** - Lightweight API client
-- **Thunder Client** - VS Code extension
-- **curl** - Command-line testing
+- All changes to the Prisma schema must be reflected here.
+- Add new endpoints and models as the backend evolves.
+- Use TypeScript types and Zod for validation in all route handlers.
 
-### Example Test Requests
+---
 
-```bash
-# Register new user
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","name":"Test User","password":"password123"}'
-
-# Login
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"password123"}'
-```
-
-This API documentation will be updated as new endpoints are implemented and the application evolves.
+This document is the single source of truth for backend and API development. Always keep it up to date with the codebase.
