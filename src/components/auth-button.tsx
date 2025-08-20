@@ -19,7 +19,7 @@ export default function AuthButton({}) {
   if (status === "loading") {
     return (
       <Button variant="ghost" disabled>
-        Caricamento...
+        Loading...
       </Button>
     );
   }
@@ -29,9 +29,6 @@ export default function AuthButton({}) {
       <div className="flex gap-2">
         <Button onClick={() => signIn("google")} variant="outline">
           Google
-        </Button>
-        <Button onClick={() => signIn("github")} variant="outline">
-          GitHub
         </Button>
         <Button onClick={() => router.push("/auth/signin")} variant="default">
           Login
@@ -64,11 +61,11 @@ export default function AuthButton({}) {
             {session.user.email}
           </p>
           <p className="text-xs leading-none text-muted-foreground">
-            Ruolo: {session.user.role}
+            Role: {session.user.role}
           </p>
           {session.user.country && (
             <p className="text-xs leading-none text-muted-foreground">
-              Paese: {session.user.country}
+              Country: {session.user.country}
             </p>
           )}
           <p className="text-xs leading-none text-muted-foreground">
@@ -85,19 +82,21 @@ export default function AuthButton({}) {
           </p>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => (window.location.href = "/profile")}>
-          Profilo
+        <DropdownMenuItem onClick={() => router.push("/profile")}>
+          Profile
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => (window.location.href = "/settings")}>
-          Impostazioni
+        <DropdownMenuItem onClick={() => router.push("/settings")}>
+          Settings
         </DropdownMenuItem>
         {session.user.role === "ADMIN" && (
-          <DropdownMenuItem onClick={() => (window.location.href = "/admin")}>
+          <DropdownMenuItem onClick={() => router.push("/admin")}>
             Admin Panel
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => signOut()} variant="destructive">
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

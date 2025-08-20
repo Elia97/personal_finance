@@ -51,8 +51,8 @@
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.55 0.18 250); /* blu acceso */
+  --primary-foreground: oklch(0.98 0.01 260);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.967 0.001 286.375);
@@ -118,5 +118,36 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Scrollbar base */
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: oklch(0.3 0.18 250);
+  border-radius: 8px;
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background: oklch(0.55 0.18 250);
+  border-radius: 8px;
+}
+
+/* Thumb hover */
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.45 0.18 250);
+}
+
+/* Firefox */
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.55 0.18 250) oklch(0.3 0.18 250);
   }
 }

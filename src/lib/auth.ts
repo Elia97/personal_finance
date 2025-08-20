@@ -1,6 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -72,16 +71,28 @@ const getProviders = () => {
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         allowDangerousEmailAccountLinking: true, // Per collegare account con stessa email
-      })
-    );
-  }
-
-  if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
-    providers.push(
-      GitHubProvider({
-        clientId: process.env.GITHUB_ID,
-        clientSecret: process.env.GITHUB_SECRET,
-        allowDangerousEmailAccountLinking: true,
+        authorization: {
+          params: {
+            prompt: "select_account",
+          },
+        },
+        profile(profile) {
+          let name = "";
+          if (profile.given_name && profile.family_name) {
+            name = `${profile.given_name} ${profile.family_name}`;
+          } else if (profile.given_name) {
+            name = profile.given_name;
+          } else if (profile.name) {
+            name = profile.name;
+          }
+          return {
+            id: profile.sub,
+            email: profile.email,
+            name,
+            image: profile.picture,
+            emailVerified: profile.email_verified ? new Date() : null,
+          };
+        },
       })
     );
   }
@@ -295,28 +306,13 @@ export const authOptions: NextAuthOptions = {
           id: token.id as string,
           name: token.name ?? "",
           email: token.email ?? "",
-          image: token.picture ?? null,
+          image: token.picture ?? undefined,
           role: (token as ExtendedJWT).role ?? "USER",
-          phone:
-            typeof (token as ExtendedJWT).phone === "string"
-              ? (token as ExtendedJWT).phone
-              : null,
-          language:
-            typeof (token as ExtendedJWT).language === "string"
-              ? (token as ExtendedJWT).language
-              : null,
-          country:
-            typeof (token as ExtendedJWT).country === "string"
-              ? (token as ExtendedJWT).country
-              : null,
-          status:
-            typeof (token as ExtendedJWT).status === "string"
-              ? ((token as ExtendedJWT).status as UserStatus)
-              : "ACTIVE",
-          lastLogin:
-            (token as ExtendedJWT).lastLogin instanceof Date
-              ? (token as ExtendedJWT).lastLogin
-              : null,
+          phone: (token as ExtendedJWT).phone ?? undefined,
+          language: (token as ExtendedJWT).language ?? undefined,
+          country: (token as ExtendedJWT).country ?? undefined,
+          status: (token as ExtendedJWT).status ?? "ACTIVE",
+          lastLogin: (token as ExtendedJWT).lastLogin ?? undefined,
         },
       };
 

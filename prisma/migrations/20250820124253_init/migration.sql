@@ -1,14 +1,8 @@
 -- CreateEnum
-CREATE
-TYPE "public"."UserRole" AS ENUM ('USER', 'ADMIN');
+CREATE TYPE "public"."UserRole" AS ENUM ('USER', 'ADMIN');
 
 -- CreateEnum
-CREATE
-TYPE "public"."UserStatus" AS ENUM (
-    'ACTIVE',
-    'INACTIVE',
-    'BANNED'
-);
+CREATE TYPE "public"."UserStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'BANNED');
 
 -- CreateTable
 CREATE TABLE "public"."accounts" (
@@ -24,6 +18,7 @@ CREATE TABLE "public"."accounts" (
     "scope" TEXT,
     "id_token" TEXT,
     "session_state" TEXT,
+
     CONSTRAINT "accounts_pkey" PRIMARY KEY ("id")
 );
 
@@ -33,6 +28,7 @@ CREATE TABLE "public"."sessions" (
     "sessionToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
+
     CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
 );
 
@@ -43,7 +39,7 @@ CREATE TABLE "public"."users" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
-    "password" TEXT NOT NULL,
+    "password" TEXT,
     "role" "public"."UserRole" DEFAULT 'USER',
     "phone" TEXT,
     "language" TEXT,
@@ -54,6 +50,7 @@ CREATE TABLE "public"."users" (
     "settings" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
@@ -65,32 +62,22 @@ CREATE TABLE "public"."verificationtokens" (
 );
 
 -- CreateIndex
-CREATE UNIQUE
-INDEX "accounts_provider_providerAccountId_key" ON "public"."accounts" (
-    "provider",
-    "providerAccountId"
-);
+CREATE UNIQUE INDEX "accounts_provider_providerAccountId_key" ON "public"."accounts"("provider", "providerAccountId");
 
 -- CreateIndex
-CREATE UNIQUE
-INDEX "sessions_sessionToken_key" ON "public"."sessions" ("sessionToken");
+CREATE UNIQUE INDEX "sessions_sessionToken_key" ON "public"."sessions"("sessionToken");
 
 -- CreateIndex
-CREATE UNIQUE
-INDEX "users_email_key" ON "public"."users" ("email");
+CREATE UNIQUE INDEX "users_email_key" ON "public"."users"("email");
 
 -- CreateIndex
-CREATE UNIQUE
-INDEX "verificationtokens_token_key" ON "public"."verificationtokens" ("token");
+CREATE UNIQUE INDEX "verificationtokens_token_key" ON "public"."verificationtokens"("token");
 
 -- CreateIndex
-CREATE UNIQUE
-INDEX "verificationtokens_identifier_token_key" ON "public"."verificationtokens" ("identifier", "token");
+CREATE UNIQUE INDEX "verificationtokens_identifier_token_key" ON "public"."verificationtokens"("identifier", "token");
 
 -- AddForeignKey
-ALTER TABLE "public"."accounts"
-ADD CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."accounts" ADD CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."sessions"
-ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."sessions" ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
