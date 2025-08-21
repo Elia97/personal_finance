@@ -40,19 +40,19 @@ export default function AuthButton({}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
+        <Button variant="ghost" className="relative size-16 rounded-full">
+          <Avatar className="size-16">
             <AvatarImage
               src={session.user.image || ""}
               alt={session.user.name || ""}
             />
-            <AvatarFallback>
+            <AvatarFallback className="text-3xl font-serif">
               {session.user.name?.charAt(0) || "U"}
             </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-56" align="start" forceMount>
         <div className="flex flex-col space-y-1 p-2">
           <p className="text-sm font-medium leading-none">
             {session.user.name}

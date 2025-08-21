@@ -4,7 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import AuthButton from "@/components/auth-button";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,9 +19,6 @@ export default function Home() {
   return (
     <>
       <section className="w-full flex flex-col items-center justify-center min-h-screen py-4">
-        <div className="fixed top-6 right-12 z-20">
-          <AuthButton />
-        </div>
         {/* Content with enhanced styling */}
         <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
           {(() => {
