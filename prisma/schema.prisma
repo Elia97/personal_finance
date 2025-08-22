@@ -29,6 +29,7 @@ model Account {
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  investmentTransactions InvestmentTransaction[]
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -64,13 +65,14 @@ model User {
 
   // Relations
   accounts        Account[]
+  bankAccounts    BankAccount[]
   sessions        Session[]
-  // bankAccounts    BankAccount[]
-  // transactions    Transaction[]
-  // transfers       Transfer[]
-  // budgets         Budget[]
-  // goals           Goal[]
-  // investments     Investment[]
+  categories      Category[]
+  transactions    Transaction[]
+  transfers       Transfer[]
+  budgets         Budget[]
+  goals           Goal[]
+  investments     Investment[]
 
   @@map("users")
 }
@@ -93,4 +95,229 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+enum AccountType {
+  BANK
+  CASH
+  CREDIT_CARD
+  CRYPTO
+  INVESTMENT
+  OTHER
+}
+
+model BankAccount {
+  id            String      @id @default(cuid())
+  userId        String
+  name          String
+  accountNumber String?
+  type          AccountType
+  currency      String      @default("EUR")
+  balance       Decimal     @db.Decimal(10, 2) @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  investmentTransactions InvestmentTransaction[] @relation("BankAccountInvestmentTransactions")
+  transfersOut Transfer[]    @relation("TransfersOut")
+  transfersIn  Transfer[]    @relation("TransfersIn")
+
+  @@index([accountNumber])
+}
+
+// --- CATEGORY ---
+model Category {
+  id          String       @id @default(cuid())
+  type        CategoryType
+  name        String?
+  parentId    String?
+  userId      String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+  parent       Category?     @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children     Category[]    @relation("CategoryHierarchy")
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  budgetCategories BudgetCategory[]
+
+  @@unique([type, userId], name: "unique_system_category_per_user")
+}
+
+enum CategoryType {
+  SALARY
+  FREELANCE
+  INVESTMENT_RETURN
+  GIFT_RECEIVED
+  OTHER_INCOME
+  FOOD
+  HOUSING
+  TRANSPORTATION
+  UTILITIES
+  ENTERTAINMENT
+  HEALTHCARE
+  SHOPPING
+  EDUCATION
+  OTHER_EXPENSE
+}
+
+// --- TRANSACTION ---
+model Transaction {
+  id          String          @id @default(cuid())
+  userId      String
+  bankAccountId String
+  categoryId  String
+  amount      Decimal         @db.Decimal(10, 2)
+  date        DateTime
+  description String?
+  type        TransactionType
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relations
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankAccount BankAccount     @relation(fields: [bankAccountId], references: [id], onDelete: Cascade)
+  category    Category        @relation(fields: [categoryId], references: [id])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+// --- TRANSFER ---
+model Transfer {
+  id              String    @id @default(cuid())
+  userId          String
+  fromAccountId   String
+  toAccountId     String
+  amount          Decimal   @db.Decimal(10, 2)
+  date            DateTime
+  description     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromAccount     BankAccount   @relation("TransfersOut", fields: [fromAccountId], references: [id], onDelete: Cascade)
+  toAccount       BankAccount   @relation("TransfersIn", fields: [toAccountId], references: [id], onDelete: Cascade)
+}
+// --- BUDGET ---
+model Budget {
+  id          String    @id @default(cuid())
+  userId      String
+  name        String
+  periodStart DateTime
+  periodEnd   DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  budgetCategories BudgetCategory[]
+}
+
+model BudgetCategory {
+  id              String   @id @default(cuid())
+  budgetId        String
+  categoryId      String
+  allocatedAmount Decimal   @db.Decimal(10, 2)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  budget   Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([budgetId, categoryId])
+}
+
+// --- GOAL ---
+model Goal {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  targetAmount  Decimal  @db.Decimal(10, 2)
+  currentAmount Decimal  @db.Decimal(10, 2) @default(0)
+  deadline      DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// --- INVESTMENT ---
+model InvestmentAsset {
+  id        String   @id @default(cuid())
+  name      String
+  symbol    String?
+  isin      String?
+  type      AssetType
+  currency  String
+  exchange  String?
+  country   String?
+  sector    String?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  investments Investment[]
+}
+
+enum AssetType {
+  STOCK
+  CRYPTO
+  ETF
+  FUND
+  BOND
+  DERIVATIVE
+  COMMODITY
+  OTHER
+}
+
+model Investment {
+  id            String   @id @default(cuid())
+  userId        String
+  assetId       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset         InvestmentAsset @relation(fields: [assetId], references: [id])
+  transactions  InvestmentTransaction[]
+}
+
+model InvestmentTransaction {
+  id            String   @id @default(cuid())
+  investmentId  String
+  accountId     String
+  bankAccountId String
+  date          DateTime
+  type          InvestmentTransactionType
+  quantity      Decimal
+  price         Decimal
+  total         Decimal
+  fee           Decimal?
+  note          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  investment    Investment @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+  account       Account    @relation(fields: [accountId], references: [id])
+  bankAccount   BankAccount @relation("BankAccountInvestmentTransactions", fields: [bankAccountId], references: [id])
+}
+
+enum InvestmentTransactionType {
+  BUY
+  SELL
+  DIVIDEND
+  FEE
+  INTEREST
+  OTHER
 }
