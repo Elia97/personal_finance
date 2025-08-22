@@ -33,6 +33,60 @@
     "privacyPolicy": "Informativa sulla privacy",
     "termsOfService": "Termini di servizio"
   },
+  "auth": {
+    "error": {
+      "invalidCredentials": "Credenziali non valide. Controlla email e password.",
+      "accountNotLinked": "Questo account è già collegato a un altro provider.",
+      "oauthError": "Si è verificato un errore durante l'autenticazione OAuth.",
+      "generic": "Si è verificato un errore durante l'accesso. Riprova.",
+      "requiredFields": "Email e password sono obbligatori",
+      "inactiveAccount": "Il tuo account non è attivo. Contatta il supporto.",
+      "connection": "Errore di connessione. Riprova più tardi.",
+      "registration": "Errore durante la registrazione",
+      "registrationSuccessButLogin": "Registrazione avvenuta, ma errore durante l'accesso.",
+      "allFieldsRequired": "Tutti i campi sono obbligatori",
+      "passwordsNoMatch": "Le password non corrispondono",
+      "acceptTerms": "Devi accettare i termini di servizio"
+    },
+    "oauth": {
+      "continueWithGoogle": "Continua con Google",
+      "or": "oppure"
+    },
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Ricordami",
+      "forgotPassword": "Password dimenticata?",
+      "signIn": "Accedi",
+      "signingIn": "Accesso in corso..."
+    },
+    "signup": {
+      "name": "Nome",
+      "email": "Email",
+      "password": "Password",
+      "repeatPassword": "Ripeti password",
+      "acceptTerms": "Accetto i",
+      "terms": "termini di servizio",
+      "signUp": "Registrati",
+      "registering": "Registrazione in corso..."
+    },
+    "switch": {
+      "noAccount": "Non hai un account? ",
+      "alreadyAccount": "Hai già un account? ",
+      "signUpHere": "Registrati qui",
+      "signInHere": "Accedi qui"
+    },
+    "features": {
+      "security": "Sicurezza\nbancaria",
+      "analytics": "Analisi\navanzate",
+      "management": "Gestione\ntutto-in-uno"
+    },
+    "placeholder": {
+      "email": "email@esempio.com",
+      "password": "••••••••",
+      "name": "Mario Rossi"
+    }
+  },
   "dashboard": {
     "title": "Dashboard - Personal Finance",
     "description": "Dashboard completa per il controllo delle tue finanze personali."

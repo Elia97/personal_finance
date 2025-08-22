@@ -33,6 +33,60 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
   },
+  "auth": {
+    "error": {
+      "invalidCredentials": "Invalid credentials. Please check your email and password.",
+      "accountNotLinked": "This account is already linked with another provider.",
+      "oauthError": "An error occurred during OAuth authentication.",
+      "generic": "An error occurred during sign in. Please try again.",
+      "requiredFields": "Email and password are required",
+      "inactiveAccount": "Your account is not active. Please contact support.",
+      "connection": "Connection error. Please try again later.",
+      "registration": "Registration error",
+      "registrationSuccessButLogin": "Registration successful, but error during login.",
+      "allFieldsRequired": "All fields are required",
+      "passwordsNoMatch": "Passwords do not match",
+      "acceptTerms": "You must accept the terms of service"
+    },
+    "oauth": {
+      "continueWithGoogle": "Continue with Google",
+      "or": "or"
+    },
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign in",
+      "signingIn": "Signing in..."
+    },
+    "signup": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "repeatPassword": "Repeat password",
+      "acceptTerms": "I accept the",
+      "terms": "terms of service",
+      "signUp": "Sign up",
+      "registering": "Registering..."
+    },
+    "switch": {
+      "noAccount": "Don't have an account? ",
+      "alreadyAccount": "Already have an account? ",
+      "signUpHere": "Sign up here",
+      "signInHere": "Sign in here"
+    },
+    "features": {
+      "security": "Bank-level\nSecurity",
+      "analytics": "Advanced\nAnalytics",
+      "management": "All-in-one\nManagement"
+    },
+    "placeholder": {
+      "email": "email@example.com",
+      "password": "••••••••",
+      "name": "John Doe"
+    }
+  },
   "dashboard": {
     "title": "Dashboard - Personal Finance",
     "description": "Complete dashboard for controlling your personal finances."

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function AuthForm() {
   const [isNewUser, setIsNewUser] = useState(false);
@@ -44,32 +45,32 @@ export default function AuthForm() {
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const urlError = searchParams.get("error");
 
+  const t = useTranslations("auth");
+
   useEffect(() => {
     if (urlError) {
       switch (urlError) {
         case "CredentialsSignin":
-          setError(
-            "Invalid credentials. Please check your email and password."
-          );
+          setError(t("error.invalidCredentials"));
           break;
         case "OAuthAccountNotLinked":
-          setError("This account is already linked with another provider.");
+          setError(t("error.accountNotLinked"));
           break;
         case "OAuthCallback":
-          setError("An error occurred during OAuth authentication.");
+          setError(t("error.oauthError"));
           break;
         default:
-          setError("An error occurred during sign in. Please try again.");
+          setError(t("error.generic"));
       }
     }
-  }, [urlError]);
+  }, [urlError, t]);
 
   // LOGIN
   const handleCredentialsSignIn = async () => {
     setIsLoading(true);
     setError("");
     if (!email || !password) {
-      setError("Email and password are required");
+      setError(t("error.requiredFields"));
       setIsLoading(false);
       return;
     }
@@ -80,18 +81,18 @@ export default function AuthForm() {
         redirect: false,
       });
       if (result?.error) {
-        setError("Invalid credentials. Please try again.");
+        setError(t("error.invalidCredentials"));
       } else if (result?.ok) {
         const session = await getSession();
         if (session?.user?.status !== "ACTIVE") {
-          setError("Your account is not active. Please contact support.");
+          setError(t("error.inactiveAccount"));
           return;
         }
 
         router.push(callbackUrl, { locale: session?.user?.language || "en" });
       }
     } catch {
-      setError("Connection error. Please try again later.");
+      setError(t("error.connection"));
     } finally {
       setIsLoading(false);
     }
@@ -107,17 +108,17 @@ export default function AuthForm() {
       !signupPassword ||
       !signupPasswordRepeat
     ) {
-      setError("All fields are required");
+      setError(t("error.allFieldsRequired"));
       setIsLoading(false);
       return;
     }
     if (signupPassword !== signupPasswordRepeat) {
-      setError("Passwords do not match");
+      setError(t("error.passwordsNoMatch"));
       setIsLoading(false);
       return;
     }
     if (!acceptTerms) {
-      setError("You must accept the terms of service");
+      setError(t("error.acceptTerms"));
       setIsLoading(false);
       return;
     }
@@ -141,14 +142,14 @@ export default function AuthForm() {
         if (loginRes?.ok) {
           router.push("/auth/new-user");
         } else {
-          setError("Registration successful, but error during login.");
+          setError(t("error.registrationSuccessButLogin"));
         }
       } else {
         const data = await res.json();
-        setError(data.error || "Registration error");
+        setError(data.error || t("error.registration"));
       }
     } catch {
-      setError("Connection error. Please try again later.");
+      setError(t("error.connection"));
     } finally {
       setIsLoading(false);
     }
@@ -194,7 +195,7 @@ export default function AuthForm() {
                 height={20}
               />
             </span>
-            Continue with Google
+            {t("oauth.continueWithGoogle")}
           </Button>
         </div>
 
@@ -203,7 +204,9 @@ export default function AuthForm() {
             <Separator className="w-full" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-slate-500 font-medium">or</span>
+            <span className="bg-white px-2 text-slate-500 font-medium">
+              {t("oauth.or")}
+            </span>
           </div>
         </div>
 
@@ -212,12 +215,12 @@ export default function AuthForm() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
-                Email
+                {t("login.email")}
               </Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="name@example.com"
+                placeholder={t("placeholder.email")}
                 value={email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEmail(e.target.value)
@@ -230,13 +233,13 @@ export default function AuthForm() {
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium">
-                Password
+                {t("login.password")}
               </Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
+                  placeholder={t("placeholder.password")}
                   value={password}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setPassword(e.target.value)
@@ -271,7 +274,7 @@ export default function AuthForm() {
                   disabled={isLoading}
                 />
                 <Label htmlFor="remember" className="text-sm text-slate-600">
-                  Remember me
+                  {t("login.rememberMe")}
                 </Label>
               </div>
               <Button
@@ -280,7 +283,7 @@ export default function AuthForm() {
                 onClick={() => router.push("/auth/forgot-password")}
                 disabled={isLoading}
               >
-                Forgot password?
+                {t("login.forgotPassword")}
               </Button>
             </div>
 
@@ -292,10 +295,10 @@ export default function AuthForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  {t("login.signingIn")}
                 </>
               ) : (
-                "Sign in"
+                t("login.signIn")
               )}
             </Button>
           </div>
@@ -303,12 +306,12 @@ export default function AuthForm() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="signup-name" className="text-sm font-medium">
-                Name
+                {t("signup.name")}
               </Label>
               <Input
                 id="signup-name"
                 type="name"
-                placeholder="John Doe"
+                placeholder={t("placeholder.name")}
                 value={signupName}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSignupName(e.target.value)
@@ -320,12 +323,12 @@ export default function AuthForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="signup-email" className="text-sm font-medium">
-                Email
+                {t("signup.email")}
               </Label>
               <Input
                 id="signup-email"
                 type="email"
-                placeholder="name@example.com"
+                placeholder={t("placeholder.email")}
                 value={signupEmail}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSignupEmail(e.target.value)
@@ -337,12 +340,12 @@ export default function AuthForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="signup-password" className="text-sm font-medium">
-                Password
+                {t("signup.password")}
               </Label>
               <Input
                 id="signup-password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t("placeholder.password")}
                 value={signupPassword}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSignupPassword(e.target.value)
@@ -357,12 +360,12 @@ export default function AuthForm() {
                 htmlFor="signup-password-repeat"
                 className="text-sm font-medium"
               >
-                Repeat password
+                {t("signup.repeatPassword")}
               </Label>
               <Input
                 id="signup-password-repeat"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t("placeholder.password")}
                 value={signupPasswordRepeat}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSignupPasswordRepeat(e.target.value)
@@ -380,9 +383,9 @@ export default function AuthForm() {
                 disabled={isLoading}
               />
               <Label htmlFor="accept-terms" className="text-sm text-slate-600">
-                I accept the{" "}
+                {t("signup.acceptTerms")}
                 <a href="/terms" target="_blank" className="underline">
-                  terms of service
+                  {t("signup.terms")}
                 </a>
               </Label>
             </div>
@@ -394,10 +397,10 @@ export default function AuthForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Registering...
+                  {t("signup.registering")}
                 </>
               ) : (
-                "Sign up"
+                t("signup.signUp")
               )}
             </Button>
           </div>
@@ -408,26 +411,26 @@ export default function AuthForm() {
         <div className="text-center text-sm text-slate-600">
           {!isNewUser ? (
             <>
-              Don&apos;t have an account?{" "}
+              {t("switch.noAccount")}
               <Button
                 variant="link"
                 className="px-0 text-blue-600 hover:text-blue-800 font-medium"
                 onClick={() => setIsNewUser(true)}
                 disabled={isLoading}
               >
-                Sign up here
+                {t("switch.signUpHere")}
               </Button>
             </>
           ) : (
             <>
-              Already have an account?{" "}
+              {t("switch.alreadyAccount")}
               <Button
                 variant="link"
                 className="px-0 text-blue-600 hover:text-blue-800 font-medium"
                 onClick={() => setIsNewUser(false)}
                 disabled={isLoading}
               >
-                Sign in
+                {t("switch.signInHere")}
               </Button>
             </>
           )}
@@ -437,27 +440,15 @@ export default function AuthForm() {
         <div className="grid grid-cols-3 gap-4 pt-4 border-t">
           <div className="text-center">
             <Shield className="h-6 w-6 text-green-600 mx-auto mb-1" />
-            <p className="text-xs text-slate-600">
-              Bank-level
-              <br />
-              Security
-            </p>
+            <p className="text-xs text-slate-600">{t("features.security")}</p>
           </div>
           <div className="text-center">
             <TrendingUp className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-            <p className="text-xs text-slate-600">
-              Advanced
-              <br />
-              Analytics
-            </p>
+            <p className="text-xs text-slate-600">{t("features.analytics")}</p>
           </div>
           <div className="text-center">
             <CreditCard className="h-6 w-6 text-purple-600 mx-auto mb-1" />
-            <p className="text-xs text-slate-600">
-              All-in-one
-              <br />
-              Management
-            </p>
+            <p className="text-xs text-slate-600">{t("features.management")}</p>
           </div>
         </div>
       </CardFooter>
