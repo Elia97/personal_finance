@@ -88,8 +88,44 @@
     }
   },
   "dashboard": {
+    "sidebar": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "accounts": "Conti",
+        "transactions": "Transazioni",
+        "analytics": "Analisi",
+        "investments": "Investimenti",
+        "settings": "Impostazioni"
+      },
+      "footer": {
+        "backToHome": "Torna alla Home"
+      }
+    },
     "title": "Dashboard - Personal Finance",
-    "description": "Dashboard completa per il controllo delle tue finanze personali."
+    "description": "Dashboard completa per il controllo delle tue finanze personali.",
+    "addTransaction": "Aggiungi transazione",
+    "header": {
+      "title": "Dashboard",
+      "description": "Panoramica delle tue finanze personali"
+    },
+    "summary": {
+      "title": "Riepilogo mensile",
+      "income": "Entrate",
+      "expenses": "Uscite",
+      "balance": "Saldo",
+      "viewByMonth": "Vedi riepilogo per mese"
+    },
+    "accounts": {
+      "title": "I tuoi conti",
+      "description": "Panoramica dei tuoi conti finanziari",
+      "type": {
+        "checking": "Conto corrente",
+        "savings": "Conto risparmio",
+        "investment": "Conto investimenti"
+      },
+      "totalBalance": "Saldo totale",
+      "emptyState": "Nessun conto trovato. Aggiungi un conto per iniziare."
+    }
   },
   "default": {
     "title": "Personal Finance App",

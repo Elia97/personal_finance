@@ -89,7 +89,43 @@
   },
   "dashboard": {
     "title": "Dashboard - Personal Finance",
-    "description": "Complete dashboard for controlling your personal finances."
+    "description": "Complete dashboard for controlling your personal finances.",
+    "addTransaction": "Add Transaction",
+    "sidebar": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "accounts": "Accounts",
+        "transactions": "Transactions",
+        "analytics": "Analytics",
+        "investments": "Investments",
+        "settings": "Settings"
+      },
+      "footer": {
+        "backToHome": "Back to Home"
+      }
+    },
+    "header": {
+      "title": "Dashboard",
+      "description": "Overview of your personal finances"
+    },
+    "summary": {
+      "title": "Monthly Summary",
+      "income": "Income",
+      "expenses": "Expenses",
+      "balance": "Balance",
+      "viewByMonth": "View summary by month"
+    },
+    "accounts": {
+      "title": "Your Accounts",
+      "description": "Overview of your financial accounts",
+      "type": {
+        "checking": "Checking Account",
+        "savings": "Savings Account",
+        "investment": "Investment Account"
+      },
+      "totalBalance": "Total Balance",
+      "emptyState": "No accounts found. Add an account to get started."
+    }
   },
   "default": {
     "title": "Personal Finance App",

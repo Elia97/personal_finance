@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getTranslations } from "next-intl/server";
 
 const accounts = [
   {
@@ -28,11 +29,12 @@ const accounts = [
 ];
 
 export async function AccountsOverview() {
+  const t = await getTranslations("dashboard.accounts");
   return (
     <Card className="col-span-2">
       <CardHeader>
-        <CardTitle>Your Accounts</CardTitle>
-        <CardDescription>Overview of your financial accounts</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         {accounts.length > 0 ? (
@@ -46,17 +48,17 @@ export async function AccountsOverview() {
                   <div className="font-medium">{account.name}</div>
                   <div className="text-sm text-muted-foreground">
                     {account.type === "CHECKING"
-                      ? "Checking Account"
+                      ? t("type.checking")
                       : account.type === "SAVINGS"
-                      ? "Savings Account"
-                      : "Investment Account"}
+                      ? t("type.savings")
+                      : t("type.investment")}
                   </div>
                 </div>
                 <div className="font-medium">{account.balance}</div>
               </div>
             ))}
             <div className="flex items-center justify-between rounded-lg bg-muted p-4">
-              <div className="font-medium">Total Balance</div>
+              <div className="font-medium">{t("totalBalance")}</div>
               <div className="text-lg font-bold">
                 {accounts.reduce((acc, account) => acc + account.balance, 0)}
               </div>
@@ -64,7 +66,7 @@ export async function AccountsOverview() {
           </div>
         ) : (
           <div className="text-center text-muted-foreground">
-            No accounts found. Add an account to get started.
+            {t("emptyState")}
           </div>
         )}
       </CardContent>

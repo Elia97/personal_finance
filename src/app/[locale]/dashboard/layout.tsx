@@ -24,15 +24,7 @@ import {
 import Link from "next/link";
 import { getAuthSession } from "@/lib/auth-utils";
 import { redirect } from "@/i18n/navigation";
-
-const navItems = [
-  { title: "Dashboard", href: "/", icon: Home },
-  { title: "Accounts", href: "/accounts", icon: Wallet },
-  { title: "Transactions", href: "/transactions", icon: ArrowLeftRight },
-  { title: "Analytics", href: "/analytics", icon: BarChart3 },
-  { title: "Investments", href: "/investments", icon: LineChart },
-  { title: "Settings", href: "/settings", icon: Settings },
-];
+import { getTranslations } from "next-intl/server";
 
 export default async function DashboardLayout({
   children,
@@ -47,6 +39,21 @@ export default async function DashboardLayout({
   if (!session) {
     redirect({ href: "/auth/signin", locale });
   }
+
+  const t = await getTranslations("dashboard.sidebar");
+
+  const navItems = [
+    { title: t("menu.dashboard"), href: "/", icon: Home },
+    { title: t("menu.accounts"), href: "/accounts", icon: Wallet },
+    {
+      title: t("menu.transactions"),
+      href: "/transactions",
+      icon: ArrowLeftRight,
+    },
+    { title: t("menu.analytics"), href: "/analytics", icon: BarChart3 },
+    { title: t("menu.investments"), href: "/investments", icon: LineChart },
+    { title: t("menu.settings"), href: "/settings", icon: Settings },
+  ];
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Professional blue gradient background matching home page */}
@@ -122,7 +129,7 @@ export default async function DashboardLayout({
                   className="w-full justify-start items-center gap-2"
                 >
                   <MoveLeft className="size-4" />
-                  <span>Back to Home</span>
+                  <span>{t("footer.backToHome")}</span>
                 </Button>
               </Link>
             </SidebarFooter>

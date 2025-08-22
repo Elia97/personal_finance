@@ -7,10 +7,20 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+import { getTranslations } from "next-intl/server";
+import CurrentMonthLabel from "../current-month-label";
+import { getAuthSession } from "@/lib/auth-utils";
 
-export function TransactionsSummary() {
-  // Hardcoded dummy data
-  const currentMonthLabel = "August 2025";
+export async function TransactionsSummary() {
+  const t = await getTranslations("dashboard.summary");
+
+  const session = await getAuthSession();
+
+  if (!session) {
+    return null;
+  }
+  const locale = `${session.user.language}-${session.user.country}`; // es: "en-US" o "it-IT"
+
   const summary = {
     income: 2450.75,
     expenses: 1780.2,
@@ -19,28 +29,30 @@ export function TransactionsSummary() {
   return (
     <Card className="col-span-2 lg:col-span-1 justify-between">
       <CardHeader className="flex flex-col items-center">
-        <CardTitle>Monthly Summary</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <div className="flex items-center">
-          <CardDescription>{currentMonthLabel}</CardDescription>
+          <CardDescription>
+            <CurrentMonthLabel />
+          </CardDescription>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-6 ">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Income</span>
+            <span className="text-muted-foreground">{t("income")}</span>
             <span className="font-medium text-green-600">
-              {formatCurrency(summary.income)}
+              {formatCurrency(summary.income, locale)}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Expenses</span>
+            <span className="text-muted-foreground">{t("expenses")}</span>
             <span className="font-medium text-red-600">
-              {formatCurrency(summary.expenses)}
+              {formatCurrency(summary.expenses, locale)}
             </span>
           </div>
           <div className="border-t pt-2 mt-2">
             <div className="flex justify-between font-medium">
-              <span>Balance</span>
+              <span>{t("balance")}</span>
               <span
                 className={
                   summary.income - summary.expenses >= 0
@@ -48,7 +60,7 @@ export function TransactionsSummary() {
                     : "text-red-600"
                 }
               >
-                {formatCurrency(summary.income - summary.expenses)}
+                {formatCurrency(summary.income - summary.expenses, locale)}
               </span>
             </div>
           </div>
@@ -56,7 +68,7 @@ export function TransactionsSummary() {
       </CardContent>
       <CardFooter className="flex flex-col justify-between gap-3">
         <span className="text-sm text-muted-foreground">
-          View summary by month
+          {t("viewByMonth")}
         </span>
       </CardFooter>
     </Card>
