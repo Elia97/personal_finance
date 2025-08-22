@@ -20,7 +20,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 export default function AuthForm() {
   const [isNewUser, setIsNewUser] = useState(false);
@@ -88,7 +88,7 @@ export default function AuthForm() {
           return;
         }
 
-        router.push(`/${session.user.language}${callbackUrl}`);
+        router.push(callbackUrl, { locale: session?.user?.language || "en" });
       }
     } catch {
       setError("Connection error. Please try again later.");

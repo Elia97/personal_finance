@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,7 +48,7 @@ export default function NewUserPage() {
       if (!res.ok)
         throw new Error("Errore durante l'aggiornamento del profilo");
       setSuccess(true);
-      setTimeout(() => router.push(`/${form.language}`), 1500);
+      setTimeout(() => router.push("/", { locale: form.language }), 1500);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Errore generico");
