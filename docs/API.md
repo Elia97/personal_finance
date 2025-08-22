@@ -207,8 +207,20 @@ enum InvestmentTransactionType {
 
 ## Main Endpoints (to implement)
 
-- Authentication: `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`
-- User management: `/api/users/profile` (GET/PUT)
+### Authentication
+
+- All authentication and session management is handled by [NextAuth.js](https://next-auth.js.org/) via the catch-all route: `/api/auth/[...nextauth]`.
+- This route supports OAuth providers (e.g. Google), credentials login, session management, and sign out, following the NextAuth.js conventions.
+- For advanced flows (registration, password reset, etc.), custom API routes can be added as needed.
+- Example of a custom API route already present: `/api/user/update` (for updating user profile data).
+
+---
+
+### Other Main Endpoints
+
+- User management:
+  - `/api/user` (GET): get current user profile
+  - `/api/user/update` (PUT): update user profile
 - Accounts: `/api/accounts` (CRUD)
 - Transactions: `/api/transactions` (CRUD, filters, pagination)
 - Transfers: `/api/transfers` (CRUD)

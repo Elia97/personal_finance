@@ -71,43 +71,88 @@ personal_finance/
 │   │   ├── layout.tsx            # Root layout with global providers
 │   │   ├── page.tsx              # Home page with metadata
 │   │   ├── globals.css           # Global styles and CSS variables
-│   │   └── favicon.ico           # Application favicon
+│   │   ├── favicon.ico           # Application favicon
+│   │   ├── [locale]/             # Locale-aware routing (i18n)
+│   │   │   ├── layout.tsx
+│   │   │   ├── (public)/         # Public pages (auth, landing, ecc.)
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── auth/
+│   │   │   │       ├── signin/
+│   │   │   │       │   └── page.tsx
+│   │   │   │       ├── new-user/
+│   │   │   │       │   └── page.tsx
+│   │   │   │       ├── error/
+│   │   │   │       │   └── page.tsx
+│   │   │   │       └── ...
+│   │   │   ├── dashboard/
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── page.tsx
+│   │   │   └── ...
+│   │   └── api/
+│   │       └── auth/
+│   │           └── [...nextauth]/
+│   │               └── route.ts   # NextAuth.js API route
 │   │
-│   ├── lib/                      # Utility libraries and configurations
-│   │   ├── prisma.ts             # Prisma client setup with Accelerate
-│   │   ├── metadata.config.ts    # SEO metadata generator
-│   │   ├── pages.config.ts       # Page configuration system
-│   │   └── utils.ts              # General utility functions
-│   │
-│   └── generated/                # Auto-generated files (Git ignored)
-│       └── prisma/               # Generated Prisma client
-│           ├── index.ts          # Main client export
-│           ├── client.js         # Compiled client
-│           └── schema.prisma     # Generated schema copy
+│   ├── components/                # React UI components
+│   │   ├── auth-form.tsx
+│   │   ├── auth-button.tsx
+│   │   ├── add-transaction-button.tsx
+│   │   ├── current-month-label.tsx
+│   │   ├── dashboard/
+│   │   └── ui/
+│   │       ├── button.tsx
+│   │       ├── card.tsx
+│   │       └── ...
+│   ├── hooks/                     # Custom React hooks
+│   │   └── use-mobile.ts
+│   ├── i18n/                      # Internationalization utilities
+│   │   ├── navigation.ts
+│   │   ├── request.ts
+│   │   ├── routing.ts
+│   ├── lib/                       # Utility libraries and configurations
+│   │   ├── prisma.ts
+│   │   ├── auth.ts
+│   │   ├── auth-utils.ts
+│   │   ├── metadata.config.ts
+│   │   ├── pages.config.ts
+│   │   └── utils.ts
+│   ├── types/                     # TypeScript type definitions
+│   │   └── next-auth.d.ts
+│   └── generated/                 # Auto-generated files (Git ignored)
+│       └── prisma/
+│           ├── client.js
+│           ├── index.js
+│           ├── schema.prisma
+│           └── ...
 │
-├── prisma/                       # Database configuration
-│   ├── schema.prisma             # Main database schema
-│   ├── seed.ts                   # Database seeding script
-│   └── migrations/               # Version-controlled migrations
-│       ├── migration_lock.toml   # Migration lock file
-│       └── 20250818174445_init/  # Initial migration
-│           └── migration.sql     # Migration SQL
+├── messages/                      # Localized message files (i18n)
+│   ├── en.json
+│   └── it.json
 │
-├── docs/                         # Documentation
-│   ├── ARCHITECTURE.md           # This file
-│   ├── SETUP.md                  # Development setup guide
-│   ├── API.md                    # API documentation
-│   ├── DATABASE.md               # DB documentation
-│   └── CONTRIBUTING.md           # Contribution guidelines
+├── prisma/                        # Database configuration
+│   ├── schema.prisma
+│   ├── seed.ts
+│   └── migrations/
+│       ├── migration_lock.toml
+│       └── 20250820124253_init/
+│           └── migration.sql
 │
-├── components.json               # shadcn/ui configuration
-├── eslint.config.mjs             # ESLint configuration
-├── LICENSE                       # MIT License file
-├── next.config.ts                # Next.js configuration
-├── package.json                  # Project dependencies
-├── postcss.config.mjs            # PostCSS configuration
-├── README.md                     # Project overview
-└── tsconfig.json                 # TypeScript configuration
+├── docs/                          # Documentation
+│   ├── ARCHITECTURE.md
+│   ├── SETUP.md
+│   ├── API.md
+│   ├── DATABASE.md
+│   └── CONTRIBUTING.md
+│
+├── components.json                # shadcn/ui configuration
+├── eslint.config.mjs              # ESLint configuration
+├── LICENSE                        # MIT License file
+├── next.config.ts                 # Next.js configuration
+├── package.json                   # Project dependencies
+├── postcss.config.mjs             # PostCSS configuration
+├── README.md                      # Project overview
+└── tsconfig.json                  # TypeScript configuration
 ```
 
 ## Key Design Decisions
@@ -123,30 +168,18 @@ personal_finance/
 
 ### 2. Metadata Configuration System
 
-**Decision**: Custom metadata generation with page-specific configs
+**Decision**: Page metadata (title, description, etc.) is localized and managed through the `messages/{locale}.json` files and next-intl APIs.
+
 **Implementation**:
 
-```typescript
-// lib/pages.config.ts
-export const pagesConfig: PagesConfig = {
-  app: {
-    title: "Dashboard",
-    description: "Overview of your financial health",
-  },
-};
-
-// lib/metadata.config.ts
-export function generateMetadata(page: keyof PagesConfig) {
-  const { title, description } = pagesConfig[page] ?? pagesConfig["app"];
-  return { title, description };
-}
-```
+- Metadata is defined in the message files (`messages/en.json`, `messages/it.json`) under the `metadata` key.
+- Each Next.js page imports metadata using next-intl hooks or functions, based on the active locale.
 
 **Benefits**:
 
-- Centralized SEO management
-- Type-safe page metadata
-- Easy to maintain and extend
+- Native multilingual SEO
+- Centralized and scalable metadata management
+- No risk of mismatch between content and metadata
 
 ### 3. Font Strategy
 
@@ -256,6 +289,112 @@ const roboto = Roboto({
 - **CDN Integration**: Global content distribution
 - **Load Balancing**: Horizontal scaling capabilities
 - **Database Sharding**: Data partitioning for large datasets
+
+## Internationalization & Localization
+
+### Multilingua con next-intl
+
+- **Libreria**: [next-intl](https://next-intl-docs.vercel.app/)
+- **Locali supportate**: `en` (inglese), `it` (italiano)
+- **Gestione messaggi**: file JSON in `/messages/en.json` e `/messages/it.json`
+- **Routing locale-aware**: struttura delle route Next.js con segmento `[locale]`
+- **Provider**: `NextIntlClientProvider` inietta i messaggi e la lingua nel contesto React
+- **Navigazione**: wrapper custom per Link, redirect e router (`@/i18n/navigation`)
+- **Fallback**: se la locale richiesta non è supportata, viene usata la `defaultLocale` (`en`)
+
+#### Esempio di configurazione
+
+```typescript
+// src/i18n/routing.ts
+export const routing = defineRouting({
+  locales: ["en", "it"],
+  defaultLocale: "en",
+});
+
+// src/i18n/request.ts
+export default getRequestConfig(async ({ requestLocale }) => {
+  const requested = await requestLocale;
+  const locale = hasLocale(routing.locales, requested)
+    ? requested
+    : routing.defaultLocale;
+  return {
+    locale,
+    messages: (await import(`../../messages/${locale}.json`)).default,
+  };
+});
+```
+
+#### Flusso di localizzazione
+
+1. L’utente accede a una route con prefisso locale (`/it/dashboard`)
+2. Il middleware e i provider validano la locale
+3. I messaggi localizzati vengono caricati dinamicamente
+4. Tutti i testi UI sono estratti tramite hook `useTranslations()`
+
+---
+
+## Authentication Architecture
+
+### NextAuth.js con provider multipli
+
+- **Libreria**: [next-auth](https://next-auth.js.org/)
+- **Provider supportati**: Google OAuth (se configurato), Credentials (email/password)
+- **Adapter**: Prisma Adapter per persistenza utenti e sessioni
+- **Sessione**: JWT (stateless), con payload esteso (ruolo, lingua, status, ecc.)
+- **Pagine custom**: `/auth/signin`, `/auth/error`, `/auth/new-user`
+- **Callback**: personalizzati per arricchire token e sessione, validare lo stato utente, gestire redirect sicuri
+- **Eventi**: logging di login/logout e onboarding nuovi utenti
+
+#### Flusso di autenticazione
+
+1. L’utente accede a `/auth/signin` e sceglie Google o email/password
+2. Se OAuth, viene reindirizzato a Google e poi validato lato backend
+3. Se credentials, la password viene validata con bcrypt e controllato lo stato utente
+4. Se login riuscito, viene generato un JWT con dati utente estesi
+5. La sessione viene idratata lato client con tutti i dati necessari (ruolo, lingua, ecc.)
+6. I redirect sono sempre limitati al dominio dell’app
+
+#### Estratto di configurazione
+
+```typescript
+// src/lib/auth.ts
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [GoogleProvider, CredentialsProvider],
+  session: { strategy: "jwt" },
+  pages: {
+    signIn: "/auth/signin",
+    error: "/auth/error",
+    newUser: "/auth/new-user",
+  },
+  callbacks: {
+    async signIn({ user, account }) {
+      /* ... */
+    },
+    async jwt({ token, user }) {
+      /* ... */
+    },
+    async session({ session, token }) {
+      /* ... */
+    },
+    async redirect({ url, baseUrl }) {
+      /* ... */
+    },
+  },
+  events: {
+    async signIn({ user, account, isNewUser }) {
+      /* ... */
+    },
+    async signOut({ session, token }) {
+      /* ... */
+    },
+  },
+  debug: process.env.NODE_ENV === "development",
+  secret: process.env.NEXTAUTH_SECRET,
+};
+```
+
+---
 
 ## Development Workflow
 
