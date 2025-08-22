@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { signIn, getSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,6 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import {
   Eye,
   EyeOff,
@@ -21,6 +20,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function AuthForm() {
   const [isNewUser, setIsNewUser] = useState(false);
@@ -87,7 +87,8 @@ export default function AuthForm() {
           setError("Your account is not active. Please contact support.");
           return;
         }
-        router.push(callbackUrl);
+
+        router.push(`/${session.user.language}${callbackUrl}`);
       }
     } catch {
       setError("Connection error. Please try again later.");
@@ -306,7 +307,7 @@ export default function AuthForm() {
               </Label>
               <Input
                 id="signup-name"
-                type="text"
+                type="name"
                 placeholder="John Doe"
                 value={signupName}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

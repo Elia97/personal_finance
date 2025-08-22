@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "title": "Personal Finance - Gestisci le tue finanze",
+    "description": "Piattaforma professionale per la gestione delle finanze personali. Monitora, pianifica e ottimizza le tue risorse finanziarie.",
+    "keywords": {
+      "personalFinance": "finanza personale",
+      "moneyManagement": "gestione del denaro",
+      "budget": "budget",
+      "investments": "investimenti",
+      "savings": "risparmi",
+      "financialPlanning": "pianificazione finanziaria"
+    },
+    "authors": {
+      "team": "Team Personal Finance"
+    },
+    "creator": "Personal Finance App",
+    "publisher": "Personal Finance",
+    "openGraph": {
+      "locale": "it_IT",
+      "siteName": "Personal Finance"
+    }
+  },
+  "home": {
+    "title": "Personal Finance - Gestisci le tue finanze",
+    "description": "Piattaforma professionale per la gestione delle finanze personali. Monitora, pianifica e ottimizza le tue risorse finanziarie.",
+    "getStarted": "Inizia ora",
+    "discoverFeatures": "Scopri le funzionalità"
+  },
+  "signin": {
+    "title": "Accedi - Personal Finance",
+    "description": "Accedi alla tua piattaforma di gestione finanziaria personale.",
+    "footerDescription": "Protetto da crittografia end-to-end",
+    "privacyPolicy": "Informativa sulla privacy",
+    "termsOfService": "Termini di servizio"
+  },
+  "dashboard": {
+    "title": "Dashboard - Personal Finance",
+    "description": "Dashboard completa per il controllo delle tue finanze personali."
+  },
+  "default": {
+    "title": "Personal Finance App",
+    "description": "App professionale per la gestione delle finanze personali."
+  }
+}

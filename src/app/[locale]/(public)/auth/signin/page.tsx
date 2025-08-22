@@ -6,29 +6,32 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AuthForm from "@/components/auth-form";
-import { generateMetadata } from "@/lib/metadata.config";
-import path from "path";
-import { fileURLToPath } from "url";
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const page = path.basename(path.resolve(__dirname, "."));
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("signin");
+  return {
+    title: t("title"),
+    description: t("description"),
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
 
-export const metadata: Metadata = generateMetadata(page);
-
-export default function SignInPage() {
+export default async function SignInPage() {
+  const t = await getTranslations("signin");
   return (
     <section className="w-full flex flex-col items-center justify-center min-h-screen py-4">
       <Card className="shadow-2xl border-slate-200/20 bg-white/95 backdrop-blur-sm w-full max-w-xl">
         <CardHeader className="space-y-1 pb-6">
           <CardTitle className="text-2xl text-center font-semibold">
-            {(metadata?.title as string).split("-")[0] ||
-              "Sign in to your account"}
+            {t("title")}
           </CardTitle>
           <CardDescription className="text-center text-slate-600">
-            {metadata?.description ||
-              "Securely manage your finances with confidence"}
+            {t("description")}
           </CardDescription>
         </CardHeader>
         <AuthForm />
@@ -36,20 +39,20 @@ export default function SignInPage() {
 
       {/* Footer */}
       <div className="text-center mt-8 text-slate-400 text-sm">
-        <p>Protected by end-to-end encryption</p>
+        <p>{t("footerDescription")}</p>
         <p className="mt-1">
           <Button
             variant="link"
             className="px-0 text-slate-400 hover:text-white text-sm"
           >
-            Privacy Policy
+            {t("privacyPolicy")}
           </Button>
           {" • "}
           <Button
             variant="link"
             className="px-0 text-slate-400 hover:text-white text-sm"
           >
-            Terms of Service
+            {t("termsOfService")}
           </Button>
         </p>
       </div>

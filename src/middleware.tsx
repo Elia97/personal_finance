@@ -1,24 +1,11 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
-export async function middleware(request: NextRequest) {
-  // Proteggi solo le rotte dashboard
-  if (request.nextUrl.pathname.startsWith("/dashboard")) {
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
-    if (!token) {
-      // Redirect a /auth/signin se non autenticato
-      const signInUrl = new URL("/auth/signin", request.url);
-      return NextResponse.redirect(signInUrl);
-    }
-  }
-  return NextResponse.next();
-}
+export default createMiddleware(routing);
 
-// Configura le rotte da proteggere
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  // Match all pathnames except for
+  // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
+  // - … the ones containing a dot (e.g. `favicon.ico`)
+  matcher: "/((?!api|trpc|_next|_vercel|.*\\..*).*)",
 };

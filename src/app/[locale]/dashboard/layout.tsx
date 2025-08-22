@@ -22,6 +22,8 @@ import {
   MoveLeft,
 } from "lucide-react";
 import Link from "next/link";
+import { getAuthSession } from "@/lib/auth-utils";
+import { redirect } from "@/i18n/navigation";
 
 const navItems = [
   { title: "Dashboard", href: "/", icon: Home },
@@ -34,9 +36,17 @@ const navItems = [
 
 export default async function DashboardLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { locale: string };
 }) {
+  const paramsList = await params;
+  const locale = paramsList.locale;
+  const session = await getAuthSession();
+  if (!session) {
+    redirect({ href: "/auth/signin", locale });
+  }
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Professional blue gradient background matching home page */}

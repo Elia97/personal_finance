@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "title": "Personal Finance - Manage Your Finances",
+    "description": "Professional platform for personal finance management. Monitor, plan and optimize your financial resources.",
+    "keywords": {
+      "personalFinance": "personal finance",
+      "moneyManagement": "money management",
+      "budget": "budget",
+      "investments": "investments",
+      "savings": "savings",
+      "financialPlanning": "financial planning"
+    },
+    "authors": {
+      "team": "Personal Finance Team"
+    },
+    "creator": "Personal Finance App",
+    "publisher": "Personal Finance",
+    "openGraph": {
+      "locale": "en_US",
+      "siteName": "Personal Finance"
+    }
+  },
+  "home": {
+    "title": "Personal Finance - Manage Your Finances",
+    "description": "Professional platform for personal finance management. Monitor, plan and optimize your financial resources.",
+    "getStarted": "Get Started",
+    "discoverFeatures": "Discover Features"
+  },
+  "signin": {
+    "title": "Sign In - Personal Finance",
+    "description": "Access your personal financial management platform.",
+    "footerDescription": "Protected by end-to-end encryption",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "dashboard": {
+    "title": "Dashboard - Personal Finance",
+    "description": "Complete dashboard for controlling your personal finances."
+  },
+  "default": {
+    "title": "Personal Finance App",
+    "description": "Professional app for personal finance management."
+  }
+}
