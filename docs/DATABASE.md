@@ -17,15 +17,15 @@ model User {
   name           String
   password       String
   role           UserRole? // ADMIN, MEMBER, VIEWER
-  phone          String?   // Per 2FA o notifiche
-  avatarUrl      String?   // URL immagine profilo
-  language       String?   // es: "it", "en"
-  country        String?   // es: "IT", "US"
+  phone          String?   // For 2FA or notifications
+  avatarUrl      String?   // Profile image URL
+  language       String?   // e.g., "it", "en"
+  country        String?   // e.g., "IT", "US"
   dateOfBirth    DateTime?
   status         UserStatus @default(ACTIVE)
   lastLogin      DateTime?
   emailVerified  Boolean   @default(false)
-  settings       Json?     // Preferenze utente (tema, notifiche, ecc.)
+  settings       Json?     // User preferences (theme, notifications, etc.)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -307,7 +307,7 @@ model Goal {
 model InvestmentAsset {
   id        String   @id @default(cuid())
   name      String   // e.g., "Apple Inc.", "Bitcoin", "MSCI World ETF"
-  symbol    String?  // e.g., "AAPL", "BTC", "EUNL.DE"
+  symbol    String?  // e.g., "AAPL", "BTC", "SWDA"
   isin      String?  // International Securities Identification Number
   type      AssetType // STOCK, CRYPTO, ETF, FUND, BOND, etc.
   currency  String   // e.g., "USD", "EUR"
@@ -348,7 +348,7 @@ model Investment {
 model InvestmentTransaction {
   id            String   @id @default(cuid())
   investmentId  String
-  accountId     String   // Account coinvolto (banca, broker, ecc.) - obbligatorio!
+  accountId     String   // Involved account (bank, broker, etc.) - mandatory!
   date          DateTime
   type          InvestmentTransactionType // BUY, SELL, DIVIDEND, FEE, etc.
   quantity      Decimal

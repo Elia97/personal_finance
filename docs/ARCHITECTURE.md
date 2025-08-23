@@ -292,17 +292,17 @@ const roboto = Roboto({
 
 ## Internationalization & Localization
 
-### Multilingua con next-intl
+### Multilingual with next-intl
 
-- **Libreria**: [next-intl](https://next-intl-docs.vercel.app/)
-- **Locali supportate**: `en` (inglese), `it` (italiano)
-- **Gestione messaggi**: file JSON in `/messages/en.json` e `/messages/it.json`
-- **Routing locale-aware**: struttura delle route Next.js con segmento `[locale]`
-- **Provider**: `NextIntlClientProvider` inietta i messaggi e la lingua nel contesto React
-- **Navigazione**: wrapper custom per Link, redirect e router (`@/i18n/navigation`)
-- **Fallback**: se la locale richiesta non è supportata, viene usata la `defaultLocale` (`en`)
+- **Library**: [next-intl](https://next-intl-docs.vercel.app/)
+- **Supported locales**: `en` (English), `it` (Italian)
+- **Message management**: JSON files in `/messages/en.json` and `/messages/it.json`
+- **Locale-aware routing**: Next.js route structure with `[locale]` segment
+- **Provider**: `NextIntlClientProvider` injects messages and language into the React context
+- **Navigation**: Custom wrapper for Link, redirect, and router (`@/i18n/navigation`)
+- **Fallback**: If the requested locale is not supported, the `defaultLocale` (`en`) is used
 
-#### Esempio di configurazione
+#### Configuration Example
 
 ```typescript
 // src/i18n/routing.ts
@@ -324,37 +324,37 @@ export default getRequestConfig(async ({ requestLocale }) => {
 });
 ```
 
-#### Flusso di localizzazione
+#### Localization Flow
 
-1. L’utente accede a una route con prefisso locale (`/it/dashboard`)
-2. Il middleware e i provider validano la locale
-3. I messaggi localizzati vengono caricati dinamicamente
-4. Tutti i testi UI sono estratti tramite hook `useTranslations()`
+1. The user accesses a route with a locale prefix (`/it/dashboard`)
+2. Middleware and providers validate the locale
+3. Localized messages are dynamically loaded
+4. All UI texts are extracted using the `useTranslations()` hook
 
 ---
 
 ## Authentication Architecture
 
-### NextAuth.js con provider multipli
+### NextAuth.js with multiple providers
 
-- **Libreria**: [next-auth](https://next-auth.js.org/)
-- **Provider supportati**: Google OAuth (se configurato), Credentials (email/password)
-- **Adapter**: Prisma Adapter per persistenza utenti e sessioni
-- **Sessione**: JWT (stateless), con payload esteso (ruolo, lingua, status, ecc.)
-- **Pagine custom**: `/auth/signin`, `/auth/error`, `/auth/new-user`
-- **Callback**: personalizzati per arricchire token e sessione, validare lo stato utente, gestire redirect sicuri
-- **Eventi**: logging di login/logout e onboarding nuovi utenti
+- **Library**: [next-auth](https://next-auth.js.org/)
+- **Supported providers**: Google OAuth (if configured), Credentials (email/password)
+- **Adapter**: Prisma Adapter for user and session persistence
+- **Session**: JWT (stateless), with extended payload (role, language, status, etc.)
+- **Custom pages**: `/auth/signin`, `/auth/error`, `/auth/new-user`
+- **Callbacks**: Customized to enrich tokens and sessions, validate user status, manage secure redirects
+- **Events**: Logging of login/logout and onboarding new users
 
-#### Flusso di autenticazione
+#### Authentication Flow
 
-1. L’utente accede a `/auth/signin` e sceglie Google o email/password
-2. Se OAuth, viene reindirizzato a Google e poi validato lato backend
-3. Se credentials, la password viene validata con bcrypt e controllato lo stato utente
-4. Se login riuscito, viene generato un JWT con dati utente estesi
-5. La sessione viene idratata lato client con tutti i dati necessari (ruolo, lingua, ecc.)
-6. I redirect sono sempre limitati al dominio dell’app
+1. The user accesses `/auth/signin` and chooses Google or email/password
+2. If OAuth, the user is redirected to Google and then validated on the backend
+3. If credentials, the password is validated with bcrypt and the user status is checked
+4. If login is successful, a JWT with extended user data is generated
+5. The session is hydrated on the client side with all necessary data (role, language, etc.)
+6. Redirects are always limited to the app domain
 
-#### Estratto di configurazione
+#### Configuration Excerpt
 
 ```typescript
 // src/lib/auth.ts
