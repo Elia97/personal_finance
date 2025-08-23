@@ -10,21 +10,18 @@ import { formatCurrency } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import CurrentMonthLabel from "../current-month-label";
 import { getAuthSession } from "@/lib/auth-utils";
+import { getUserLocale } from "@/app/actions/user-actions";
 
 export async function TransactionsSummary() {
-  const t = await getTranslations("dashboard.summary");
-
   const session = await getAuthSession();
-
-  if (!session) {
-    return null;
-  }
-  const locale = `${session.user.language}-${session.user.country}`; // es: "en-US" o "it-IT"
-
+  if (session?.user.status !== "ACTIVE") return null;
+  const { language, country } = await getUserLocale();
+  const locale = `${language}-${country}`; // es: "en-US" o "it-IT"
   const summary = {
     income: 2450.75,
     expenses: 1780.2,
   };
+  const t = await getTranslations("dashboard.summary");
 
   return (
     <Card className="col-span-2 lg:col-span-1 justify-between">

@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth/next";
-import { authOptions, ExtendedSession } from "@/lib/auth";
+import { authOptions } from "@/lib/auth";
+import { ExtendedSession } from "@/types/auth";
 import { redirect } from "next/navigation";
 import prisma from "./prisma";
 
@@ -13,11 +14,11 @@ export async function getAuthSession(): Promise<ExtendedSession | null> {
 /**
  * Richiedi autenticazione - redirect se non autenticato
  */
-export async function requireAuth(): Promise<ExtendedSession> {
+export async function requireAuth(locale: string): Promise<ExtendedSession> {
   const session = await getAuthSession();
 
   if (!session) {
-    redirect("/auth/signin");
+    redirect(`/${locale}/auth/signin`);
   }
 
   return session;
@@ -27,9 +28,9 @@ export async function requireAuth(): Promise<ExtendedSession> {
  * Richiedi un ruolo specifico
  */
 export async function requireRole(
-  role: "USER" | "ADMIN" | "MODERATOR"
+  role: "USER" | "ADMIN"
 ): Promise<ExtendedSession> {
-  const session = await requireAuth();
+  const session = await requireAuth("en"); // Sostituire con il locale appropriato
 
   if (session.user.role !== role) {
     redirect("/unauthorized");
@@ -62,7 +63,7 @@ export async function isAdmin(): Promise<boolean> {
  * Controlla se l'account è attivo
  */
 export async function requireActiveStatus(): Promise<ExtendedSession> {
-  const session = await requireAuth();
+  const session = await requireAuth("en"); // Sostituire con il locale appropriato
 
   if (session.user.status !== "ACTIVE") {
     redirect("/account-suspended");

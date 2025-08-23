@@ -1,9 +1,10 @@
 import { Roboto } from "next/font/google";
 import "../globals.css";
-import { Providers } from "../providers";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { Providers } from "./providers";
+import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { NextIntlClientProvider } from "next-intl";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -25,7 +26,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className={`${roboto.variable} antialiased`}>
-        <main className="flex flex-col items-center justify-center min-h-screen">
+        <main>
           <Providers>
             <NextIntlClientProvider>{children}</NextIntlClientProvider>
           </Providers>

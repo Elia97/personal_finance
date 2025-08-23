@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatCurrency(
   amount: number,
-  locale: string = "it_IT",
+  locale: string = "it-IT",
   currency: string = "EUR",
   useGrouping: boolean = true
 ): string {

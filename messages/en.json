@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Personal Finance - Manage Your Finances",
-    "description": "Professional platform for personal finance management. Monitor, plan and optimize your financial resources.",
+    "description": "Professional platform for personal finance management.",
     "keywords": {
       "personalFinance": "personal finance",
       "moneyManagement": "money management",
@@ -22,7 +22,7 @@
   },
   "home": {
     "title": "Personal Finance - Manage Your Finances",
-    "description": "Professional platform for personal finance management. Monitor, plan and optimize your financial resources.",
+    "description": "Professional platform for personal finance management.\nMonitor, plan and optimize your financial resources.",
     "getStarted": "Get Started",
     "discoverFeatures": "Discover Features"
   },

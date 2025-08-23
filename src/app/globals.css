@@ -51,9 +51,9 @@
   --card-foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
   --popover: oklch(0.949 0.003 257.7); /* zinc-100 */
   --popover-foreground: oklch(0.21 0.006 285.885); /* zinc-900 */
-  --primary: oklch(0.546 0.245 262.881); /* blue-600 */
+  --primary: oklch(0.623 0.214 259.815); /* blue-500 */
   --primary-foreground: oklch(0.985 0 0); /* zinc-50 */
-  --secondary: oklch(0.591 0.293 322.896); /* fuchsia-600 */
+  --secondary: oklch(0.596 0.1274 163.23); /* emerald-500 */
   --secondary-foreground: oklch(0.985 0 0); /* zinc-50 */
   --muted: oklch(0.949 0.003 257.7); /* zinc-100 */
   --muted-foreground: oklch(0.552 0.016 285.938); /* zinc-500 */
@@ -85,9 +85,9 @@
   --card-foreground: oklch(0.985 0 0); /* zinc-50 */
   --popover: oklch(0.21 0.006 285.885); /* zinc-900 */
   --popover-foreground: oklch(0.949 0.003 257.7); /* zinc-100 */
-  --primary: oklch(0.707 0.165 254.624); /* blue-400 */
+  --primary: oklch(0.623 0.214 259.815); /* blue-500 */
   --primary-foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
-  --secondary: oklch(0.74 0.238 322.16); /* fuchsia-400 */
+  --secondary: oklch(0.596 0.1274 163.23); /* emerald-500 */
   --secondary-foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
   --muted: oklch(0.21 0.006 285.885); /* zinc-900 */
   --muted-foreground: oklch(0.552 0.016 285.938); /* zinc-500 */
