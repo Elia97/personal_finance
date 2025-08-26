@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth-utils";
+import { createUserEvent } from "@/lib/auth-events";
+import { User } from "next-auth";
+import {
+  createVerificationToken,
+  sendVerificationEmail,
+} from "@/lib/auth-utils";
 
 export async function POST(req: Request) {
   try {
@@ -30,6 +36,13 @@ export async function POST(req: Request) {
         // puoi aggiungere altri campi di default qui
       },
     });
+
+    await createUserEvent({ user } as { user: User });
+
+    const token = await createVerificationToken(user.email ?? "");
+
+    await sendVerificationEmail(user.email ?? "", token);
+
     return NextResponse.json(
       { success: true, user: { id: user.id, email: user.email } },
       { status: 201 }

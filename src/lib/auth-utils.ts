@@ -3,6 +3,8 @@ import { authOptions } from "@/lib/auth";
 import { ExtendedSession } from "@/types/auth";
 import { redirect } from "next/navigation";
 import prisma from "./prisma";
+import { sendEmail } from "./resend";
+import { randomBytes } from "crypto";
 
 /**
  * Ottieni la sessione sul server
@@ -119,8 +121,26 @@ export async function verifyPassword(
 /**
  * Genera un token di verifica email
  */
-import { randomBytes } from "crypto";
 
-export function generateVerificationToken(): string {
-  return randomBytes(32).toString("hex");
+export async function createVerificationToken(email: string) {
+  const token = randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + 1000 * 60 * 60 * 24); // Scadenza: 24 ore
+
+  await prisma.verificationToken.create({
+    data: {
+      identifier: email,
+      token,
+      expires,
+    },
+  });
+
+  return token;
+}
+
+export async function sendVerificationEmail(email: string, token: string) {
+  const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${token}`;
+  const subject = "Personal Finance - Verifica la tua email";
+  const text = `Clicca sul seguente link per verificare la tua email: ${verificationUrl}`;
+
+  await sendEmail(email, subject, text);
 }

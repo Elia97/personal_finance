@@ -1,14 +1,14 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getToken } from "next-auth/jwt";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function PATCH(req: Request) {
+export async function PATCH(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.email) {
-      return new Response(JSON.stringify({ error: "Non autorizzato" }), {
-        status: 401,
-      });
+      return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
     }
     const data = await req.json();
     const { phone, language, country, dateOfBirth } = data;
@@ -21,12 +21,20 @@ export async function PATCH(req: Request) {
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
       },
     });
-    return new Response(JSON.stringify({ success: true, user }), {
-      status: 200,
-    });
+
+    // Aggiorna i dati della sessione corrente
+    const token = await getToken({ req });
+    if (token) {
+      token.phone = phone;
+      token.language = language;
+      token.country = country;
+      token.dateOfBirth = dateOfBirth;
+    }
+
+    return NextResponse.json({ success: true, user }, { status: 200 });
   } catch {
-    return new Response(
-      JSON.stringify({ error: "Errore aggiornamento profilo" }),
+    return NextResponse.json(
+      { error: "Errore aggiornamento profilo" },
       { status: 500 }
     );
   }

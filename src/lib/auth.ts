@@ -3,15 +3,18 @@ import prisma from "@/lib/prisma";
 import type { NextAuthOptions } from "next-auth";
 import { getProviders } from "@/lib/auth-providers";
 import { signIn, jwt, session, redirect } from "@/lib/auth-callbacks";
-import { signInEvent, signOutEvent } from "@/lib/auth-events";
-
-const strategy = "jwt";
+import {
+  createUserEvent,
+  linkAccountEvent,
+  signInEvent,
+  signOutEvent,
+} from "@/lib/auth-events";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: getProviders(),
   session: {
-    strategy,
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
     updateAge: 24 * 60 * 60, // Update every 24 hours
   },
@@ -34,6 +37,8 @@ export const authOptions: NextAuthOptions = {
   events: {
     signIn: signInEvent,
     signOut: signOutEvent,
+    createUser: createUserEvent,
+    linkAccount: linkAccountEvent,
   },
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,

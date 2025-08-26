@@ -48,7 +48,10 @@ export default function NewUserPage() {
       if (!res.ok)
         throw new Error("Errore durante l'aggiornamento del profilo");
       setSuccess(true);
-      setTimeout(() => router.push("/", { locale: form.language }), 1500);
+      setTimeout(
+        () => router.push("/dashboard", { locale: form.language }),
+        1500
+      );
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Errore generico");

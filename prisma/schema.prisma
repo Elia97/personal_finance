@@ -321,3 +321,12 @@ enum InvestmentTransactionType {
   INTEREST
   OTHER
 }
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  event     String
+  email     String
+  provider  String?  // Facoltativo, per eventi come `linkAccount`
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}

@@ -8,19 +8,13 @@ import type { Session } from "next-auth";
 export async function signIn({
   user,
   account,
-  isNewUser,
 }: {
   user: User;
   account: Account | null;
-  isNewUser?: boolean;
 }) {
-  console.log(`New login: ${user.email} via ${account?.provider}`);
-
-  // Add custom logic here, such as logging or analytics
-  if (isNewUser) {
-    console.log(`New user registered: ${user.email}`);
+  if (account?.provider !== "credentials") {
+    if (user.email && !user.emailVerified) return false;
   }
-
   return true;
 }
 
