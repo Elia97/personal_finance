@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import type { ExtendedJWT } from "@/types/auth";
 import type { AdapterUser } from "next-auth/adapters";
-import type { Account, User } from "next-auth";
+import type { Account, Profile, User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
 
@@ -9,8 +9,9 @@ export async function signIn({
   user,
   account,
 }: {
-  user: User;
+  user: User | AdapterUser;
   account: Account | null;
+  profile?: Profile | undefined;
 }) {
   if (account?.provider !== "credentials") {
     if (user.email && !user.emailVerified) return false;
