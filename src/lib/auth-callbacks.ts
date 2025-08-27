@@ -37,6 +37,7 @@ export async function jwt({
     token.phone = (user as ExtendedJWT).phone ?? undefined;
     token.language = (user as ExtendedJWT).language ?? undefined;
     token.country = (user as ExtendedJWT).country ?? undefined;
+    token.dateOfBirth = (user as ExtendedJWT).dateOfBirth ?? undefined;
     token.status = (user as ExtendedJWT).status ?? undefined;
     token.lastLogin = (user as ExtendedJWT).lastLogin ?? undefined;
     token.emailVerified = (user as ExtendedJWT).emailVerified;
@@ -67,6 +68,7 @@ export async function jwt({
           phone: true,
           language: true,
           country: true,
+          dateOfBirth: true,
           status: true,
           lastLogin: true,
           emailVerified: true,
@@ -81,6 +83,7 @@ export async function jwt({
         token.phone = dbUser.phone ?? undefined;
         token.language = dbUser.language ?? undefined;
         token.country = dbUser.country ?? undefined;
+        token.dateOfBirth = dbUser.dateOfBirth ?? undefined;
         token.status = dbUser.status ?? undefined;
         token.lastLogin = dbUser.lastLogin ?? undefined;
         token.emailVerified = dbUser.emailVerified;
@@ -111,6 +114,7 @@ export async function session({
       phone: (token as ExtendedJWT).phone ?? undefined,
       language: (token as ExtendedJWT).language ?? undefined,
       country: (token as ExtendedJWT).country ?? undefined,
+      dateOfBirth: (token as ExtendedJWT).dateOfBirth ?? undefined,
       status: (token as ExtendedJWT).status ?? "ACTIVE",
       lastLogin: (token as ExtendedJWT).lastLogin ?? undefined,
     },

@@ -1,105 +1,113 @@
 "use client";
 
-import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Calendar } from "@/components/ui/calendar";
+import { useForm } from "react-hook-form";
+import { NewUserFormValues, newUserSchema } from "@/lib/zod/new-user-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 
 export default function NewUserPage() {
   const { data: session } = useSession();
-  const router = useRouter();
-  const [form, setForm] = useState({
-    phone: "",
-    language: "",
-    country: "",
-  });
-  const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors, isDirty },
+  } = useForm<NewUserFormValues>({
+    resolver: zodResolver(newUserSchema),
+  });
+
+  useEffect(() => {
+    if (session) {
+      reset({
+        phone: session.user.phone || "",
+        language: session.user.language || "",
+        country: session.user.country || "",
+        dateOfBirth: session.user.dateOfBirth
+          ? new Date(session.user.dateOfBirth)
+          : undefined,
+      });
+    }
+  }, [session, reset]);
+
+  const onSubmit = async (data: NewUserFormValues) => {
+    setLoading(true);
+    if (isDirty) {
+      try {
+        const res = await fetch("/api/user/update", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...data,
+            dateOfBirth: data.dateOfBirth?.toISOString(), // Converte in stringa ISO
+          }),
+        });
+        if (!res.ok)
+          throw new Error("Errore durante l'aggiornamento del profilo");
+        setTimeout(
+          () => router.push("/dashboard", { locale: data.language }),
+          1500
+        );
+      } catch (error) {
+        console.error("Errore durante l'aggiornamento del profilo:", error);
+      }
+    } else {
+      console.log("Nessuna modifica, proseguo senza inviare dati.");
+    }
+    setLoading(false);
+  };
 
   if (!session) return null;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess(false);
-    try {
-      if (!dateOfBirth) throw new Error("Seleziona la data di nascita");
-      // Chiamata API per aggiornare l'utente
-      const res = await fetch("/api/user/update", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          dateOfBirth: dateOfBirth.toISOString().split("T")[0],
-        }),
-      });
-      if (!res.ok)
-        throw new Error("Errore durante l'aggiornamento del profilo");
-      setSuccess(true);
-      setTimeout(
-        () => router.push("/dashboard", { locale: form.language }),
-        1500
-      );
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message || "Errore generico");
-      } else {
-        setError("Errore generico");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const hasData =
+    session.user.phone ||
+    session.user.language ||
+    session.user.country ||
+    session.user.dateOfBirth;
 
   return (
     <section className="w-full flex flex-col items-center justify-center min-h-screen py-4">
       <Card className="w-full max-w-md">
         <CardContent className="space-y-6 pt-6">
           <h2 className="text-2xl font-bold text-center">
-            Completa il tuo profilo
+            {hasData
+              ? "Controlla i tuoi dati"
+              : "Benvenuto! Completa il tuo profilo"}
           </h2>
           <p className="text-center text-sm text-gray-600">
-            Benvenuto, {session.user.name || session.user.email}!<br />
-            Per continuare, inserisci i dati mancanti.
+            {hasData
+              ? "Abbiamo trovato dei dati associati al tuo profilo. Controlla che siano corretti e prosegui."
+              : `Benvenuto, ${
+                  session.user.name || session.user.email
+                }! Per continuare, inserisci i dati mancanti.`}
           </p>
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          {success && (
-            <Alert variant="default">
-              <AlertDescription>
-                Profilo aggiornato! Reindirizzamento...
-              </AlertDescription>
-            </Alert>
-          )}
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <Label htmlFor="phone" className="mb-2">
                 Telefono
               </Label>
               <Input
                 id="phone"
-                name="phone"
                 type="tel"
+                {...register("phone")}
                 placeholder="Inserisci il numero di telefono"
-                value={form.phone}
-                onChange={handleChange}
-                required
               />
+              {errors.phone && (
+                <p className="text-xs text-destructive mt-1">
+                  {errors.phone.message}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="language" className="mb-2">
@@ -107,13 +115,15 @@ export default function NewUserPage() {
               </Label>
               <Input
                 id="language"
-                name="language"
                 type="text"
+                {...register("language")}
                 placeholder="es: it, en, fr"
-                value={form.language}
-                onChange={handleChange}
-                required
               />
+              {errors.language && (
+                <p className="text-xs text-destructive mt-1">
+                  {errors.language.message}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="country" className="mb-2">
@@ -121,28 +131,30 @@ export default function NewUserPage() {
               </Label>
               <Input
                 id="country"
-                name="country"
                 type="text"
+                {...register("country")}
                 placeholder="es: IT, US, FR"
-                value={form.country}
-                onChange={handleChange}
-                required
               />
+              {errors.country && (
+                <p className="text-xs text-destructive mt-1">
+                  {errors.country.message}
+                </p>
+              )}
             </div>
             <div>
               <Label className="mb-2">Data di nascita</Label>
               <div className="flex flex-col items-center">
                 <Calendar
                   mode="single"
-                  selected={dateOfBirth}
-                  onSelect={setDateOfBirth}
+                  selected={watch("dateOfBirth")}
+                  onSelect={(date) => setValue("dateOfBirth", date)}
                   captionLayout="dropdown"
                   className="rounded-md border shadow mt-2"
                   required
                 />
-                {!dateOfBirth && (
+                {errors.dateOfBirth && (
                   <span className="text-xs text-red-500 mt-1">
-                    Seleziona la data di nascita
+                    {errors.dateOfBirth.message}
                   </span>
                 )}
               </div>
@@ -150,9 +162,18 @@ export default function NewUserPage() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Salvataggio..." : "Salva e continua"}
             </Button>
+            {hasData && (
+              <Button
+                type="button"
+                className="w-full mt-2"
+                onClick={() => router.push("/dashboard")}
+              >
+                Prosegui senza modifiche
+              </Button>
+            )}
           </form>
         </CardContent>
-        <CardFooter className="text-center text-xs text-gray-400">
+        <CardFooter className="text-center text-xs text-muted-foreground">
           Puoi modificare questi dati anche in seguito dalle impostazioni del
           profilo.
         </CardFooter>

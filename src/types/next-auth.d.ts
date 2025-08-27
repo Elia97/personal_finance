@@ -12,6 +12,7 @@ declare module "next-auth" {
       phone?: string | null;
       language?: string | null;
       country?: string | null;
+      dateOfBirth?: Date | null;
       status?: UserStatus;
       lastLogin?: Date | null;
     } & DefaultSession["user"];
