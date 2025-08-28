@@ -39,14 +39,10 @@
       "accountNotLinked": "This account is already linked with another provider.",
       "oauthError": "An error occurred during OAuth authentication.",
       "generic": "An error occurred during sign in. Please try again.",
-      "requiredFields": "Email and password are required",
       "inactiveAccount": "Your account is not active. Please contact support.",
       "connection": "Connection error. Please try again later.",
       "registration": "Registration error",
-      "registrationSuccessButLogin": "Registration successful, but error during login.",
-      "allFieldsRequired": "All fields are required",
-      "passwordsNoMatch": "Passwords do not match",
-      "acceptTerms": "You must accept the terms of service"
+      "registrationSuccessButLogin": "Registration successful, but error during login."
     },
     "oauth": {
       "continueWithGoogle": "Continue with Google",

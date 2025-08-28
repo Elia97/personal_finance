@@ -2,15 +2,15 @@ import type { Config } from "jest";
 
 const config: Config = {
   preset: "ts-jest",
-  testEnvironment: "jest-environment-jsdom",
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  testEnvironment: "node", // Ambiente per test unitari
+  moduleFileExtensions: ["ts", "js", "json", "node"],
   testPathIgnorePatterns: ["/node_modules/", "/dist/"],
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(ts|js)$": "ts-jest", // Trasforma solo TypeScript e JavaScript
   },
-  setupFilesAfterEnv: ["<rootDir>/setup-tests.ts"],
+  setupFilesAfterEnv: [], // Rimuovo i file di setup
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1", // Mappa l'alias @/ al percorso src/
+    "^@/(.*)$": "<rootDir>/src/$1", // Mapping per l'alias @
   },
 };
 

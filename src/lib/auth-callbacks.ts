@@ -15,6 +15,17 @@ export async function signIn({
 }) {
   if (account?.provider !== "credentials") {
     if (user.email && !user.emailVerified) return false;
+  } else {
+    const currentDate = new Date();
+    const createdAt = user.createdAt ? new Date(user.createdAt) : null;
+    if (
+      user.email &&
+      !user.emailVerified &&
+      createdAt &&
+      (currentDate.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24) > 30
+    ) {
+      return false;
+    }
   }
   return true;
 }
