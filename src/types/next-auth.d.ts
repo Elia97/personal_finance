@@ -7,42 +7,45 @@ type UserStatus = "ACTIVE" | "INACTIVE" | "BANNED";
 declare module "next-auth" {
   interface Session {
     user: {
+      name?: string | null;
+      email?: string | null;
+      picture?: string | null;
       id: string;
-      role?: UserRole;
-      phone?: string | null;
+      role?: UserRole | null;
+      status?: UserStatus | null;
       language?: string | null;
       country?: string | null;
-      dateOfBirth?: Date | null;
-      status?: UserStatus;
-      lastLogin?: Date | null;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
-    role?: UserRole;
+    id: string;
+    role?: UserRole | null;
+    email?: string | null;
+    name?: string | null;
+    image?: string | null;
     phone?: string | null;
     language?: string | null;
     country?: string | null;
     dateOfBirth?: Date | null;
-    status?: UserStatus;
+    status?: UserStatus | null;
     lastLogin?: Date | null;
-    settings?: Record<string, unknown>; // JSON field
-    password?: string;
     emailVerified?: Date | null;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt?: Date | null;
+    updatedAt?: Date | null;
+    settings?: JsonValue;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
-    id?: string;
-    role?: UserRole;
-    phone?: string;
-    language?: string;
-    country?: string;
-    status?: UserStatus;
-    lastLogin?: Date;
-    emailVerified?: Date | null;
+    id: string;
+    role?: UserRole | null;
+    status?: UserStatus | null;
+    language?: string | null;
+    country?: string | null;
+    iat?: number | null; // Aggiungi esplicitamente la proprietà iat
+    exp?: number | null; // (Opzionale) Aggiungi exp se necessario
+    nbf?: number | null; // (Opzionale) Aggiungi nbf se necessario
   }
 }

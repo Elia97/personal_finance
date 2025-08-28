@@ -1,23 +1,34 @@
 import prisma from "@/lib/prisma";
-import type { ExtendedJWT } from "@/types/auth";
-import type { AdapterUser } from "next-auth/adapters";
-import type { Account, Profile, User } from "next-auth";
+import type { Account, User, Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
-import type { Session } from "next-auth";
 
+/**
+ * This function manages user access by verifying the user's email status.
+ *
+ * - For users registered through an external provider:
+ *   - Access is denied if the email address is not verified.
+ *
+ * - For users registered with credentials:
+ *   - Access is denied if the email address is not verified within 30 days of registration.
+ *
+ * Logs are generated to indicate the reason for access denial or approval.
+ *
+ * @param user - The user object containing details about the authenticated user.
+ * @param account - The account object containing details about the authentication provider.
+ * @returns A boolean indicating whether the user is authorized to access the application.
+ */
 export async function signIn({
   user,
   account,
 }: {
-  user: User | AdapterUser;
-  account: Account | null;
-  profile?: Profile | undefined;
+  user: User;
+  account: Account | undefined;
 }) {
   if (account?.provider !== "credentials") {
     if (user.email && !user.emailVerified) return false;
   } else {
     const currentDate = new Date();
-    const createdAt = user.createdAt ? new Date(user.createdAt) : null;
+    const createdAt = user.createdAt ? new Date(user.createdAt) : undefined;
     if (
       user.email &&
       !user.emailVerified &&
@@ -37,28 +48,41 @@ export async function jwt({
   session,
 }: {
   token: JWT;
-  user?: User | AdapterUser;
+  user?: User;
   trigger?: "signIn" | "signUp" | "update";
   session?: Partial<Session>;
 }): Promise<JWT> {
+  // Helper per aggiornare il token con i dati dell'utente
+  const updateTokenWithUserData = (userData: Partial<User>) => {
+    token.name = userData.name || token.name;
+    token.email = userData.email || token.email;
+    token.picture = userData.image || token.picture;
+    token.id = userData.id || token.id;
+    token.role = userData.role || token.role;
+    token.status = userData.status || token.status;
+    token.language = userData.language || token.language;
+    token.country = userData.country || token.country;
+  };
+
   // On first login, add user information to the token
   if (user) {
-    token.id = user.id;
-    token.role = (user as ExtendedJWT).role ?? undefined;
-    token.phone = (user as ExtendedJWT).phone ?? undefined;
-    token.language = (user as ExtendedJWT).language ?? undefined;
-    token.country = (user as ExtendedJWT).country ?? undefined;
-    token.dateOfBirth = (user as ExtendedJWT).dateOfBirth ?? undefined;
-    token.status = (user as ExtendedJWT).status ?? undefined;
-    token.lastLogin = (user as ExtendedJWT).lastLogin ?? undefined;
-    token.emailVerified = (user as ExtendedJWT).emailVerified;
+    updateTokenWithUserData(user);
   }
 
-  // If it's a session update trigger, update the token
-  if (trigger === "update" && session) {
-    const sessionWithProps = session as { name?: string; email?: string };
-    token.name = sessionWithProps.name ?? token.name;
-    token.email = sessionWithProps.email ?? token.email;
+  // If it's a session update trigger, update the token and database
+  if (trigger === "update" && session?.user) {
+    updateTokenWithUserData(session.user);
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+        language: session.user.language,
+        country: session.user.country,
+      },
+    });
   }
 
   // Periodically refresh user data from the database (every hour)
@@ -69,38 +93,28 @@ export async function jwt({
   ) {
     try {
       const dbUser = await prisma.user.findUnique({
-        where: { id: token.id as string },
+        where: { id: token.id },
         select: {
-          id: true,
           name: true,
           email: true,
           image: true,
+          id: true,
           role: true,
-          phone: true,
+          status: true,
           language: true,
           country: true,
-          dateOfBirth: true,
-          status: true,
-          lastLogin: true,
-          emailVerified: true,
         },
       });
 
       if (dbUser) {
-        token.name = dbUser.name;
-        token.email = dbUser.email;
-        token.picture = dbUser.image;
-        token.role = dbUser.role ?? undefined;
-        token.phone = dbUser.phone ?? undefined;
-        token.language = dbUser.language ?? undefined;
-        token.country = dbUser.country ?? undefined;
-        token.dateOfBirth = dbUser.dateOfBirth ?? undefined;
-        token.status = dbUser.status ?? undefined;
-        token.lastLogin = dbUser.lastLogin ?? undefined;
-        token.emailVerified = dbUser.emailVerified;
+        updateTokenWithUserData(dbUser);
+      } else {
+        console.error(
+          `Error during token refresh: User with ID ${token.id} not found.`
+        );
       }
     } catch (error) {
-      console.error("Error during token refresh:", error);
+      console.error("Error during token refresh: ", error);
     }
   }
 
@@ -117,17 +131,10 @@ export async function session({
   const extendedSession: Session = {
     ...session,
     user: {
-      id: token.id as string,
-      name: token.name ?? "",
-      email: token.email ?? "",
-      image: token.picture ?? undefined,
-      role: (token as ExtendedJWT).role ?? "USER",
-      phone: (token as ExtendedJWT).phone ?? undefined,
-      language: (token as ExtendedJWT).language ?? undefined,
-      country: (token as ExtendedJWT).country ?? undefined,
-      dateOfBirth: (token as ExtendedJWT).dateOfBirth ?? undefined,
-      status: (token as ExtendedJWT).status ?? "ACTIVE",
-      lastLogin: (token as ExtendedJWT).lastLogin ?? undefined,
+      id: token.id,
+      name: token.name,
+      email: token.email,
+      role: token.role,
     },
   };
 
@@ -141,7 +148,6 @@ export async function redirect({
   url: string;
   baseUrl: string;
 }) {
-  // Allow redirects only within the app's domain
   if (url.startsWith("/")) return `${baseUrl}${url}`;
   if (new URL(url).origin === baseUrl) return url;
   return baseUrl;

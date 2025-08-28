@@ -8,7 +8,7 @@ export async function signInEvent({
   account,
 }: {
   user: User;
-  account?: Account | null;
+  account?: Account | undefined;
 }) {
   await prisma.log.create({
     data: {
