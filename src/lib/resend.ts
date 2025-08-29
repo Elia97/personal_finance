@@ -1,18 +1,18 @@
 import { Resend } from "resend";
+import logger from "./logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendEmail(to: string, subject: string, text: string) {
-  try {
-    await resend.emails.send({
+  await resend.emails
+    .send({
       from: "onboarding@resend.dev", // Configura un dominio verificato su Resend
       to,
       subject,
       text,
+    })
+    .catch((error: Error) => {
+      logger.error(`Error sending email: ${error.message}`);
+      throw new Error("Failed to send email");
     });
-    console.log(`Email sent to ${to}`);
-  } catch (error) {
-    console.error("Error sending email:", error);
-    throw new Error("Failed to send email");
-  }
 }

@@ -2,7 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/lib/prisma";
 import { verifyPassword } from "./auth-utils";
-import type { ExtendedUser } from "@/types/auth";
+import type { User } from "next-auth";
 
 // Dynamically configure authentication providers
 export const getProviders = () => {
@@ -57,7 +57,7 @@ export const getProviders = () => {
           placeholder: "••••••••",
         },
       },
-      async authorize(credentials): Promise<ExtendedUser | null> {
+      async authorize(credentials): Promise<User | null> {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password are required");
         }
@@ -111,7 +111,7 @@ export const getProviders = () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { password, ...userWithoutPassword } = user;
 
-          return userWithoutPassword as ExtendedUser;
+          return userWithoutPassword as User;
         } catch (error) {
           console.error("Error during authentication:", error);
           return null;

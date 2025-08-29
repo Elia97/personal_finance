@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import { ExtendedSession } from "@/types/auth";
+import type { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "./prisma";
 import { sendEmail } from "./resend";
@@ -9,14 +9,14 @@ import { randomBytes } from "crypto";
 /**
  * Ottieni la sessione sul server
  */
-export async function getAuthSession(): Promise<ExtendedSession | null> {
-  return (await getServerSession(authOptions)) as ExtendedSession | null;
+export async function getAuthSession(): Promise<Session> {
+  return (await getServerSession(authOptions)) as Session;
 }
 
 /**
  * Richiedi autenticazione - redirect se non autenticato
  */
-export async function requireAuth(locale: string): Promise<ExtendedSession> {
+export async function requireAuth(locale: string): Promise<Session> {
   const session = await getAuthSession();
 
   if (!session) {
@@ -29,9 +29,7 @@ export async function requireAuth(locale: string): Promise<ExtendedSession> {
 /**
  * Richiedi un ruolo specifico
  */
-export async function requireRole(
-  role: "USER" | "ADMIN"
-): Promise<ExtendedSession> {
+export async function requireRole(role: "USER" | "ADMIN"): Promise<Session> {
   const session = await requireAuth("en"); // Sostituire con il locale appropriato
 
   if (session.user.role !== role) {
@@ -64,7 +62,7 @@ export async function isAdmin(): Promise<boolean> {
 /**
  * Controlla se l'account è attivo
  */
-export async function requireActiveStatus(): Promise<ExtendedSession> {
+export async function requireActiveStatus(): Promise<Session> {
   const session = await requireAuth("en"); // Sostituire con il locale appropriato
 
   if (session.user.status !== "ACTIVE") {

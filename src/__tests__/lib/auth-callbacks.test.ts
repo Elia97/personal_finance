@@ -1,14 +1,14 @@
 import { Account, Session, User } from "next-auth";
-import {
-  signIn,
-  jwt,
-  // redirect,
-  // session
-} from "../../lib/auth-callbacks";
+import { signIn, jwt, session, redirect } from "../../lib/auth-callbacks";
 import { JWT } from "next-auth/jwt";
 import prisma from "@/lib/prisma";
+import logger from "@/lib/logger";
 
 describe("SignIn Callback", () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Pulisce i mock prima di ogni test
+  });
+
   it("Grants access to a user with an external provider and a verified email", async () => {
     const user = {
       email: "test@example.com",
@@ -25,6 +25,10 @@ describe("SignIn Callback", () => {
   });
 
   it("Denies access to a user with an external provider and an unverified email", async () => {
+    const loggerSpy = jest
+      .spyOn(logger, "warn")
+      .mockImplementation(() => logger);
+
     const user = {
       email: "test@example.com",
       emailVerified: undefined,
@@ -37,6 +41,9 @@ describe("SignIn Callback", () => {
     const result = await signIn({ user, account });
 
     expect(result).toBe(false);
+    expect(loggerSpy).toHaveBeenCalledWith(
+      "Sign-in denied: User with email test@example.com has not verified their email via example-provider."
+    );
   });
 
   it("Grants access to a user with the 'credentials' and an unverified email within 30 days", async () => {
@@ -56,6 +63,10 @@ describe("SignIn Callback", () => {
   });
 
   it("Denies access to a user with the 'credentials' and an unverified email after 30 days", async () => {
+    const loggerSpy = jest
+      .spyOn(logger, "warn")
+      .mockImplementation(() => logger);
+
     const user = {
       email: "test@example.com",
       emailVerified: undefined,
@@ -69,6 +80,9 @@ describe("SignIn Callback", () => {
     const result = await signIn({ user, account });
 
     expect(result).toBe(false);
+    expect(loggerSpy).toHaveBeenCalledWith(
+      "Sign-in denied: User with email test@example.com has not verified their email within 30 days of registration."
+    );
   });
 });
 
@@ -93,6 +107,7 @@ describe("JWT Callback", () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks(); // Pulisce i mock prima di ogni test
     // Inizializza il token e la sessione con valori predefiniti
     token = {
       id: userId,
@@ -173,6 +188,29 @@ describe("JWT Callback", () => {
     expect(updatedUser?.country).toBe("FR");
   });
 
+  it("Logs an error when updating database user data fails", async () => {
+    // Spia per intercettare logger.error
+    const loggerSpy = jest
+      .spyOn(logger, "error")
+      .mockImplementation(() => logger);
+
+    await jwt({
+      token,
+      session: {
+        ...session,
+        user: {
+          ...session.user,
+          id: "non-existent-user-id",
+        },
+      },
+      trigger: "update",
+    });
+
+    expect(loggerSpy).toHaveBeenCalledWith(
+      "Error updating user non-existent-user-id in database during session update"
+    );
+  });
+
   it("Refreshes user data from the database", async () => {
     const refreshedToken = await jwt({
       token: { ...token, iat: token.iat! - 3601 }, // Simula un token scaduto
@@ -189,84 +227,104 @@ describe("JWT Callback", () => {
     expect(refreshedToken.country).toBe(user?.country);
   });
 
-  it("Handles missing user gracefully and logs an error", async () => {
-    // Spia per intercettare console.error
-    const consoleErrorSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+  it("Logs an error when refreshing user data fails", async () => {
+    // Spia per intercettare logger.error
+    const loggerSpy = jest
+      .spyOn(logger, "error")
+      .mockImplementation(() => logger);
 
-    // Simula un token con un ID utente che non esiste nel database e un iat scaduto
+    await jwt({
+      token: { ...token, id: "non-existent-user-id", iat: token.iat! - 3601 }, // Simula un token scaduto
+    });
+
+    expect(loggerSpy).toHaveBeenCalledWith(
+      "Error during token refresh: User non-existent-user-id not found."
+    );
+  });
+
+  it("Handles missing user gracefully and logs an error", async () => {
+    const loggerSpy = jest
+      .spyOn(logger, "error")
+      .mockImplementation(() => logger);
+
     const missingUserToken = {
       id: "non-existent-user-id",
       iat: Math.floor(Date.now() / 1000) - 3601, // Simula un token emesso più di un'ora fa
     } as JWT;
 
-    // Chiama la funzione jwt con il token di un utente inesistente
     const resultToken = await jwt({
       token: missingUserToken,
     });
 
-    // Verifica che il token non contenga dati relativi all'utente
     expect(resultToken.name).toBeUndefined();
     expect(resultToken.email).toBeUndefined();
     expect(resultToken.picture).toBeUndefined();
     expect(resultToken.language).toBeUndefined();
     expect(resultToken.country).toBeUndefined();
 
-    // Verifica che console.error sia stato chiamato con il messaggio corretto
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      `Error during token refresh: User with ID non-existent-user-id not found.`
+    expect(loggerSpy).toHaveBeenCalledWith(
+      "Error during token refresh: User non-existent-user-id not found."
     );
 
-    // Ripristina il comportamento originale di console.error
-    consoleErrorSpy.mockRestore();
+    loggerSpy.mockRestore();
   });
 });
 
-// describe("session callback", () => {
-//   it("Extends the session with user data from the token", async () => {
-//     const token = {
-//       id: "user-id",
-//       name: "Test User",
-//       email: "test@example.com",
-//       picture: "image-url",
-//       role: "ADMIN" as UserRole,
-//     };
-//     const baseSession = {
-//       user: { id: "user-id" },
-//       expires: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-//     };
+describe("Session callback", () => {
+  it("dovrebbe estendere la sessione con i dati del token", async () => {
+    // Mock del token
+    const token = {
+      id: "example-user-id",
+      name: "Test User",
+      email: "test.user@example.com",
+      role: "USER",
+    } as JWT;
 
-//     const extendedSession = await session({ session: baseSession, token });
+    // Mock della sessione
+    const oldSession = {
+      user: {},
+    } as Session;
 
-//     expect(extendedSession.user.id).toBe("user-id");
-//     expect(extendedSession.user.name).toBe("Test User");
-//     expect(extendedSession.user.email).toBe("test@example.com");
-//     expect(extendedSession.user.role).toBe("ADMIN");
-//   });
-// });
+    // Chiamata alla funzione session
+    const newSession = await session({
+      session: oldSession,
+      token: token,
+    });
 
-// describe("redirect callback", () => {
-//   const baseUrl = "https://example.com";
+    // Verifica
+    expect(newSession).toEqual({
+      ...oldSession,
+      user: {
+        id: "example-user-id",
+        name: "Test User",
+        email: "test.user@example.com",
+        role: "USER",
+      },
+    });
+  });
+});
 
-//   it("Allows internal redirects", async () => {
-//     const url = "/dashboard";
-//     const result = await redirect({ url, baseUrl });
+describe("Redirect callback", () => {
+  const baseUrl = "https://example.com";
 
-//     expect(result).toBe("https://example.com/dashboard");
-//   });
+  it("Allows internal redirects", async () => {
+    const url = "/dashboard";
+    const result = await redirect({ url, baseUrl });
 
-//   it("Allows external redirects within the same domain", async () => {
-//     const url = "https://example.com/profile";
-//     const result = await redirect({ url, baseUrl });
+    expect(result).toBe("https://example.com/dashboard");
+  });
 
-//     expect(result).toBe(url);
-//   });
+  it("Allows external redirects within the same domain", async () => {
+    const url = "https://example.com/profile";
+    const result = await redirect({ url, baseUrl });
 
-//   it("Denies redirects to external domains", async () => {
-//     const url = "https://malicious.com";
-//     const result = await redirect({ url, baseUrl });
+    expect(result).toBe(url);
+  });
 
-//     expect(result).toBe(baseUrl);
-//   });
-// });
+  it("Denies redirects to external domains", async () => {
+    const url = "https://malicious.com";
+    const result = await redirect({ url, baseUrl });
+
+    expect(result).toBe(baseUrl);
+  });
+});
