@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 export default function CallToAction() {
   const t = useTranslations("home");
   return (
-    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in slide-in-from-bottom-translate-full fade-in-0 duration-1000 transition-discrete">
       <Link
         href="/dashboard"
         aria-label="Go to the dashboard to get started"

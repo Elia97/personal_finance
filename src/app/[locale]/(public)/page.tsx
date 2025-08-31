@@ -18,7 +18,7 @@ export default async function Home() {
   return (
     <>
       <section className="w-full flex flex-col items-center justify-center min-h-screen py-4 text-center">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-none mb-6 text-blue-100 drop-shadow-lg drop-shadow-primary/80">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-none mb-6 text-blue-100 drop-shadow-lg drop-shadow-primary/80 animate-in slide-in-from-top-translate-full fade-in-0 duration-1000 transition-discrete">
           {left}
           {right && (
             <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
@@ -27,7 +27,7 @@ export default async function Home() {
             </span>
           )}
         </h1>
-        <p className="text-lg md:text-2xl max-w-prose text-blue-100 mb-12 leading-relaxed">
+        <p className="text-lg md:text-2xl max-w-prose text-blue-100 mb-12 leading-relaxed animate-in fade-in-0 duration-[4000ms] transition-discrete">
           {t("description")}
         </p>
         <CallToAction />
