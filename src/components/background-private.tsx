@@ -4,7 +4,7 @@ export default function BackgroundPrivate({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen w-full relative overflow-hidden">
+    <div className="min-h-screen w-full relative">
       {/* Professional blue gradient background matching home page */}
       <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800"></div>
 

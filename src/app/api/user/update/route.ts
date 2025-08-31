@@ -18,7 +18,7 @@ export async function PATCH(req: NextRequest) {
         phone,
         language,
         country,
-        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
+        dateOfBirth: dateOfBirth ?? new Date(dateOfBirth),
       },
     });
 
