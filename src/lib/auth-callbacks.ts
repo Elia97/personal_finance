@@ -148,6 +148,8 @@ export async function session({
       name: token.name,
       email: token.email,
       role: token.role,
+      status: token.status,
+      image: token.picture,
     },
   };
 

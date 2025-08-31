@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import type { Session } from "next-auth";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
 import prisma from "./prisma";
 import { sendEmail } from "./resend";
 import { randomBytes } from "crypto";
@@ -9,8 +9,8 @@ import { randomBytes } from "crypto";
 /**
  * Ottieni la sessione sul server
  */
-export async function getAuthSession(): Promise<Session> {
-  return (await getServerSession(authOptions)) as Session;
+export async function getAuthSession(): Promise<Session | null> {
+  return (await getServerSession(authOptions)) as Session | null;
 }
 
 /**
@@ -18,24 +18,22 @@ export async function getAuthSession(): Promise<Session> {
  */
 export async function requireAuth(locale: string): Promise<Session> {
   const session = await getAuthSession();
-
   if (!session) {
-    redirect(`/${locale}/auth/signin`);
+    redirect({ href: "/auth/signin", locale });
+    throw new Error("Redirected to signin");
   }
-
   return session;
 }
 
 /**
- * Richiedi un ruolo specifico
+ * Controlla se l'account è attivo
  */
-export async function requireRole(role: "USER" | "ADMIN"): Promise<Session> {
-  const session = await requireAuth("en"); // Sostituire con il locale appropriato
-
-  if (session.user.role !== role) {
-    redirect("/unauthorized");
+export async function requireActiveStatus(locale: string): Promise<Session> {
+  const session = await requireAuth(locale);
+  if (!session.user || session.user.status !== "ACTIVE") {
+    redirect({ href: "/account-suspended", locale });
+    throw new Error("Redirected to account suspended");
   }
-
   return session;
 }
 
@@ -46,9 +44,7 @@ export async function hasAnyRole(
   roles: ("USER" | "ADMIN")[]
 ): Promise<boolean> {
   const session = await getAuthSession();
-
   if (!session) return false;
-
   return roles.includes(session.user.role || "USER");
 }
 
@@ -57,19 +53,6 @@ export async function hasAnyRole(
  */
 export async function isAdmin(): Promise<boolean> {
   return hasAnyRole(["ADMIN"]);
-}
-
-/**
- * Controlla se l'account è attivo
- */
-export async function requireActiveStatus(): Promise<Session> {
-  const session = await requireAuth("en"); // Sostituire con il locale appropriato
-
-  if (session.user.status !== "ACTIVE") {
-    redirect("/account-suspended");
-  }
-
-  return session;
 }
 
 /**

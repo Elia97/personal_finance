@@ -20,7 +20,7 @@ import {
   Settings,
   Wallet,
 } from "lucide-react";
-import { requireAuth } from "@/lib/auth-utils";
+import { requireActiveStatus } from "@/lib/auth-utils";
 import { getTranslations } from "next-intl/server";
 import BackgroundPrivate from "@/components/background-private";
 import BackToHomeButton from "@/components/back-to-home-button";
@@ -34,10 +34,8 @@ export default async function DashboardLayout({
 }) {
   const paramsList = await params;
   const locale = paramsList.locale;
-  const session = await requireAuth(locale);
-  if (session.user.status !== "ACTIVE") {
-    return null;
-  }
+
+  await requireActiveStatus(locale);
 
   const t = await getTranslations("dashboard.sidebar");
 
@@ -53,6 +51,7 @@ export default async function DashboardLayout({
     { title: t("menu.investments"), href: "/investments", icon: LineChart },
     { title: t("menu.settings"), href: "/settings", icon: Settings },
   ];
+
   return (
     <BackgroundPrivate>
       <SidebarProvider>

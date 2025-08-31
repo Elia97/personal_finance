@@ -55,8 +55,8 @@ export default function SignIn(): React.JSX.Element {
 
         router.push(callbackUrl);
       }
-    } catch (error: unknown) {
-      setError(typeof error === "string" ? error : t("error.generic"));
+    } catch (error) {
+      setError(error instanceof Error ? error.message : t("error.generic"));
     } finally {
       setIsLoading(false);
     }
@@ -105,7 +105,7 @@ export default function SignIn(): React.JSX.Element {
         <div className="flex items-center space-x-2">
           <Checkbox
             id="remember"
-            checked={rememberMe ?? false}
+            checked={rememberMe}
             onCheckedChange={(checked) =>
               setValue("rememberMe", checked === true)
             }

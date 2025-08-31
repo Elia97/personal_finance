@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 
-export default function AuthButton({}) {
+export default function AuthButton() {
   const { data: session, status } = useSession();
   const router = useRouter();
 

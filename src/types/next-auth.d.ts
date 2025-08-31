@@ -1,15 +1,13 @@
 import { DefaultSession, DefaultUser } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
-
-type UserRole = "USER" | "ADMIN";
-type UserStatus = "ACTIVE" | "INACTIVE" | "BANNED";
+import { UserRole, UserStatus } from "@/generated/prisma";
 
 declare module "next-auth" {
   interface Session {
     user: {
       name?: string | null;
       email?: string | null;
-      picture?: string | null;
+      image?: string | null;
       id: string;
       role?: UserRole | null;
       status?: UserStatus | null;

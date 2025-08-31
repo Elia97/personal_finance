@@ -6,7 +6,7 @@ import logger from "@/lib/logger";
 
 describe("SignIn Callback", () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Pulisce i mock prima di ogni test
+    jest.clearAllMocks(); // Clears mocks before each test
   });
 
   it("Grants access to a user with an external provider and a verified email", async () => {
@@ -92,7 +92,7 @@ describe("JWT Callback", () => {
   let session: Partial<Session>;
 
   beforeAll(async () => {
-    // Pulizia del database e creazione di un utente di test
+    // Database cleanup and creation of a test user
     await prisma.user.deleteMany();
     const user = await prisma.user.create({
       data: {
@@ -107,8 +107,8 @@ describe("JWT Callback", () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks(); // Pulisce i mock prima di ogni test
-    // Inizializza il token e la sessione con valori predefiniti
+    jest.clearAllMocks(); // Clears mocks before each test
+    // Initializes the token and session with default values
     token = {
       id: userId,
       name: "Old Name",
@@ -132,13 +132,13 @@ describe("JWT Callback", () => {
   });
 
   afterEach(() => {
-    // Ripulisci le variabili per garantire che i test siano indipendenti
+    // Cleans up variables to ensure tests are independent
     token = {} as JWT;
     session = {};
   });
 
   afterAll(async () => {
-    // Chiudi la connessione al database dopo i test
+    // Closes the database connection after tests
     await prisma.$disconnect();
   });
 
@@ -164,19 +164,19 @@ describe("JWT Callback", () => {
 
   it("Should update the token and database on session update", async () => {
     const updatedToken = await jwt({
-      token: { ...token, iat: Math.floor(Date.now() / 1000) }, // Imposta un timestamp corrente
+      token: { ...token, iat: Math.floor(Date.now() / 1000) }, // Sets a current timestamp
       session,
       trigger: "update",
     });
 
-    // Verifica che il token sia stato aggiornato
+    // Verifies that the token has been updated
     expect(updatedToken.name).toBe("Updated User");
     expect(updatedToken.email).toBe("updateduser@example.com");
     expect(updatedToken.picture).toBe("updated-image.jpg");
     expect(updatedToken.language).toBe("fr");
     expect(updatedToken.country).toBe("FR");
 
-    // Verifica che il database sia stato aggiornato
+    // Verifies that the database has been updated
     const updatedUser = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -189,7 +189,7 @@ describe("JWT Callback", () => {
   });
 
   it("Logs an error when updating database user data fails", async () => {
-    // Spia per intercettare logger.error
+    // Spy to intercept logger.error
     const loggerSpy = jest
       .spyOn(logger, "error")
       .mockImplementation(() => logger);
@@ -213,7 +213,7 @@ describe("JWT Callback", () => {
 
   it("Refreshes user data from the database", async () => {
     const refreshedToken = await jwt({
-      token: { ...token, iat: token.iat! - 3601 }, // Simula un token scaduto
+      token: { ...token, iat: token.iat! - 3601 }, // Simulates an expired token
     });
 
     const user = await prisma.user.findUnique({
@@ -228,13 +228,13 @@ describe("JWT Callback", () => {
   });
 
   it("Logs an error when refreshing user data fails", async () => {
-    // Spia per intercettare logger.error
+    // Spy to intercept logger.error
     const loggerSpy = jest
       .spyOn(logger, "error")
       .mockImplementation(() => logger);
 
     await jwt({
-      token: { ...token, id: "non-existent-user-id", iat: token.iat! - 3601 }, // Simula un token scaduto
+      token: { ...token, id: "non-existent-user-id", iat: token.iat! - 3601 }, // Simulates an expired token
     });
 
     expect(loggerSpy).toHaveBeenCalledWith(
@@ -249,7 +249,7 @@ describe("JWT Callback", () => {
 
     const missingUserToken = {
       id: "non-existent-user-id",
-      iat: Math.floor(Date.now() / 1000) - 3601, // Simula un token emesso più di un'ora fa
+      iat: Math.floor(Date.now() / 1000) - 3601, // Simulates a token issued more than an hour ago
     } as JWT;
 
     const resultToken = await jwt({
@@ -271,8 +271,8 @@ describe("JWT Callback", () => {
 });
 
 describe("Session callback", () => {
-  it("dovrebbe estendere la sessione con i dati del token", async () => {
-    // Mock del token
+  it("should extend the session with token data", async () => {
+    // Token mock
     const token = {
       id: "example-user-id",
       name: "Test User",
@@ -280,18 +280,18 @@ describe("Session callback", () => {
       role: "USER",
     } as JWT;
 
-    // Mock della sessione
+    // Session mock
     const oldSession = {
       user: {},
     } as Session;
 
-    // Chiamata alla funzione session
+    // Call to the session function
     const newSession = await session({
       session: oldSession,
       token: token,
     });
 
-    // Verifica
+    // Verification
     expect(newSession).toEqual({
       ...oldSession,
       user: {
