@@ -150,6 +150,8 @@ export async function session({
       role: token.role,
       status: token.status,
       image: token.picture,
+      language: token.language,
+      country: token.country,
     },
   };
 
