@@ -34,11 +34,13 @@ import {
   Clock,
   TrendingUp,
 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { ProfileUserSchema, ProfileUser } from "@/lib/zod/profile-user-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "next-auth";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 interface UserProfile extends User {
   accountsCount: number;
@@ -49,14 +51,17 @@ interface UserProfile extends User {
 
 export default function ProfilePage() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { update } = useSession();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [initialLanguage, setInitialLanguage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
     watch,
+    control,
     formState: { isDirty },
   } = useForm<ProfileUser>({
     resolver: zodResolver(ProfileUserSchema),
@@ -72,6 +77,7 @@ export default function ProfilePage() {
         }
         const data = await res.json();
         setUserData(data.user);
+        setInitialLanguage(data.user.language || null);
         const formData = {
           ...data.user,
           dateOfBirth: data.user.dateOfBirth
@@ -86,6 +92,7 @@ export default function ProfilePage() {
         reset(formData);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        toast.error("Failed to load profile data. Please refresh the page.");
       }
     };
 
@@ -94,6 +101,7 @@ export default function ProfilePage() {
 
   const onsubmit = async (data: ProfileUser) => {
     if (!isDirty) {
+      toast("No changes detected.");
       setIsEditing(false);
       return;
     }
@@ -121,8 +129,27 @@ export default function ProfilePage() {
           ? new Date(updatedData.user.dateOfBirth).toISOString().split("T")[0]
           : null,
       });
+      toast.success("Profile updated successfully!");
+
+      // Check if language changed
+      if (data.language !== initialLanguage) {
+        await update({ language: data.language });
+        setInitialLanguage(data.language || null);
+        // Set cookie for middleware
+        document.cookie = `user-language=${data.language}; path=/; max-age=31536000`; // 1 year
+        // Redirect to the same page with new locale
+        let remainingPath = pathname.replace(/^\/(en|it)/, "");
+        // Remove any additional locales
+        while (remainingPath.match(/^\/(en|it)/)) {
+          remainingPath = remainingPath.replace(/^\/(en|it)/, "");
+        }
+        if (!remainingPath.startsWith("/")) remainingPath = "/" + remainingPath;
+        const newPathname = `/${data.language}${remainingPath}`;
+        router.push(newPathname);
+      }
     } catch (error) {
       console.error("Error updating user data:", error);
+      toast.error("Failed to update profile. Please try again.");
     } finally {
       setIsEditing(false);
     }
@@ -368,41 +395,53 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="country">Country</Label>
-                  <Select
-                    value={watch("country") || ""}
-                    onValueChange={(value) => setValue("country", value)}
-                    disabled={!isEditing}
-                  >
-                    <SelectTrigger className="bg-background/50">
-                      <SelectValue placeholder="Select country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="US">United States</SelectItem>
-                      <SelectItem value="IT">Italy</SelectItem>
-                      <SelectItem value="GB">United Kingdom</SelectItem>
-                      <SelectItem value="DE">Germany</SelectItem>
-                      <SelectItem value="FR">France</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    name="country"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        value={field.value || ""}
+                        onValueChange={field.onChange}
+                        disabled={!isEditing}
+                      >
+                        <SelectTrigger className="bg-background/50">
+                          <SelectValue placeholder="Select country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="US">United States</SelectItem>
+                          <SelectItem value="IT">Italy</SelectItem>
+                          <SelectItem value="GB">United Kingdom</SelectItem>
+                          <SelectItem value="DE">Germany</SelectItem>
+                          <SelectItem value="FR">France</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="language">Language</Label>
-                  <Select
-                    value={watch("language") || ""}
-                    onValueChange={(value) => setValue("language", value)}
-                    disabled={!isEditing}
-                  >
-                    <SelectTrigger className="bg-background/50">
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="it">Italiano</SelectItem>
-                      <SelectItem value="de">Deutsch</SelectItem>
-                      <SelectItem value="fr">Français</SelectItem>
-                      <SelectItem value="es">Español</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    name="language"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        value={field.value || ""}
+                        onValueChange={field.onChange}
+                        disabled={!isEditing}
+                      >
+                        <SelectTrigger className="bg-background/50">
+                          <SelectValue placeholder="Select language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="en">English</SelectItem>
+                          <SelectItem value="it">Italiano</SelectItem>
+                          <SelectItem value="de">Deutsch</SelectItem>
+                          <SelectItem value="fr">Français</SelectItem>
+                          <SelectItem value="es">Español</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                 </div>
               </div>
             </CardContent>
@@ -446,12 +485,16 @@ export default function ProfilePage() {
                       Add an extra layer of security to your account
                     </p>
                   </div>
-                  <Switch
-                    checked={watch("settings.twoFactorEnabled") || false}
-                    onCheckedChange={(checked) =>
-                      setValue("settings.twoFactorEnabled", checked)
-                    }
-                    disabled={!isEditing}
+                  <Controller
+                    name="settings.twoFactorEnabled"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value || false}
+                        onCheckedChange={field.onChange}
+                        disabled={!isEditing}
+                      />
+                    )}
                   />
                 </div>
 
@@ -462,12 +505,16 @@ export default function ProfilePage() {
                       Receive notifications about your account activity
                     </p>
                   </div>
-                  <Switch
-                    checked={watch("settings.notifications") || false}
-                    onCheckedChange={(checked) =>
-                      setValue("settings.notifications", checked)
-                    }
-                    disabled={!isEditing}
+                  <Controller
+                    name="settings.notifications"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value || false}
+                        onCheckedChange={field.onChange}
+                        disabled={!isEditing}
+                      />
+                    )}
                   />
                 </div>
 
@@ -478,12 +525,16 @@ export default function ProfilePage() {
                       Receive emails about new features and updates
                     </p>
                   </div>
-                  <Switch
-                    checked={watch("settings.marketingEmail") || false}
-                    onCheckedChange={(checked) =>
-                      setValue("settings.marketingEmail", checked)
-                    }
-                    disabled={!isEditing}
+                  <Controller
+                    name="settings.marketingEmail"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value || false}
+                        onCheckedChange={field.onChange}
+                        disabled={!isEditing}
+                      />
+                    )}
                   />
                 </div>
               </div>

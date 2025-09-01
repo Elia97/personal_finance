@@ -5,6 +5,7 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
+import { Toaster } from "react-hot-toast";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -31,6 +32,7 @@ export default async function RootLayout({
             <NextIntlClientProvider>{children}</NextIntlClientProvider>
           </Providers>
         </main>
+        <Toaster />
       </body>
     </html>
   );
