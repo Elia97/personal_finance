@@ -6,7 +6,7 @@ export default async function PrivateLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
   const paramsList = await params;
   const locale = paramsList.locale;

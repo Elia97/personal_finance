@@ -10,7 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useForm } from "react-hook-form";
 import { NewUserFormValues, newUserSchema } from "@/lib/zod/new-user-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function NewUserPage() {
   const { data: session } = useSession();
@@ -22,24 +22,10 @@ export default function NewUserPage() {
     handleSubmit,
     watch,
     setValue,
-    reset,
     formState: { errors, isDirty },
   } = useForm<NewUserFormValues>({
     resolver: zodResolver(newUserSchema),
   });
-
-  useEffect(() => {
-    if (session) {
-      reset({
-        phone: session.user.phone || "",
-        language: session.user.language || "",
-        country: session.user.country || "",
-        dateOfBirth: session.user.dateOfBirth
-          ? new Date(session.user.dateOfBirth)
-          : undefined,
-      });
-    }
-  }, [session, reset]);
 
   const onSubmit = async (data: NewUserFormValues) => {
     setLoading(true);
@@ -70,27 +56,16 @@ export default function NewUserPage() {
 
   if (!session) return null;
 
-  const hasData =
-    session.user.phone ||
-    session.user.language ||
-    session.user.country ||
-    session.user.dateOfBirth;
-
   return (
     <section className="w-full flex flex-col items-center justify-center min-h-screen py-4">
       <Card className="w-full max-w-md">
         <CardContent className="space-y-6 pt-6">
           <h2 className="text-2xl font-bold text-center">
-            {hasData
-              ? "Controlla i tuoi dati"
-              : "Benvenuto! Completa il tuo profilo"}
+            Benvenuto! Completa il tuo profilo
           </h2>
           <p className="text-center text-sm text-gray-600">
-            {hasData
-              ? "Abbiamo trovato dei dati associati al tuo profilo. Controlla che siano corretti e prosegui."
-              : `Benvenuto, ${
-                  session.user.name || session.user.email
-                }! Per continuare, inserisci i dati mancanti.`}
+            Benvenuto, ${session.user.name || session.user.email}! Per
+            continuare, inserisci i dati mancanti.
           </p>
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
@@ -162,15 +137,6 @@ export default function NewUserPage() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Salvataggio..." : "Salva e continua"}
             </Button>
-            {hasData && (
-              <Button
-                type="button"
-                className="w-full mt-2"
-                onClick={() => router.push("/dashboard")}
-              >
-                Prosegui senza modifiche
-              </Button>
-            )}
           </form>
         </CardContent>
         <CardFooter className="text-center text-xs text-muted-foreground">
