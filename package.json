@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "dotenv -e .env.test -- npx jest --verbose",
     "test:lib": "dotenv -e .env.test -- npx jest __tests__/lib --verbose --watch",
     "test:database": "dotenv -e .env.test -- npx jest __tests__/database --verbose"
