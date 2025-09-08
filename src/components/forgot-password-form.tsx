@@ -2,21 +2,18 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { Label } from "./ui/label";
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const t = useTranslations("auth");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,47 +33,45 @@ export default function ForgotPasswordForm() {
       if (response.ok) {
         setMessage(data.message);
       } else {
-        setError(data.error || "Errore durante l'invio");
+        setError(data.error || t("forgotPassword.serverError"));
       }
-    } catch {
-      setError("Errore di rete");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : t("forgotPassword.serverError"),
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
-      <CardHeader>
-        <CardTitle>
-          <h2 className="text-xl font-bold">Forgot Password</h2>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription>
-          <p className="text-lg text-muted-foreground mb-4">
-            Please enter your email to reset the password.
-          </p>
-          <form onSubmit={handleSubmit}>
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-            {message && (
-              <p className="text-green-500 text-sm mt-2">{message}</p>
-            )}
-          </form>
-        </CardDescription>
-      </CardContent>
-      <CardFooter>
-        <Button type="submit" onClick={handleSubmit} disabled={loading}>
-          {loading ? "Invio..." : "Invia"}
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <Label htmlFor="email" className="hidden" aria-hidden="true">
+        {t("forgotPassword.email")}
+      </Label>
+      <Input
+        type="email"
+        placeholder={t("placeholder.email")}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+      {message && <p className="text-green-500 text-sm mt-2">{message}</p>}
+      <div className="gap-4 grid grid-cols-2">
+        <Button
+          type="button"
+          onClick={() => router.push("/auth/signin")}
+          variant="secondary"
+        >
+          {t("forgotPassword.backToSignIn")}
         </Button>
-      </CardFooter>
-    </Card>
+        <Button type="submit" onClick={handleSubmit} disabled={loading}>
+          {loading ? t("forgotPassword.sending") : t("forgotPassword.submit")}
+        </Button>
+      </div>
+    </form>
   );
 }

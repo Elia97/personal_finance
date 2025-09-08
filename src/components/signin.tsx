@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { SignInFormValues, SignInSchema } from "@/lib/zod/signin-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -24,14 +24,12 @@ export default function SignIn(): React.JSX.Element {
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
+    control,
     formState: { errors },
   } = useForm<SignInFormValues>({
     resolver: zodResolver(SignInSchema),
+    defaultValues: { rememberMe: false },
   });
-
-  const rememberMe = watch("rememberMe");
 
   const t = useTranslations("auth");
 
@@ -42,6 +40,7 @@ export default function SignIn(): React.JSX.Element {
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
+        rememberMe: data.rememberMe,
         redirect: false,
       });
       if (result?.error) {
@@ -73,7 +72,7 @@ export default function SignIn(): React.JSX.Element {
           id="email"
           type="email"
           placeholder={t("placeholder.email")}
-          className="h-11"
+          className=""
           {...register("email")}
         />
         {errors.email && (
@@ -91,7 +90,7 @@ export default function SignIn(): React.JSX.Element {
           id="password"
           type="password"
           placeholder={t("placeholder.password")}
-          className="h-11 pr-10"
+          className=" pr-10"
           {...register("password")}
         />
         {errors.password && (
@@ -103,15 +102,19 @@ export default function SignIn(): React.JSX.Element {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Checkbox
-            id="remember"
-            checked={rememberMe}
-            onCheckedChange={(checked) =>
-              setValue("rememberMe", checked === true)
-            }
-            disabled={isLoading}
+          <Controller
+            name="rememberMe"
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                id="rememberMe"
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                disabled={isLoading}
+              />
+            )}
           />
-          <Label htmlFor="remember" className="text-sm text-slate-600">
+          <Label htmlFor="rememberMe" className="text-sm text-slate-600">
             {t("login.rememberMe")}
           </Label>
         </div>
@@ -128,7 +131,7 @@ export default function SignIn(): React.JSX.Element {
 
       <Button
         type="submit"
-        className="w-full h-11 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+        className="w-full bg-gradient-to-tr from-primary to-secondary text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
         disabled={isLoading}
       >
         {isLoading ? (

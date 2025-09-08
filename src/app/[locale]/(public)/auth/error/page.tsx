@@ -1,21 +1,49 @@
-"use client";
-import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import AuthError from "@/components/auth-error";
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 
-export default function AuthErrorPage() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("metadata.error");
+  return {
+    title: t("title"),
+    description: t("description"),
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
+
+export default async function AuthErrorPage(): Promise<React.JSX.Element> {
+  const t = await getTranslations("auth.errorPage");
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-      <h1 className="text-4xl font-bold text-white">Authentication Error</h1>
-      <p className="text-destructive text-center">
-        {error || "An error occurred during login."}
-      </p>
-      <Button asChild variant="link" className="text-white">
-        <Link href="/auth/signin">Back to login</Link>
-      </Button>
-    </div>
+    <Card className="max-w-lg mx-auto shadow-2xl shadow-primary text-center">
+      <CardHeader>
+        <CardTitle>
+          <h1 className="text-xl">{t("title")}</h1>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription className="text-destructive">
+          <AuthError />
+        </CardDescription>
+      </CardContent>
+      <CardFooter className="justify-center">
+        <Button asChild variant="link" className="p-0">
+          <Link href="/">{t("backToHome")}</Link>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

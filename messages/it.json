@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Personal Finance - Gestisci le tue finanze",
+    "title": "Finanza Personale - Gestisci le Tue Finanze",
     "description": "Piattaforma professionale per la gestione delle finanze personali.",
     "keywords": {
       "personalFinance": "finanza personale",
@@ -11,42 +11,67 @@
       "financialPlanning": "pianificazione finanziaria"
     },
     "authors": {
-      "team": "Team Personal Finance"
+      "team": "Team Finanza Personale"
     },
-    "creator": "Personal Finance App",
-    "publisher": "Personal Finance",
+    "creator": "App Finanza Personale",
+    "publisher": "Finanza Personale",
     "openGraph": {
       "locale": "it_IT",
-      "siteName": "Personal Finance"
+      "siteName": "Finanza Personale"
+    },
+    "error": {
+      "title": "Errore - Finanza Personale",
+      "description": "Si è verificato un errore durante il processo."
+    },
+    "forgot-password": {
+      "title": "Password Dimenticata - Finanza Personale",
+      "description": "Reimposta la tua password per riottenere l’accesso al tuo account di finanza personale."
+    },
+    "new-user": {
+      "title": "Benvenuto - Finanza Personale",
+      "description": "Il tuo account è stato creato con successo. Inizia subito a gestire le tue finanze."
+    },
+    "reset-password": {
+      "title": "Reimposta Password - Finanza Personale",
+      "description": "Imposta una nuova password per il tuo account di finanza personale."
+    },
+    "signin": {
+      "title": "Accedi - Finanza Personale",
+      "description": "Accedi alla tua piattaforma di gestione finanziaria personale."
+    },
+    "verify-request": {
+      "title": "Verifica Richiesta - Finanza Personale",
+      "description": "Controlla la tua email per il link di accesso al tuo account di finanza personale."
     }
   },
   "home": {
-    "title": "Personal Finance - Gestisci le tue finanze",
+    "title": "Finanza Personale - Gestisci le Tue Finanze",
     "description": "Piattaforma professionale per la gestione delle finanze personali.\nMonitora, pianifica e ottimizza le tue risorse finanziarie.",
-    "getStarted": "Inizia ora",
-    "discoverFeatures": "Scopri le funzionalità"
+    "getStarted": "Inizia Ora",
+    "discoverFeatures": "Scopri le Funzionalità",
+    "footerDescription": "Protetto da crittografia end-to-end",
+    "privacyPolicy": "Informativa sulla Privacy",
+    "termsOfService": "Termini di Servizio"
   },
   "signin": {
-    "title": "Accedi - Personal Finance",
+    "title": "Accedi - Finanza Personale",
     "description": "Accedi alla tua piattaforma di gestione finanziaria personale.",
-    "footerDescription": "Protetto da crittografia end-to-end",
-    "privacyPolicy": "Informativa sulla privacy",
-    "termsOfService": "Termini di servizio"
+    "features": {
+      "security": "Sicurezza\na livello bancario",
+      "analytics": "Analisi\nAvanzate",
+      "management": "Gestione\nTutto-in-uno"
+    }
   },
   "auth": {
     "error": {
-      "invalidCredentials": "Credenziali non valide. Controlla email e password.",
+      "invalidCredentials": "Credenziali non valide. Controlla la tua email e password.",
       "accountNotLinked": "Questo account è già collegato a un altro provider.",
-      "oauthError": "Si è verificato un errore durante l'autenticazione OAuth.",
-      "generic": "Si è verificato un errore durante l'accesso. Riprova.",
-      "requiredFields": "Email e password sono obbligatori",
+      "oauthError": "Si è verificato un errore durante l’autenticazione OAuth.",
+      "generic": "Si è verificato un errore durante l’accesso. Riprova.",
       "inactiveAccount": "Il tuo account non è attivo. Contatta il supporto.",
       "connection": "Errore di connessione. Riprova più tardi.",
-      "registration": "Errore durante la registrazione",
-      "registrationSuccessButLogin": "Registrazione avvenuta, ma errore durante l'accesso.",
-      "allFieldsRequired": "Tutti i campi sono obbligatori",
-      "passwordsNoMatch": "Le password non corrispondono",
-      "acceptTerms": "Devi accettare i termini di servizio"
+      "registration": "Errore di registrazione",
+      "registrationSuccessButLogin": "Registrazione riuscita, ma errore durante l’accesso."
     },
     "oauth": {
       "continueWithGoogle": "Continua con Google",
@@ -76,21 +101,91 @@
       "signUpHere": "Registrati qui",
       "signInHere": "Accedi qui"
     },
-    "features": {
-      "security": "Sicurezza\nbancaria",
-      "analytics": "Analisi\navanzate",
-      "management": "Gestione\ntutto-in-uno"
-    },
     "placeholder": {
       "email": "email@esempio.com",
       "password": "••••••••",
       "name": "Mario Rossi"
+    },
+    "forgotPassword": {
+      "title": "Password Dimenticata",
+      "description": "Inserisci la tua email per reimpostare la password.",
+      "emailRequired": "L’email è obbligatoria",
+      "emailNotSent": "Se esiste un account con questa email, è stato inviato un link per reimpostare la password.",
+      "resetEmail": {
+        "subject": "Reimposta la tua Password",
+        "body": "Clicca sul seguente link per reimpostare la tua password: {resetUrl}"
+      },
+      "email": "Email",
+      "emailSent": "Link di reset inviato alla tua email.",
+      "serverError": "Si è verificato un errore. Riprova più tardi.",
+      "sendLink": "Invia Link di Reset",
+      "backToSignIn": "Torna al Login",
+      "submit": "Invia",
+      "sending": "Invio in corso...",
+      "note": "Se non ricevi l’email, controlla la cartella spam o riprova."
+    },
+    "resetPassword": {
+      "token": {
+        "invalid": "Token non valido o scaduto.",
+        "missing": "Il token è obbligatorio."
+      },
+      "passwords": {
+        "mismatch": "Le password non corrispondono.",
+        "short": "La password deve contenere almeno 6 caratteri."
+      },
+      "success": "Password reimpostata con successo. Reindirizzamento all’accesso...",
+      "error": "Si è verificato un errore. Riprova più tardi.",
+      "title": "Reimposta Password",
+      "description": "Inserisci la tua nuova password qui sotto.",
+      "newPassword": "Nuova Password",
+      "confirmPassword": "Conferma Password",
+      "submit": "Reimposta Password",
+      "resetting": "Reimpostazione in corso...",
+      "requestNew": "Richiedi un nuovo link"
+    },
+    "errorPage": {
+      "title": "Errore di Autenticazione",
+      "description": "Si è verificato un errore durante l’autenticazione. Riprova.",
+      "backToHome": "Torna alla Home"
+    },
+    "newUser": {
+      "title": "Completa il Tuo Profilo",
+      "description": "Benvenuto, ${session.user.name || session.user.email}! Per continuare, compila le informazioni mancanti.",
+      "note": "Puoi modificare queste informazioni in seguito dalle impostazioni del profilo.",
+      "formError": "Si è verificato un errore durante l’aggiornamento del profilo. Riprova.",
+      "phone": {
+        "label": "Numero di Telefono",
+        "placeholder": "Inserisci il tuo numero di telefono"
+      },
+      "language": {
+        "label": "Lingua Preferita",
+        "placeholder": "es. it, en, fr"
+      },
+      "country": {
+        "label": "Paese",
+        "placeholder": "es. IT, US, FR"
+      },
+      "dateOfBirth": {
+        "label": "Data di Nascita"
+      },
+      "submit": "Completa Profilo",
+      "submitting": "Invio in corso..."
+    },
+    "verifyRequest": {
+      "title": "Controlla la Tua Email",
+      "description": "Un link di accesso è stato inviato al tuo indirizzo email. Controlla la posta in arrivo e clicca sul link per accedere.",
+      "note": "Puoi modificare queste informazioni in seguito dalle impostazioni del profilo.",
+      "error": "Si è verificato un errore durante il reinvio dell’email. Riprova più tardi.",
+      "resendSuccess": "Email reinviata con successo!",
+      "submitting": "Invio in corso...",
+      "submit": "Reinvia Email",
+      "backToLogin": "Torna al Login"
     }
   },
   "dashboard": {
-    "title": "Dashboard - Personal Finance",
+    "title": "Dashboard - Finanza Personale",
     "description": "Dashboard completa per il controllo delle tue finanze personali.",
-    "addTransaction": "Aggiungi transazione",
+    "addTransaction": "Aggiungi Transazione",
     "sidebar": {
       "menu": {
         "dashboard": "Dashboard",
@@ -109,26 +204,22 @@
       "description": "Panoramica delle tue finanze personali"
     },
     "summary": {
-      "title": "Riepilogo mensile",
+      "title": "Riepilogo Mensile",
       "income": "Entrate",
       "expenses": "Uscite",
       "balance": "Saldo",
-      "viewByMonth": "Vedi riepilogo per mese"
+      "viewByMonth": "Visualizza riepilogo per mese"
     },
     "accounts": {
-      "title": "I tuoi conti",
+      "title": "I Tuoi Conti",
       "description": "Panoramica dei tuoi conti finanziari",
       "type": {
-        "checking": "Conto corrente",
-        "savings": "Conto risparmio",
-        "investment": "Conto investimenti"
+        "checking": "Conto Corrente",
+        "savings": "Conto Risparmio",
+        "investment": "Conto Investimenti"
       },
-      "totalBalance": "Saldo totale",
+      "totalBalance": "Saldo Totale",
       "emptyState": "Nessun conto trovato. Aggiungi un conto per iniziare."
     }
-  },
-  "default": {
-    "title": "Personal Finance App",
-    "description": "App professionale per la gestione delle finanze personali."
   }
 }

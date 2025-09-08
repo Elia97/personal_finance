@@ -13,12 +13,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verifica se il token inizia con 'reset_'
     if (!token.startsWith("reset_")) {
       return NextResponse.json({ error: "Invalid token" }, { status: 400 });
     }
 
-    // Trova il token in VerificationToken
     const verificationToken = await prisma.verificationToken.findUnique({
       where: { token },
     });
@@ -30,7 +28,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Trova l'utente
     const user = await prisma.user.findUnique({
       where: { email: verificationToken.identifier },
     });
@@ -39,16 +36,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Hash della nuova password
     const hashedPassword = await bcrypt.hash(newPassword, 12);
 
-    // Aggiorna la password
     await prisma.user.update({
       where: { id: user.id },
       data: { password: hashedPassword },
     });
 
-    // Elimina il token usato
     await prisma.verificationToken.delete({
       where: { token },
     });

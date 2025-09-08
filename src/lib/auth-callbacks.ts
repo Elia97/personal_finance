@@ -28,7 +28,7 @@ export async function signIn({
   if (account?.provider !== "credentials") {
     if (user.email && !user.emailVerified) {
       logger.warn(
-        `Sign-in denied: User with email ${user.email} has not verified their email via ${account?.provider}.`
+        `Sign-in denied: User with email ${user.email} has not verified their email via ${account?.provider}.`,
       );
       return false;
     }
@@ -42,7 +42,7 @@ export async function signIn({
       (currentDate.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24) > 30
     ) {
       logger.warn(
-        `Sign-in denied: User with email ${user.email} has not verified their email within 30 days of registration.`
+        `Sign-in denied: User with email ${user.email} has not verified their email within 30 days of registration.`,
       );
       return false;
     }
@@ -63,19 +63,26 @@ export async function jwt({
 }): Promise<JWT> {
   // Helper per aggiornare il token con i dati dell'utente
   const updateToken = (data: Partial<User>) => {
-    token.name = data.name || token.name;
-    token.email = data.email || token.email;
-    token.picture = data.image || token.picture;
-    token.id = data.id || token.id;
-    token.role = data.role || token.role;
-    token.status = data.status || token.status;
-    token.language = data.language || token.language;
-    token.country = data.country || token.country;
+    token.name = data.name ?? token.name;
+    token.email = data.email ?? token.email;
+    token.picture = data.image ?? token.picture;
+    token.id = data.id ?? token.id;
+    token.role = data.role ?? token.role;
+    token.status = data.status ?? token.status;
+    token.language = data.language ?? token.language;
+    token.country = data.country ?? token.country;
+    token.rememberMe = data.rememberMe ?? token.rememberMe;
   };
 
   // On first login, add user information to the token
   if (user) {
     updateToken(user);
+
+    const sessionDuration = user.rememberMe
+      ? 30 * 24 * 60 * 60 // 30 days
+      : 8 * 60 * 60; // 8 hours
+
+    token.exp = Math.floor(Date.now() / 1000) + sessionDuration;
   }
 
   // If it's a session update trigger, update the token and database
@@ -95,7 +102,7 @@ export async function jwt({
       })
       .catch(() => {
         logger.error(
-          `Error updating user ${session?.user?.id} in database during session update`
+          `Error updating user ${session?.user?.id} in database during session update`,
         );
       });
   }
@@ -152,6 +159,7 @@ export async function session({
       image: token.picture,
       language: token.language,
       country: token.country,
+      rememberMe: token.rememberMe,
     },
   };
 

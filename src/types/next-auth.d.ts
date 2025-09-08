@@ -13,15 +13,12 @@ declare module "next-auth" {
       status?: UserStatus | null;
       language?: string | null;
       country?: string | null;
+      rememberMe?: boolean | null;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
-    id: string;
     role?: UserRole | null;
-    email?: string | null;
-    name?: string | null;
-    image?: string | null;
     phone?: string | null;
     language?: string | null;
     country?: string | null;
@@ -29,6 +26,7 @@ declare module "next-auth" {
     status?: UserStatus | null;
     lastLogin?: Date | null;
     emailVerified?: Date | null;
+    rememberMe?: boolean | null;
     createdAt?: Date | null;
     updatedAt?: Date | null;
     settings?: JsonValue;
@@ -42,8 +40,9 @@ declare module "next-auth/jwt" {
     status?: UserStatus | null;
     language?: string | null;
     country?: string | null;
-    iat?: number | null; // Aggiungi esplicitamente la proprietà iat
-    exp?: number | null; // (Opzionale) Aggiungi exp se necessario
-    nbf?: number | null; // (Opzionale) Aggiungi nbf se necessario
+    rememberMe?: boolean | null;
+    iat?: number | null;
+    exp?: number | null;
+    nbf?: number | null;
   }
 }

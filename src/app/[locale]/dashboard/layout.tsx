@@ -10,8 +10,6 @@ export default async function PrivateLayout({
 }) {
   const paramsList = await params;
   const locale = paramsList.locale;
-
   await requireActiveStatus(locale);
-
   return <BackgroundPrivate>{children}</BackgroundPrivate>;
 }

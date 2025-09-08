@@ -18,20 +18,49 @@
     "openGraph": {
       "locale": "en_US",
       "siteName": "Personal Finance"
+    },
+    "error": {
+      "title": "Error - Personal Finance",
+      "description": "An error occurred during the process."
+    },
+    "forgot-password": {
+      "title": "Forgot Password - Personal Finance",
+      "description": "Reset your password to regain access to your personal finance account."
+    },
+    "new-user": {
+      "title": "Welcome - Personal Finance",
+      "description": "Your account has been successfully created. Start managing your finances now."
+    },
+    "reset-password": {
+      "title": "Reset Password - Personal Finance",
+      "description": "Set a new password for your personal finance account."
+    },
+    "signin": {
+      "title": "Sign In - Personal Finance",
+      "description": "Access your personal financial management platform."
+    },
+    "verify-request": {
+      "title": "Verify Request - Personal Finance",
+      "description": "Check your email for a sign-in link to access your personal finance account."
     }
   },
   "home": {
     "title": "Personal Finance - Manage Your Finances",
     "description": "Professional platform for personal finance management.\nMonitor, plan and optimize your financial resources.",
     "getStarted": "Get Started",
-    "discoverFeatures": "Discover Features"
+    "discoverFeatures": "Discover Features",
+    "footerDescription": "Protected by end-to-end encryption",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
   },
   "signin": {
     "title": "Sign In - Personal Finance",
     "description": "Access your personal financial management platform.",
-    "footerDescription": "Protected by end-to-end encryption",
-    "privacyPolicy": "Privacy Policy",
-    "termsOfService": "Terms of Service"
+    "features": {
+      "security": "Bank-level\nSecurity",
+      "analytics": "Advanced\nAnalytics",
+      "management": "All-in-one\nManagement"
+    }
   },
   "auth": {
     "error": {
@@ -72,15 +101,85 @@
       "signUpHere": "Sign up here",
       "signInHere": "Sign in here"
     },
-    "features": {
-      "security": "Bank-level\nSecurity",
-      "analytics": "Advanced\nAnalytics",
-      "management": "All-in-one\nManagement"
-    },
     "placeholder": {
       "email": "email@example.com",
       "password": "••••••••",
       "name": "John Doe"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "description": "Please enter your email to reset the password.",
+      "emailRequired": "Email is required",
+      "emailNotSent": "If an account with that email exists, a password reset link has been sent.",
+      "resetEmail": {
+        "subject": "Reset Your Password",
+        "body": "Click the following link to reset your password: {resetUrl}"
+      },
+      "email": "Email",
+      "emailSent": "Reset link sent to your email.",
+      "serverError": "An error occurred. Please try again later.",
+      "sendLink": "Send Reset Link",
+      "backToSignIn": "Back to Sign In",
+      "submit": "Submit",
+      "sending": "Sending...",
+      "note": "If you don't receive an email, please check your spam folder or try again."
+    },
+    "resetPassword": {
+      "token": {
+        "invalid": "Invalid or expired token.",
+        "missing": "Token is required."
+      },
+      "passwords": {
+        "mismatch": "Passwords do not match.",
+        "short": "Password must be at least 6 characters long."
+      },
+      "success": "Password reset successfully. Redirecting to sign in...",
+      "error": "An error occurred. Please try again later.",
+      "title": "Reset Password",
+      "description": "Please enter your new password below.",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Reset Password",
+      "resetting": "Resetting...",
+      "requestNew": "Request a new link"
+    },
+    "errorPage": {
+      "title": "Authentication Error",
+      "description": "An error occurred during authentication. Please try again.",
+      "backToHome": "Back to Home"
+    },
+    "newUser": {
+      "title": "Complete Your Profile",
+      "description": "Welcome, ${session.user.name || session.user.email}! To continue, please fill in the missing information.",
+      "note": "You can also edit this information later from the profile settings.",
+      "formError": "Error occurred while updating your profile. Please try again.",
+      "phone": {
+        "label": "Phone Number",
+        "placeholder": "Enter your phone number"
+      },
+      "language": {
+        "label": "Preferred Language",
+        "placeholder": "e.g., en, it, fr"
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "e.g., US, IT, FR"
+      },
+      "dateOfBirth": {
+        "label": "Date of Birth"
+      },
+      "submit": "Complete Profile",
+      "submitting": "Submitting..."
+    },
+    "verifyRequest": {
+      "title": "Check Your Email",
+      "description": "A sign-in link has been sent to your email address. Please check your inbox and click the link to sign in.",
+      "note": "You can also edit this information later from the profile settings.",
+      "error": "An error occurred while resending the email. Please try again later.",
+      "resendSuccess": "Email resent successfully!",
+      "submitting": "Resending...",
+      "submit": "Resend Email",
+      "backToLogin": "Back to Login"
     }
   },
   "dashboard": {
@@ -122,9 +221,5 @@
       "totalBalance": "Total Balance",
       "emptyState": "No accounts found. Add an account to get started."
     }
-  },
-  "default": {
-    "title": "Personal Finance App",
-    "description": "Professional app for personal finance management."
   }
 }

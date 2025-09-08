@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import CallToAction from "@/components/call-to-action";
+import { Button } from "@/components/ui/button";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("home");
@@ -10,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Home() {
+export default async function Home(): Promise<React.JSX.Element> {
   const t = await getTranslations("home");
   const title = t("title");
   const [left, right] = title.split("-").map((part) => part.trim());
@@ -33,6 +34,24 @@ export default async function Home() {
         <CallToAction />
       </section>
       <section id="features" className="h-screen"></section>
+      <div className="text-center mt-8 text-muted-foreground text-sm">
+        <p>{t("footerDescription")}</p>
+        <p className="mt-1">
+          <Button
+            variant="link"
+            className="px-0 text-muted-foreground hover:text-white text-sm"
+          >
+            {t("privacyPolicy")}
+          </Button>
+          {" • "}
+          <Button
+            variant="link"
+            className="px-0 text-muted-foreground hover:text-white text-sm"
+          >
+            {t("termsOfService")}
+          </Button>
+        </p>
+      </div>
     </>
   );
 }

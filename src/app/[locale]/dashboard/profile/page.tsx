@@ -158,7 +158,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen p-6 space-y-8">
       {/* Header Section */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-6 md:flex-row md:justify-between">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             User Profile

@@ -76,7 +76,7 @@ export default function SignUp() {
           type="name"
           placeholder={t("placeholder.name")}
           disabled={isLoading}
-          className="h-11"
+          className=""
           {...register("name")}
         />
         {errors.name && (
@@ -92,7 +92,7 @@ export default function SignUp() {
           type="email"
           placeholder={t("placeholder.email")}
           disabled={isLoading}
-          className="h-11"
+          className=""
           {...register("email")}
         />
         {errors.email && (
@@ -108,7 +108,7 @@ export default function SignUp() {
           type="password"
           placeholder={t("placeholder.password")}
           disabled={isLoading}
-          className="h-11"
+          className=""
           {...register("password")}
         />
         {errors.password && (
@@ -124,7 +124,7 @@ export default function SignUp() {
           type="password"
           placeholder={t("placeholder.password")}
           disabled={isLoading}
-          className="h-11"
+          className=""
           {...register("confirmPassword")}
         />
         {errors.confirmPassword && (
@@ -156,7 +156,7 @@ export default function SignUp() {
       </div>
       <Button
         type="submit"
-        className="w-full h-11 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+        className="w-full bg-gradient-to-bl from-primary to-secondary text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
         disabled={isLoading}
       >
         {isLoading ? (

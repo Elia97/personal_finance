@@ -37,7 +37,7 @@ export const getProviders = () => {
             emailVerified: profile.email_verified ? new Date() : null,
           };
         },
-      })
+      }),
     );
   }
 
@@ -49,12 +49,14 @@ export const getProviders = () => {
         email: {
           label: "Email",
           type: "email",
-          placeholder: "name@example.com",
         },
         password: {
           label: "Password",
           type: "password",
-          placeholder: "••••••••",
+        },
+        rememberMe: {
+          label: "Remember Me",
+          type: "checkbox",
         },
       },
       async authorize(credentials): Promise<User | null> {
@@ -111,13 +113,18 @@ export const getProviders = () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { password, ...userWithoutPassword } = user;
 
-          return userWithoutPassword as User;
+          const userWithRememberMe = {
+            ...userWithoutPassword,
+            rememberMe: credentials.rememberMe === "true",
+          };
+
+          return userWithRememberMe as User;
         } catch (error) {
           console.error("Error during authentication:", error);
           return null;
         }
       },
-    })
+    }),
   );
 
   return providers;

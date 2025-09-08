@@ -1,16 +1,17 @@
 import {
   Card,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import AuthForm from "@/components/auth-form";
+import AuthFormWrapper from "@/components/auth-form-wrapper";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import { Shield, TrendingUp, CreditCard } from "lucide-react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("signin");
+  const t = await getTranslations("metadata.signin");
   return {
     title: t("title"),
     description: t("description"),
@@ -21,41 +22,39 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function SignInPage() {
+export default async function SignInPage(): Promise<React.JSX.Element> {
   const t = await getTranslations("signin");
+
   return (
-    <section className="w-full flex flex-col items-center justify-center min-h-screen py-4">
-      <Card className="shadow-2xl border-slate-200/20 bg-white/95 backdrop-blur-sm w-full max-w-xl">
-        <CardHeader className="space-y-1 pb-6">
-          <CardTitle className="text-2xl text-center font-semibold">
-            {t("title")}
-          </CardTitle>
-          <CardDescription className="text-center text-slate-600">
+    <div className="py-6">
+      <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">{t("title")}</CardTitle>
+          <CardDescription className="text-muted-foreground">
             {t("description")}
           </CardDescription>
         </CardHeader>
-        <AuthForm />
+        <AuthFormWrapper />
+        <CardFooter className="flex flex-col space-y-4">
+          {/* Features */}
+          <div className="grid grid-cols-3 gap-4 pt-4 border-t">
+            <div className="text-center">
+              <Shield className="h-6 w-6 text-green-600 mx-auto mb-1" />
+              <p className="text-xs text-zinc-600">{t("features.security")}</p>
+            </div>
+            <div className="text-center">
+              <TrendingUp className="h-6 w-6 text-blue-600 mx-auto mb-1" />
+              <p className="text-xs text-zinc-600">{t("features.analytics")}</p>
+            </div>
+            <div className="text-center">
+              <CreditCard className="h-6 w-6 text-purple-600 mx-auto mb-1" />
+              <p className="text-xs text-zinc-600">
+                {t("features.management")}
+              </p>
+            </div>
+          </div>
+        </CardFooter>
       </Card>
-
-      {/* Footer */}
-      <div className="text-center mt-8 text-slate-400 text-sm">
-        <p>{t("footerDescription")}</p>
-        <p className="mt-1">
-          <Button
-            variant="link"
-            className="px-0 text-slate-400 hover:text-white text-sm"
-          >
-            {t("privacyPolicy")}
-          </Button>
-          {" • "}
-          <Button
-            variant="link"
-            className="px-0 text-slate-400 hover:text-white text-sm"
-          >
-            {t("termsOfService")}
-          </Button>
-        </p>
-      </div>
-    </section>
+    </div>
   );
 }
