@@ -20,7 +20,7 @@ export const ProfileUserSchema = z.object({
       },
       {
         message: "Invalid country code",
-      }
+      },
     ),
   language: z
     .string()
@@ -33,7 +33,7 @@ export const ProfileUserSchema = z.object({
       },
       {
         message: "Invalid language code",
-      }
+      },
     ),
   settings: z
     .object({

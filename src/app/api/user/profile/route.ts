@@ -1,54 +1,8 @@
 import { authOptions } from "@/lib/auth";
-import { jwt } from "@/lib/auth-callbacks"; // Importa direttamente il callback jwt
+import { jwt } from "@/lib/auth-callbacks";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-
-export async function GET() {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        image: true,
-        language: true,
-        country: true,
-        dateOfBirth: true,
-        lastLogin: true,
-        emailVerified: true,
-        settings: true,
-        createdAt: true,
-        _count: {
-          select: {
-            accounts: true,
-            transactions: true,
-            goals: true,
-            investments: true,
-          },
-        },
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ user }, { status: 200 });
-  } catch {
-    return NextResponse.json(
-      { error: "Error fetching profile" },
-      { status: 500 }
-    );
-  }
-}
 
 export async function PUT(req: NextRequest) {
   try {
@@ -89,13 +43,13 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json(
       { user: updatedUser, token: updatedToken },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error in PUT request", error); // Log errore
     return NextResponse.json(
       { error: "Error updating profile" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -42,6 +42,14 @@
     "verify-request": {
       "title": "Verifica Richiesta - Finanza Personale",
       "description": "Controlla la tua email per il link di accesso al tuo account di finanza personale."
+    },
+    "dashboard": {
+      "title": "Dashboard - Finanza Personale",
+      "description": "Dashboard completa per il controllo delle tue finanze personali."
+    },
+    "profile": {
+      "title": "Profilo - Finanza Personale",
+      "description": "Gestisci le tue informazioni personali e le impostazioni dell’account."
     }
   },
   "home": {

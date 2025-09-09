@@ -42,6 +42,14 @@
     "verify-request": {
       "title": "Verify Request - Personal Finance",
       "description": "Check your email for a sign-in link to access your personal finance account."
+    },
+    "dashboard": {
+      "title": "Dashboard - Personal Finance",
+      "description": "Complete dashboard for controlling your personal finances."
+    },
+    "profile": {
+      "title": "Profile - Personal Finance",
+      "description": "Manage your personal information and account settings."
     }
   },
   "home": {
