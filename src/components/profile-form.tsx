@@ -28,35 +28,24 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { User as UserIcon, Globe, Shield, Save, Edit3 } from "lucide-react";
-
-import { User } from "next-auth";
-
-interface UserProfile extends User {
-  _count: {
-    accounts: number;
-    transactions: number;
-    goals: number;
-    investments: number;
-  };
-}
-
-interface ProfileFormProps {
-  userData: UserProfile | null;
-  updateUserData: (data: UserProfile) => void;
-}
+import { UserProfile } from "next-auth";
+import { useTranslations } from "next-intl";
 
 export default function ProfileForm({
   userData,
   updateUserData,
-}: ProfileFormProps) {
+}: {
+  userData: UserProfile | null;
+  updateUserData: (data: UserProfile) => void;
+}): React.JSX.Element | null {
   const { update } = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  const [initialLanguage, setInitialLanguage] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const t = useTranslations("profile.form");
+  const [initialLanguage, setInitialLanguage] = useState<string>("");
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  // Evita hydration mismatch per componenti con ID dinamici
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -106,7 +95,7 @@ export default function ProfileForm({
       });
 
       if (!res.ok) {
-        throw new Error(`Network response was not ok: ${res.statusText}`);
+        throw new Error(t("errorUpdatingProfile"));
       }
 
       const updatedData = await res.json();
@@ -115,17 +104,13 @@ export default function ProfileForm({
         ...updatedData.user,
         dateOfBirth: formatDate(updatedData.user.dateOfBirth),
       });
-      toast.success("Profile updated successfully!");
+      toast.success(t("profileUpdatedSuccessfully"));
 
-      // Check if language changed
       if (data.language !== initialLanguage) {
         await update({ language: data.language });
-        setInitialLanguage(data.language || null);
-        // Set cookie for middleware
+        setInitialLanguage(data.language || "");
         document.cookie = `user-language=${data.language}; path=/; max-age=31536000`; // 1 year
-        // Redirect to the same page with new locale
         let remainingPath = pathname.replace(/^\/(en|it)/, "");
-        // Remove any additional locales
         while (remainingPath.match(/^\/(en|it)/)) {
           remainingPath = remainingPath.replace(/^\/(en|it)/, "");
         }
@@ -135,9 +120,8 @@ export default function ProfileForm({
       }
 
       setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating user data:", error);
-      toast.error("Failed to update profile. Please try again.");
+    } catch {
+      toast.error(t("errorUpdatingProfile"));
     }
   };
 
@@ -146,7 +130,6 @@ export default function ProfileForm({
     setIsEditing(false);
   };
 
-  // Imposta il form quando userData cambia
   useEffect(() => {
     if (userData) {
       const formData = {
@@ -163,7 +146,7 @@ export default function ProfileForm({
         },
       };
       reset(formData);
-      setInitialLanguage(userData.language || null);
+      setInitialLanguage(userData.language || "");
     }
   }, [userData, reset]);
 
@@ -176,16 +159,16 @@ export default function ProfileForm({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserIcon className="w-5 h-5 text-primary" />
-            Personal Information
+            {t("personalInformation.title")}
           </CardTitle>
           <CardDescription>
-            Update your personal details and contact information
+            {t("personalInformation.description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name">{t("personalInformation.fullName")}</Label>
               <Input
                 id="name"
                 {...register("name")}
@@ -194,7 +177,9 @@ export default function ProfileForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">
+                {t("personalInformation.emailAddress")}
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -204,7 +189,9 @@ export default function ProfileForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone">
+                {t("personalInformation.phoneNumber")}
+              </Label>
               <Input
                 id="phone"
                 {...register("phone")}
@@ -213,7 +200,9 @@ export default function ProfileForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Date of Birth</Label>
+              <Label htmlFor="dateOfBirth">
+                {t("personalInformation.dateOfBirth")}
+              </Label>
               <Input
                 id="dateOfBirth"
                 type="date"
@@ -231,16 +220,18 @@ export default function ProfileForm({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="w-5 h-5 text-primary" />
-            Location & Language
+            {t("location&language.title")}
           </CardTitle>
           <CardDescription>
-            Set your location and language preferences
+            {t("location&language.description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="country">Country</Label>
+              <Label htmlFor="country">
+                {t("location&language.country.label")}
+              </Label>
               {isClient ? (
                 <Controller
                   name="country"
@@ -255,23 +246,26 @@ export default function ProfileForm({
                         <SelectValue placeholder="Select your country" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="US">United States</SelectItem>
-                        <SelectItem value="IT">Italy</SelectItem>
-                        <SelectItem value="DE">Germany</SelectItem>
-                        <SelectItem value="FR">France</SelectItem>
-                        <SelectItem value="UK">United Kingdom</SelectItem>
+                        <SelectItem value="US">
+                          {t("location&language.country.US")}
+                        </SelectItem>
+                        <SelectItem value="IT">
+                          {t("location&language.country.IT")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   )}
                 />
               ) : (
                 <div className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm text-muted-foreground">
-                  Loading...
+                  {t("location&language.country.loading")}...
                 </div>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="language">Language</Label>
+              <Label htmlFor="language">
+                {t("location&language.language.label")}
+              </Label>
               {isClient ? (
                 <Controller
                   name="language"
@@ -286,15 +280,19 @@ export default function ProfileForm({
                         <SelectValue placeholder="Select your language" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="it">Italiano</SelectItem>
+                        <SelectItem value="en">
+                          {t("location&language.language.en")}
+                        </SelectItem>
+                        <SelectItem value="it">
+                          {t("location&language.language.it")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   )}
                 />
               ) : (
                 <div className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm text-muted-foreground">
-                  Loading...
+                  {t("location&language.language.loading")}...
                 </div>
               )}
             </div>
@@ -307,19 +305,21 @@ export default function ProfileForm({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-primary" />
-            Security & Preferences
+            {t("security&preferences.title")}
           </CardTitle>
           <CardDescription>
-            Manage your security settings and app preferences
+            {t("security&preferences.description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <Label htmlFor="twoFactor">Two-Factor Authentication</Label>
+                <Label htmlFor="twoFactor">
+                  {t("security&preferences.twoFactorAuth.label")}
+                </Label>
                 <p className="text-sm text-muted-foreground">
-                  Add an extra layer of security to your account
+                  {t("security&preferences.twoFactorAuth.description")}
                 </p>
               </div>
               <Controller
@@ -340,9 +340,11 @@ export default function ProfileForm({
 
             <div className="flex items-center justify-between">
               <div>
-                <Label htmlFor="notifications">Push Notifications</Label>
+                <Label htmlFor="notifications">
+                  {t("security&preferences.pushNotifications.label")}
+                </Label>
                 <p className="text-sm text-muted-foreground">
-                  Receive notifications about your account activity
+                  {t("security&preferences.pushNotifications.description")}
                 </p>
               </div>
               <Controller
@@ -361,9 +363,11 @@ export default function ProfileForm({
 
             <div className="flex items-center justify-between">
               <div>
-                <Label htmlFor="marketing">Marketing Emails</Label>
+                <Label htmlFor="marketing">
+                  {t("security&preferences.marketingEmails.label")}
+                </Label>
                 <p className="text-sm text-muted-foreground">
-                  Receive emails about new features and updates
+                  {t("security&preferences.marketingEmails.description")}
                 </p>
               </div>
               <Controller
@@ -393,7 +397,7 @@ export default function ProfileForm({
                 onClick={handleCancel}
                 className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
               >
-                Cancel
+                {t("actionButtons.cancel")}
               </Button>
             )}
             <Button
@@ -403,7 +407,7 @@ export default function ProfileForm({
               disabled={!isDirty}
             >
               <Save className="w-4 h-4 mr-2" />
-              Save Changes
+              {t("actionButtons.saveChanges")}
             </Button>
           </>
         ) : (
@@ -413,7 +417,7 @@ export default function ProfileForm({
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <Edit3 className="w-4 h-4 mr-2" />
-            Edit Profile
+            {t("actionButtons.editProfile")}
           </Button>
         )}
       </div>

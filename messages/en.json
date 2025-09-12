@@ -229,5 +229,72 @@
       "totalBalance": "Total Balance",
       "emptyState": "No accounts found. Add an account to get started."
     }
+  },
+  "profile": {
+    "header": {
+      "title": "User Profile",
+      "description": "Manage your personal information and account settings.",
+      "backToDashboard": "Back to Dashboard"
+    },
+    "overview": {
+      "errorFetchLocale": "Error fetching user locale. Defaulting to English (US).",
+      "email": "Email: ",
+      "lastLogin": "Last Login: ",
+      "memberSince": "Member Since: ",
+      "accountsOverview": "Accounts Overview",
+      "accounts": "Accounts",
+      "transactions": "Transactions",
+      "goals": "Goals",
+      "investments": "Investments"
+    },
+    "form": {
+      "errorUpdatingProfile": "Error updating profile. Please try again.",
+      "profileUpdatedSuccessfully": "Profile updated successfully.",
+      "personalInformation": {
+        "title": "Personal Information",
+        "description": "Update your personal details below.",
+        "fullName": "Full Name",
+        "emailAddress": "Email Address",
+        "phoneNumber": "Phone Number",
+        "dateOfBirth": "Date of Birth"
+      },
+      "location&language": {
+        "title": "Location & Language",
+        "description": "Set your location and preferred language.",
+        "country": {
+          "label": "Country",
+          "US": "United States",
+          "IT": "Italy",
+          "loading": "Loading countries..."
+        },
+        "language": {
+          "label": "Language",
+          "en": "English",
+          "it": "Italian",
+          "loading": "Loading languages..."
+        }
+      },
+      "security&preferences": {
+        "title": "Security & Preferences",
+        "description": "Manage your security settings and app preferences.",
+        "twoFactorAuth": {
+          "label": "Two-Factor Authentication",
+          "description": "Add an extra layer of security to your account"
+        },
+        "pushNotifications": {
+          "label": "Push Notifications",
+          "description": "Receive notifications about important account activity"
+        },
+        "marketingEmails": {
+          "label": "Marketing Emails",
+          "description": "Get updates on new features and offers"
+        }
+      },
+      "actionButtons": {
+        "cancel": "Cancel",
+        "saveChanges": "Save Changes",
+        "editProfile": "Edit Profile"
+      }
+    }
   }
 }

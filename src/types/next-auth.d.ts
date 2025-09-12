@@ -31,6 +31,15 @@ declare module "next-auth" {
     updatedAt?: Date | null;
     settings?: JsonValue;
   }
+
+  interface UserProfile extends User {
+    _count: {
+      accounts: number;
+      transactions: number;
+      goals: number;
+      investments: number;
+    };
+  }
 }
 
 declare module "next-auth/jwt" {
