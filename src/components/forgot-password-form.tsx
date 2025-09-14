@@ -52,6 +52,7 @@ export default function ForgotPasswordForm() {
         {t("forgotPassword.email")}
       </Label>
       <Input
+        id="email"
         type="email"
         placeholder={t("placeholder.email")}
         value={email}

@@ -41,7 +41,7 @@ export async function requireActiveStatus(locale: string): Promise<Session> {
  * Controlla se l'utente ha uno dei ruoli specificati
  */
 export async function hasAnyRole(
-  roles: ("USER" | "ADMIN")[]
+  roles: ("USER" | "ADMIN")[],
 ): Promise<boolean> {
   const session = await getAuthSession();
   if (!session) return false;
@@ -72,7 +72,7 @@ export async function getUserSettings(userId: string): Promise<unknown> {
  */
 export async function updateUserSettings(
   userId: string,
-  settings: unknown
+  settings: unknown,
 ): Promise<void> {
   await prisma.user.update({
     where: { id: userId },
@@ -94,7 +94,7 @@ export async function hashPassword(password: string): Promise<string> {
  */
 export async function verifyPassword(
   password: string,
-  hashedPassword: string
+  hashedPassword: string,
 ): Promise<boolean> {
   return bcrypt.compare(password, hashedPassword);
 }

@@ -10,4 +10,5 @@ export const SignInSchema = z.object({
     .max(100, { message: "Password must be at most 100 characters" }),
   rememberMe: z.boolean().default(false).optional(),
 });
+
 export type SignInFormValues = z.infer<typeof SignInSchema>;

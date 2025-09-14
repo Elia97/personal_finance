@@ -336,6 +336,24 @@ export default function ProfileForm({
               />
             </div>
 
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="changePassword">
+                  {t("security&preferences.changePassword.label")}
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  {t("security&preferences.changePassword.description")}
+                </p>
+              </div>
+              <Button
+                type="button"
+                disabled={!isEditing}
+                onClick={() => router.push("/auth/change-password")}
+              >
+                {t("security&preferences.changePassword.buttonText")}
+              </Button>
+            </div>
+
             <Separator />
 
             <div className="flex items-center justify-between">
@@ -404,7 +422,7 @@ export default function ProfileForm({
               type="button"
               onClick={handleSubmit(handleFormSubmit)}
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              disabled={!isDirty}
+              disabled={!isEditing}
             >
               <Save className="w-4 h-4 mr-2" />
               {t("actionButtons.saveChanges")}

@@ -27,13 +27,17 @@
       "title": "Password dimenticata - Personal Finance",
       "description": "Reimposta la tua password per riottenere l’accesso al tuo account di Personal Finance."
     },
-    "new-user": {
-      "title": "Benvenuto - Personal Finance",
-      "description": "Il tuo account è stato creato con successo. Inizia subito a gestire le tue finanze."
-    },
     "reset-password": {
       "title": "Reimposta password - Personal Finance",
       "description": "Imposta una nuova password per il tuo account di Personal Finance."
+    },
+    "change-password": {
+      "title": "Cambia Password - Personal Finance",
+      "description": "Cambia la tua password attuale per migliorare la sicurezza del tuo account."
+    },
+    "new-user": {
+      "title": "Benvenuto - Personal Finance",
+      "description": "Il tuo account è stato creato con successo. Inizia subito a gestire le tue finanze."
     },
     "signin": {
       "title": "Accedi - Personal Finance",
@@ -150,6 +154,26 @@
       "submit": "Reimposta password",
       "resetting": "Reimpostazione in corso...",
       "requestNew": "Richiedi un nuovo link"
+    },
+    "changePassword": {
+      "title": "Cambia Password",
+      "description": "Inserisci la tua nuova password qui sotto.",
+      "form": {
+        "success": "Password cambiata con successo. Reindirizzamento alla dashboard...",
+        "currentPassword": "Password attuale",
+        "newPassword": "Nuova password",
+        "confirmNewPassword": "Conferma nuova password",
+        "submit": "Cambia Password",
+        "goBack": "Torna Indietro",
+        "errors": {
+          "user": "Utente non autenticato.",
+          "fields": "Tutti i campi sono obbligatori.",
+          "mismatch": "Le nuove password non corrispondono.",
+          "short": "La nuova password deve essere lunga almeno 8 caratteri.",
+          "sameAsOld": "La nuova password deve essere diversa dalla password attuale.",
+          "generic": "Si è verificato un errore. Riprova più tardi."
+        }
+      }
     },
     "errorPage": {
       "title": "Errore di autenticazione",
@@ -280,6 +304,11 @@
         "twoFactorAuth": {
           "label": "Autenticazione a due fattori",
           "description": "Aggiungi un ulteriore livello di sicurezza al tuo account"
+        },
+        "changePassword": {
+          "label": "Cambia Password",
+          "description": "Aggiorna regolarmente la password del tuo account",
+          "buttonText": "Cambia Password"
         },
         "pushNotifications": {
           "label": "Notifiche push",

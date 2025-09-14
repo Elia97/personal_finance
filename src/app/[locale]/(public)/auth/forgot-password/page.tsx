@@ -29,10 +29,10 @@ export default async function ForgotPasswordPage(): Promise<React.JSX.Element> {
     <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
       <CardHeader className="text-center">
         <CardTitle>
-          <h2 className="text-xl">{t("title")}</h2>
+          <h1 className="text-xl">{t("title")}</h1>
         </CardTitle>
         <CardDescription>
-          <p className="text-muted-foreground">{t("description")}</p>
+          <p>{t("description")}</p>
         </CardDescription>
       </CardHeader>
       <CardContent>

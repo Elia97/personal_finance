@@ -27,13 +27,17 @@
       "title": "Forgot Password - Personal Finance",
       "description": "Reset your password to regain access to your personal finance account."
     },
-    "new-user": {
-      "title": "Welcome - Personal Finance",
-      "description": "Your account has been successfully created. Start managing your finances now."
-    },
     "reset-password": {
       "title": "Reset Password - Personal Finance",
       "description": "Set a new password for your personal finance account."
+    },
+    "change-password": {
+      "title": "Change Password - Personal Finance",
+      "description": "Change your current password to enhance your account security."
+    },
+    "new-user": {
+      "title": "Welcome - Personal Finance",
+      "description": "Your account has been successfully created. Start managing your finances now."
     },
     "signin": {
       "title": "Sign In - Personal Finance",
@@ -150,6 +154,27 @@
       "submit": "Reset Password",
       "resetting": "Resetting...",
       "requestNew": "Request a new link"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "description": "Please enter your new password below.",
+      "form": {
+        "success": "Password changed successfully. Redirecting to dashboard...",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmNewPassword": "Confirm New Password",
+        "submit": "Change Password",
+        "changing": "Changing...",
+        "goBack": "Go Back",
+        "errors": {
+          "user": "User not authenticated.",
+          "fields": "All fields are required.",
+          "mismatch": "New passwords do not match.",
+          "short": "New password must be at least 8 characters long.",
+          "sameAsOld": "New password must be different from the current password.",
+          "generic": "An error occurred. Please try again later."
+        }
+      }
     },
     "errorPage": {
       "title": "Authentication Error",
@@ -280,6 +305,11 @@
         "twoFactorAuth": {
           "label": "Two-Factor Authentication",
           "description": "Add an extra layer of security to your account"
+        },
+        "changePassword": {
+          "label": "Change Password",
+          "description": "Update your account password regularly",
+          "buttonText": "Change Password"
         },
         "pushNotifications": {
           "label": "Push Notifications",
