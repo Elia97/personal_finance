@@ -94,10 +94,10 @@ export default function ProfileOverview({
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-3 rounded-lg bg-primary/10">
               <div className="text-2xl font-bold text-primary">
-                {userData._count?.accounts || 0}
+                {userData._count?.bankAccounts || 0}
               </div>
               <div className="text-xs text-muted-foreground">
-                {t("accounts")}
+                {t("bankAccounts")}
               </div>
             </div>
             <div className="text-center p-3 rounded-lg bg-secondary/10">

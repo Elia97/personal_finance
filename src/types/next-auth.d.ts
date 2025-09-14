@@ -34,7 +34,7 @@ declare module "next-auth" {
 
   interface UserProfile extends User {
     _count: {
-      accounts: number;
+      bankAccounts: number;
       transactions: number;
       goals: number;
       investments: number;
