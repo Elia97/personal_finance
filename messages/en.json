@@ -105,7 +105,8 @@
       "acceptTerms": "I accept the",
       "terms": "terms of service",
       "signUp": "Sign up",
-      "registering": "Registering..."
+      "registering": "Registering...",
+      "success": "Registration successful!"
     },
     "switch": {
       "noAccount": "Don't have an account? ",

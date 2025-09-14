@@ -30,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import { User as UserIcon, Globe, Shield, Save, Edit3 } from "lucide-react";
 import { UserProfile } from "next-auth";
 import { useTranslations } from "next-intl";
+import { Badge } from "./ui/badge";
 
 export default function ProfileForm({
   userData,
@@ -313,6 +314,20 @@ export default function ProfileForm({
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label>Email Verification</Label>
+                <p className="text-sm text-muted-foreground">
+                  Your email address verification status
+                </p>
+              </div>
+              <Badge
+                variant={userData.emailVerified ? "secondary" : "destructive"}
+              >
+                {userData.emailVerified ? "Verified" : "Unverified"}
+              </Badge>
+            </div>
+
             <div className="flex items-center justify-between">
               <div>
                 <Label htmlFor="twoFactor">

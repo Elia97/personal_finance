@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Mail, Clock, Calendar, TrendingUp } from "lucide-react";
+import { Mail, Clock, Calendar } from "lucide-react";
 import { formatDateLocalized } from "@/lib/utils";
 import { getUserLocale } from "@/app/actions/user-actions";
 import { useEffect, useState } from "react";
@@ -86,14 +86,13 @@ export default function ProfileOverview({
 
       <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-secondary" />
+          <CardTitle className="flex items-center justify-center gap-2">
             {t("accountsOverview")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-3 rounded-lg bg-primary/5">
+            <div className="text-center p-3 rounded-lg bg-primary/10">
               <div className="text-2xl font-bold text-primary">
                 {userData._count?.accounts || 0}
               </div>
@@ -101,7 +100,7 @@ export default function ProfileOverview({
                 {t("accounts")}
               </div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-secondary/5">
+            <div className="text-center p-3 rounded-lg bg-secondary/10">
               <div className="text-2xl font-bold text-secondary">
                 {userData._count?.transactions || 0}
               </div>
@@ -109,13 +108,13 @@ export default function ProfileOverview({
                 {t("transactions")}
               </div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-accent/5">
-              <div className="text-2xl font-bold text-accent">
+            <div className="text-center p-3 rounded-lg bg-secondary/10">
+              <div className="text-2xl font-bold text-secondary">
                 {userData._count?.goals || 0}
               </div>
               <div className="text-xs text-muted-foreground">{t("goals")}</div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-primary/5">
+            <div className="text-center p-3 rounded-lg bg-primary/10">
               <div className="text-2xl font-bold text-primary">
                 {userData._count?.investments || 0}
               </div>

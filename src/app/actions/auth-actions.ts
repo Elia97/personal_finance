@@ -1,8 +1,46 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { getAuthSession, verifyPassword, hashPassword } from "@/lib/auth-utils";
+import {
+  getAuthSession,
+  verifyPassword,
+  hashPassword,
+  createVerificationToken,
+  sendVerificationEmail,
+} from "@/lib/auth-utils";
 import { getTranslations } from "next-intl/server";
+import { createUserEvent } from "@/lib/auth-events";
+
+export async function signUpAction(formData: FormData) {
+  const { name, email, password } = Object.fromEntries(formData.entries()) as {
+    name: string;
+    email: string;
+    password: string;
+  };
+
+  const existingUser = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (existingUser) return { error: "User with this email already exists." };
+
+  const user = await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: await hashPassword(password),
+    },
+  });
+
+  if (user.email) {
+    await createUserEvent({ user });
+    const token = await createVerificationToken(user.email);
+    await sendVerificationEmail(user.email, token);
+    return { success: true };
+  } else {
+    return { error: "Error creating user." };
+  }
+}
 
 export async function changePasswordAction(formData: FormData) {
   const t = await getTranslations("auth.changePassword.form.errors");
@@ -12,8 +50,12 @@ export async function changePasswordAction(formData: FormData) {
     return { error: t("user") };
   }
 
-  const oldPassword = formData.get("old-password") as string;
-  const newPassword = formData.get("new-password") as string;
+  const { oldPassword, newPassword } = Object.fromEntries(
+    formData.entries(),
+  ) as {
+    oldPassword: string;
+    newPassword: string;
+  };
 
   try {
     const user = await prisma.user.findUnique({
