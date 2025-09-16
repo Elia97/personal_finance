@@ -21,23 +21,19 @@ export default function AuthButton() {
 
   if (!session?.user) return null;
 
-  console.log(session.user.image);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative size-16 rounded-full">
-          {session.user.image && (
-            <Avatar className="size-16">
-              <AvatarImage
-                src={session.user.image}
-                alt={session.user.name ?? "Avatar"}
-              />
-              <AvatarFallback className="text-3xl font-serif">
-                {session.user.name?.charAt(0) ?? "U"}
-              </AvatarFallback>
-            </Avatar>
-          )}
+          <Avatar className="size-16">
+            <AvatarImage
+              src={session.user.image ?? ""}
+              alt={session.user.name ?? "Avatar"}
+            />
+            <AvatarFallback className="text-3xl font-serif">
+              {session.user.name?.charAt(0) ?? "U"}
+            </AvatarFallback>
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start" forceMount>

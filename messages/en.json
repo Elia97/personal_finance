@@ -135,6 +135,7 @@
       "backToSignIn": "Back to Sign In",
       "submit": "Submit",
       "sending": "Sending...",
+      "success": "Email sent successfully!",
       "note": "If you don't receive an email, please check your spam folder or try again."
     },
     "resetPassword": {
@@ -184,7 +185,8 @@
     },
     "newUser": {
       "title": "Complete Your Profile",
-      "description": "Welcome, ${session.user.name || session.user.email}! To continue, please fill in the missing information.",
+      "welcome": "Welcome",
+      "description": "To continue, please fill in the missing information.",
       "note": "You can also edit this information later from the profile settings.",
       "formError": "Error occurred while updating your profile. Please try again.",
       "phone": {

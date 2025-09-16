@@ -2,9 +2,9 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import type { Session } from "next-auth";
 import { redirect } from "@/i18n/navigation";
-import prisma from "./prisma";
+import { findUserById } from "@/app/repositories/user-repository";
+import { User, UserProfile } from "next-auth";
 import { sendEmail } from "./resend";
-import { randomBytes } from "crypto";
 
 /**
  * Ottieni la sessione sul server
@@ -55,29 +55,57 @@ export async function isAdmin(): Promise<boolean> {
   return hasAnyRole(["ADMIN"]);
 }
 
-/**
- * Ottieni preferenze utente dal campo settings
- */
-export async function getUserSettings(userId: string): Promise<unknown> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { settings: true },
+export async function getUserLocale(): Promise<Partial<User>> {
+  const session = await getAuthSession();
+  if (!session || !session.user?.id) {
+    throw new Error("User is not authenticated");
+  }
+
+  const user = await findUserById(session.user.id, {
+    language: true,
+    country: true,
   });
 
-  return user?.settings || {};
+  return {
+    language: user?.language || null,
+    country: user?.country || null,
+  };
 }
 
-/**
- * Aggiorna preferenze utente
- */
-export async function updateUserSettings(
-  userId: string,
-  settings: unknown,
-): Promise<void> {
-  await prisma.user.update({
-    where: { id: userId },
-    data: { settings: settings === null ? undefined : settings },
-  });
+export async function getUserProfile(): Promise<UserProfile> {
+  const session = await getAuthSession();
+  if (!session || !session.user?.id) {
+    throw new Error("User is not authenticated");
+  }
+
+  const user = (await findUserById(session.user.id, {
+    id: true,
+    name: true,
+    email: true,
+    phone: true,
+    image: true,
+    language: true,
+    country: true,
+    dateOfBirth: true,
+    lastLogin: true,
+    emailVerified: true,
+    settings: true,
+    createdAt: true,
+    _count: {
+      select: {
+        accounts: true,
+        transactions: true,
+        goals: true,
+        investments: true,
+      },
+    },
+  })) as UserProfile | null;
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
 }
 
 /**
@@ -99,29 +127,18 @@ export async function verifyPassword(
   return bcrypt.compare(password, hashedPassword);
 }
 
-/**
- * Genera un token di verifica email
- */
-
-export async function createVerificationToken(email: string) {
-  const token = randomBytes(32).toString("hex");
-  const expires = new Date(Date.now() + 1000 * 60 * 60 * 24); // Scadenza: 24 ore
-
-  await prisma.verificationToken.create({
-    data: {
-      identifier: email,
-      token,
-      expires,
-    },
-  });
-
-  return token;
-}
-
 export async function sendVerificationEmail(email: string, token: string) {
   const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${token}`;
   const subject = "Personal Finance - Verifica la tua email";
   const text = `Clicca sul seguente link per verificare la tua email: ${verificationUrl}`;
+
+  await sendEmail(email, subject, text);
+}
+
+export async function sendPasswordResetEmail(email: string, token: string) {
+  const resetUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${token}`;
+  const subject = "Personal Finance - Reimpostazione della password";
+  const text = `Clicca sul seguente link per reimpostare la tua password: ${resetUrl}`;
 
   await sendEmail(email, subject, text);
 }

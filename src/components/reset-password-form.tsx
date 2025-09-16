@@ -1,69 +1,59 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
+import { resetPasswordAction } from "@/app/actions/auth-actions";
+import toast from "react-hot-toast";
 
 export default function ResetPasswordForm() {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
   const t = useTranslations("auth");
 
-  useEffect(() => {
-    if (!token) {
-      setError(t("resetPassword.token.missing"));
-    }
-  }, [token, t]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAction = async (formData: FormData) => {
     setError("");
-    setSuccess("");
+    setLoading(true);
 
     if (!token) {
       setError(t("resetPassword.token.invalid"));
+      setLoading(false);
       return;
     }
 
+    const newPassword = formData.get("newPassword") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+
     if (newPassword !== confirmPassword) {
       setError(t("resetPassword.passwords.mismatch"));
+      setLoading(false);
       return;
     }
 
     if (newPassword.length < 6) {
       setError(t("resetPassword.passwords.short"));
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
+    formData.append("token", token);
 
     try {
-      const res = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, newPassword }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setSuccess(t("resetPassword.success"));
+      const result = await resetPasswordAction(formData);
+      if (result.success) {
+        toast.success(t("resetPassword.success"));
         setTimeout(() => router.push("/auth/signin"), 2000);
       } else {
-        setError(data.error || t("resetPassword.error"));
+        toast.error(result.error || t("resetPassword.serverError"));
       }
     } catch {
-      setError(t("resetPassword.error"));
+      toast.error(t("resetPassword.serverError"));
     } finally {
       setLoading(false);
     }
@@ -85,17 +75,16 @@ export default function ResetPasswordForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form action={handleAction} className="space-y-4">
       <div>
         <Label htmlFor="newPassword" className="mb-2">
           {t("resetPassword.newPassword")}
         </Label>
         <Input
           id="newPassword"
+          name="newPassword"
           type="password"
-          value={newPassword}
           placeholder={t("placeholder.password")}
-          onChange={(e) => setNewPassword(e.target.value)}
           required
         />
       </div>
@@ -105,21 +94,14 @@ export default function ResetPasswordForm() {
         </Label>
         <Input
           id="confirmPassword"
+          name="confirmPassword"
           type="password"
-          value={confirmPassword}
           placeholder={t("placeholder.password")}
-          onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
       </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
-      {success && <p className="text-green-500 text-sm">{success}</p>}
-      <Button
-        type="submit"
-        onClick={handleSubmit}
-        disabled={loading || !token}
-        className="w-full"
-      >
+      <Button type="submit" disabled={loading || !token} className="w-full">
         {loading ? t("resetPassword.resetting") : t("resetPassword.submit")}
       </Button>
     </form>

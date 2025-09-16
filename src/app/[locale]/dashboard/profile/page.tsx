@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/app/actions/user-actions";
+import { getUserProfile } from "@/lib/auth-utils";
 import ProfileClient from "@/components/profile-client";
 import { getTranslations } from "next-intl/server";
 

@@ -3,7 +3,7 @@
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { startTransition, useActionState, useEffect } from "react";
+import { useState } from "react";
 import { changePasswordAction } from "@/app/actions/auth-actions";
 import { useRouter } from "@/i18n/navigation";
 import toast from "react-hot-toast";
@@ -18,46 +18,43 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export default function ChangePasswordForm() {
   const t = useTranslations("auth.changePassword.form");
   const router = useRouter();
-
-  const [state, formAction, pending] = useActionState(
-    async (
-      _state: { error?: string; success?: boolean },
-      formData: FormData,
-    ): Promise<{ error?: string; success?: boolean }> => {
-      return await changePasswordAction(formData);
-    },
-    {},
-  );
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
     reset,
+    setError: setFormError,
   } = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
   });
 
-  useEffect(() => {
-    if (state?.success) {
+  async function handleAction(formData: FormData) {
+    setPending(true);
+    setError(null);
+
+    const result = await changePasswordAction(formData);
+
+    if (result.success) {
       toast.success(t("success"));
       setTimeout(() => {
         router.back();
       }, 2000);
       reset();
-    } else if (state?.error) {
-      setError("root", { message: state.error });
+    } else if (result.error) {
+      setError(result.error);
+      setFormError("root", { message: result.error });
     }
-  }, [state, router, t, reset, setError]);
+    setPending(false);
+  }
 
   const onSubmit = (data: ChangePasswordFormValues) => {
     const formData = new FormData();
-    formData.append("old-password", data["old-password"]);
-    formData.append("new-password", data["new-password"]);
-    startTransition(() => {
-      formAction(formData);
-    });
+    formData.append("oldPassword", data["old-password"]);
+    formData.append("newPassword", data["new-password"]);
+    handleAction(formData);
   };
 
   return (
@@ -110,9 +107,9 @@ export default function ChangePasswordForm() {
           </p>
         )}
       </div>
-      {(errors.root?.message || state?.error) && (
+      {(errors.root?.message || error) && (
         <p className="text-sm text-center text-red-600">
-          {errors.root?.message || state?.error}
+          {errors.root?.message || error}
         </p>
       )}
       <div className="grid sm:grid-cols-2 gap-4">

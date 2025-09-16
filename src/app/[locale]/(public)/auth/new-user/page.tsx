@@ -36,7 +36,9 @@ export default async function NewUserPage(): Promise<React.JSX.Element | null> {
           <h1 className="text-xl">{t("title")}</h1>
         </CardTitle>
         <CardDescription>
-          <p className="text-muted-foreground">{t("description")}</p>
+          <p className="text-muted-foreground">{`${t("welcome")}, ${
+            session.user.name || session.user.email
+          }! ${t("description")}`}</p>
         </CardDescription>
       </CardHeader>
       <CardContent>

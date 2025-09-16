@@ -31,6 +31,7 @@ import { User as UserIcon, Globe, Shield, Save, Edit3 } from "lucide-react";
 import { UserProfile } from "next-auth";
 import { useTranslations } from "next-intl";
 import { Badge } from "./ui/badge";
+import { updateProfileAction } from "@/app/actions/user-actions";
 
 export default function ProfileForm({
   userData,
@@ -82,46 +83,84 @@ export default function ProfileForm({
     }
 
     try {
-      const res = await fetch("/api/user/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          dateOfBirth: data.dateOfBirth
-            ? new Date(data.dateOfBirth).toISOString()
-            : null,
-        }),
-      });
+      // Crea FormData per la server action
+      const formData = new FormData();
 
-      if (!res.ok) {
-        throw new Error(t("errorUpdatingProfile"));
+      if (data.name) formData.append("name", data.name);
+      if (data.email) formData.append("email", data.email);
+      if (data.phone) formData.append("phone", data.phone);
+      if (data.dateOfBirth) formData.append("dateOfBirth", data.dateOfBirth);
+      if (data.country) formData.append("country", data.country);
+      if (data.language) formData.append("language", data.language);
+
+      // Aggiungi settings
+      if (data.settings) {
+        formData.append(
+          "settings.twoFactorEnabled",
+          data.settings.twoFactorEnabled.toString(),
+        );
+        formData.append(
+          "settings.notifications",
+          data.settings.notifications.toString(),
+        );
+        formData.append(
+          "settings.marketingEmail",
+          data.settings.marketingEmail.toString(),
+        );
       }
 
-      const updatedData = await res.json();
-      updateUserData(updatedData.user);
-      reset({
-        ...updatedData.user,
-        dateOfBirth: formatDate(updatedData.user.dateOfBirth),
-      });
-      toast.success(t("profileUpdatedSuccessfully"));
+      const result = await updateProfileAction(formData);
 
-      if (data.language !== initialLanguage) {
-        await update({ language: data.language });
-        setInitialLanguage(data.language || "");
-        document.cookie = `user-language=${data.language}; path=/; max-age=31536000`; // 1 year
-        let remainingPath = pathname.replace(/^\/(en|it)/, "");
-        while (remainingPath.match(/^\/(en|it)/)) {
-          remainingPath = remainingPath.replace(/^\/(en|it)/, "");
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      if ("user" in result && result.user) {
+        // Aggiorna solo i campi che sono cambiati, mantenendo la struttura UserProfile
+        const updatedUserData = {
+          ...userData,
+          ...result.user,
+        } as UserProfile;
+
+        updateUserData(updatedUserData);
+        reset({
+          name: result.user.name || "",
+          email: result.user.email || "",
+          phone: result.user.phone || "",
+          dateOfBirth: formatDate(result.user.dateOfBirth),
+          country: result.user.country || "",
+          language: result.user.language || "en",
+          settings: {
+            twoFactorEnabled: false,
+            notifications: true,
+            marketingEmail: false,
+            ...((result.user.settings as {
+              twoFactorEnabled?: boolean;
+              notifications?: boolean;
+              marketingEmail?: boolean;
+            }) || {}),
+          },
+        });
+        toast.success(t("profileUpdatedSuccessfully"));
+
+        if (data.language !== initialLanguage) {
+          await update({ language: data.language });
+          setInitialLanguage(data.language || "");
+          document.cookie = `user-language=${data.language}; path=/; max-age=31536000`; // 1 year
+          let remainingPath = pathname.replace(/^\/(en|it)/, "");
+          while (remainingPath.match(/^\/(en|it)/)) {
+            remainingPath = remainingPath.replace(/^\/(en|it)/, "");
+          }
+          if (!remainingPath.startsWith("/"))
+            remainingPath = "/" + remainingPath;
+          const newPathname = `/${data.language}${remainingPath}`;
+          router.push(newPathname);
         }
-        if (!remainingPath.startsWith("/")) remainingPath = "/" + remainingPath;
-        const newPathname = `/${data.language}${remainingPath}`;
-        router.push(newPathname);
-      }
 
-      setIsEditing(false);
-    } catch {
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error("Profile update error:", error);
       toast.error(t("errorUpdatingProfile"));
     }
   };
