@@ -219,7 +219,7 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard - Personal Finance",
+    "title": "Overview",
     "description": "Complete dashboard for controlling your personal finances.",
     "addTransaction": "Add Transaction",
     "sidebar": {
@@ -229,7 +229,9 @@
         "transactions": "Transactions",
         "analytics": "Analytics",
         "investments": "Investments",
-        "settings": "Settings"
+        "settings": "Settings",
+        "more": "More",
+        "moreOptions": "More Options"
       },
       "footer": {
         "backToHome": "Back to Home"
@@ -259,11 +261,8 @@
     }
   },
   "profile": {
-    "header": {
-      "title": "User Profile",
-      "description": "Manage your personal information and account settings.",
-      "backToDashboard": "Back to Dashboard"
-    },
+    "title": "User Profile",
+    "description": "Manage your personal information and account settings.",
     "overview": {
       "errorFetchLocale": "Error fetching user locale. Defaulting to English (US).",
       "email": "Email: ",

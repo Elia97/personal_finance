@@ -3,7 +3,6 @@
 import { User } from "next-auth";
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import ProfileHeader from "./profile-header";
 import { Loader2 } from "lucide-react";
 
 const ProfileOverview = dynamic(() => import("./profile-overview"), {
@@ -35,12 +34,9 @@ export default function ProfileClient({
   };
 
   return (
-    <>
-      <ProfileHeader />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <ProfileOverview userData={userData} />
-        <ProfileForm userData={userData} updateUserData={updateUserData} />
-      </div>
-    </>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <ProfileOverview userData={userData} />
+      <ProfileForm userData={userData} updateUserData={updateUserData} />
+    </div>
   );
 }

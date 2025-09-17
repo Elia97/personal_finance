@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Mail, Clock, Calendar } from "lucide-react";
+import { Clock, Calendar } from "lucide-react";
 import { formatDateLocalized } from "@/lib/utils";
 import { getUserLocale } from "@/app/actions/user-actions";
 import { useEffect, useState } from "react";
@@ -34,9 +34,9 @@ export default function ProfileOverview({
   if (!userData) return null;
 
   return (
-    <div className="lg:col-span-1 lg:sticky lg:top-6 lg:self-start space-y-6">
+    <div className="lg:col-span-1 lg:sticky lg:top-20 lg:self-start space-y-4">
       <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
-        <CardHeader className="text-center pb-4">
+        <CardHeader className="text-center">
           <div className="relative mx-auto">
             <Avatar className="size-24 border-4 border-primary/20">
               <AvatarImage
@@ -56,13 +56,6 @@ export default function ProfileOverview({
           <CardTitle className="text-xl">{userData.name}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-3 text-sm">
-            <Mail className="w-4 h-4 text-primary" />
-            <span className="text-muted-foreground">{t("email")}</span>
-            <span className="font-medium overflow-hidden text-ellipsis whitespace-nowrap">
-              {userData?.email}
-            </span>
-          </div>
           <div className="flex items-center gap-3 text-sm">
             <Clock className="w-4 h-4 text-primary" />
             <span className="text-muted-foreground">{t("lastLogin")}</span>

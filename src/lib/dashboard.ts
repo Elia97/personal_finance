@@ -12,18 +12,18 @@ const rawMonthsData: Omit<
   MonthData,
   "savings" | "rate" | "status" | "level"
 >[] = [
-  { month: "January", income: 2215, expenses: 1971.56 },
-  { month: "February", income: 1659, expenses: 1905.08 },
-  { month: "March", income: 2042, expenses: 2323.48 },
-  { month: "April", income: 1532, expenses: 1712.55 },
-  { month: "May", income: 1764, expenses: 1810.67 },
-  { month: "June", income: 1606, expenses: 2279.71 },
-  { month: "July", income: 1923, expenses: 1765.14 },
-  { month: "August", income: 1774, expenses: 2042.01 },
-  { month: "September", income: 2031, expenses: 1000.02 },
-  { month: "October", income: 0, expenses: 0 },
-  { month: "November", income: 0, expenses: 0 },
-  { month: "December", income: 0, expenses: 0 },
+  { month: "January", income: 2200, expenses: 2050 }, // ~7% savings (0–20%)
+  { month: "February", income: 1850, expenses: 1350 }, // ~27% savings (20–50%)
+  { month: "March", income: 2100, expenses: 950 }, // ~55% savings (>50%)
+  { month: "April", income: 1700, expenses: 1620 }, // ~5% savings (0–20%)
+  { month: "May", income: 1950, expenses: 1200 }, // ~38% savings (20–50%)
+  { month: "June", income: 2000, expenses: 850 }, // ~57% savings (>50%)
+  { month: "July", income: 2100, expenses: 1900 }, // ~10% savings (0–20%)
+  { month: "August", income: 1900, expenses: 1000 }, // ~47% savings (20–50%)
+  { month: "September", income: 2050, expenses: 950 }, // ~54% savings (>50%)
+  { month: "October", income: 1800, expenses: 1700 }, // ~6% savings (0–20%)
+  { month: "November", income: 2000, expenses: 1400 }, // ~30% savings (20–50%)
+  { month: "December", income: 2100, expenses: 950 }, // ~55% savings (>50%)
 ];
 
 // Function to determine status and level based on savings

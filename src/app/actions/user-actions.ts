@@ -4,6 +4,61 @@ import { getAuthSession } from "@/lib/auth-utils";
 import { updateUser } from "../repositories/user-repository";
 import type { Prisma } from "@/generated/prisma";
 import { jwt } from "@/lib/auth-callbacks";
+import { findUserById } from "@/app/repositories/user-repository";
+import { User, UserProfile } from "next-auth";
+
+export async function getUserLocale(): Promise<Partial<User>> {
+  const session = await getAuthSession();
+  if (!session || !session.user?.id) {
+    throw new Error("User is not authenticated");
+  }
+
+  const user = await findUserById(session.user.id, {
+    language: true,
+    country: true,
+  });
+
+  return {
+    language: user?.language || null,
+    country: user?.country || null,
+  };
+}
+
+export async function getUserProfile(): Promise<UserProfile> {
+  const session = await getAuthSession();
+  if (!session || !session.user?.id) {
+    throw new Error("User is not authenticated");
+  }
+
+  const user = (await findUserById(session.user.id, {
+    id: true,
+    name: true,
+    email: true,
+    phone: true,
+    image: true,
+    language: true,
+    country: true,
+    dateOfBirth: true,
+    lastLogin: true,
+    emailVerified: true,
+    settings: true,
+    createdAt: true,
+    _count: {
+      select: {
+        accounts: true,
+        transactions: true,
+        goals: true,
+        investments: true,
+      },
+    },
+  })) as UserProfile | null;
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+}
 
 export async function onBoardingAction(formData: FormData) {
   const session = await getAuthSession();

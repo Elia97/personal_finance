@@ -12,28 +12,31 @@ export default function QuickActions() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 *:cursor-pointer">
-          <Button className="h-20 flex flex-col items-center justify-center space-y-2">
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4 *:cursor-pointer">
+          <Button
+            variant="ghost"
+            className="h-10 sm:h-20 flex sm:flex-col items-center justify-center"
+          >
             <PlusCircle className="h-6 w-6" />
             <span className="text-sm">Add Transaction</span>
           </Button>
           <Button
-            variant="outline"
-            className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
+            variant="ghost"
+            className="h-10 sm:h-20 flex sm:flex-col items-center justify-center"
           >
             <MinusCircle className="h-6 w-6" />
             <span className="text-sm">New Budget</span>
           </Button>
           <Button
-            variant="outline"
-            className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
+            variant="ghost"
+            className="h-10 sm:h-20 flex sm:flex-col items-center justify-center"
           >
             <Target className="h-6 w-6" />
             <span className="text-sm">New Goal</span>
           </Button>
           <Button
-            variant="outline"
-            className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
+            variant="ghost"
+            className="h-10 sm:h-20 flex sm:flex-col items-center justify-center"
           >
             <Coins className="h-6 w-6" />
             <span className="text-sm">Investments</span>

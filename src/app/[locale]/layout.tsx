@@ -26,11 +26,9 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className={`${roboto.variable} antialiased`}>
-        <main>
-          <Providers>
-            <NextIntlClientProvider>{children}</NextIntlClientProvider>
-          </Providers>
-        </main>
+        <Providers>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </Providers>
         <Toaster />
       </body>
     </html>

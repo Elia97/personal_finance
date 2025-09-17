@@ -45,7 +45,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0); /* white */
+  --background: oklch(0.949 0.003 257.7); /* zinc-100 */
   --foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
   --card: oklch(0.985 0 0); /* zinc-50 */
   --card-foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
@@ -129,25 +129,19 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: oklch(0.3 0.18 250);
+  background: var(--background);
   border-radius: 8px;
 }
 
 /* Thumb */
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.55 0.18 250);
+  background-color: var(--foreground);
   border-radius: 8px;
-}
-
-/* Thumb hover */
-::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.45 0.18 250);
 }
 
 /* Firefox */
 @supports (scrollbar-width: thin) {
   * {
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.55 0.18 250) oklch(0.3 0.18 250);
   }
 }

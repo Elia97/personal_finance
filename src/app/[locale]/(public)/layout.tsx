@@ -40,5 +40,9 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <BackgroundPublic>{children}</BackgroundPublic>;
+  return (
+    <BackgroundPublic>
+      <main>{children}</main>
+    </BackgroundPublic>
+  );
 }

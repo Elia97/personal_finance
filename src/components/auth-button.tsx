@@ -25,7 +25,7 @@ export default function AuthButton() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative size-16 rounded-full">
-          <Avatar className="size-16">
+          <Avatar className="size-10">
             <AvatarImage
               src={session.user.image ?? ""}
               alt={session.user.name ?? "Avatar"}
@@ -36,7 +36,7 @@ export default function AuthButton() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="start" forceMount>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
         <div className="flex flex-col space-y-1 p-2">
           <p className="text-sm font-medium leading-none">
             {session.user.name}

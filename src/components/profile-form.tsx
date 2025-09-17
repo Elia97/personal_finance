@@ -193,7 +193,7 @@ export default function ProfileForm({
   if (!userData) return null;
 
   return (
-    <form className="lg:col-span-2 space-y-6" id="profileForm">
+    <form className="lg:col-span-2 space-y-4" id="profileForm">
       {/* Personal Information */}
       <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
         <CardHeader>

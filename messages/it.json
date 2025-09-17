@@ -225,7 +225,9 @@
         "transactions": "Transazioni",
         "analytics": "Analisi",
         "investments": "Investimenti",
-        "settings": "Impostazioni"
+        "settings": "Impostazioni",
+        "more": "Altro",
+        "moreOptions": "Altre opzioni"
       },
       "footer": {
         "backToHome": "Torna alla home"
