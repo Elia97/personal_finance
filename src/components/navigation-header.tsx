@@ -3,16 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AuthButton from "@/components/auth-button";
-import {
-  Wallet,
-  Home,
-  ArrowLeftRight,
-  BarChart3,
-  LineChart,
-  Settings,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Wallet, Home, ArrowLeftRight, BarChart3 } from "lucide-react";
 import type { NavigationItem } from "@/types/navigation";
+import { Button } from "./ui/button";
 
 // Icon mapping
 const iconMap = {
@@ -20,8 +13,6 @@ const iconMap = {
   wallet: Wallet,
   "arrow-left-right": ArrowLeftRight,
   "bar-chart-3": BarChart3,
-  "line-chart": LineChart,
-  settings: Settings,
 };
 
 interface NavigationHeaderProps {
@@ -43,22 +34,22 @@ export function NavigationHeader({ navItems }: NavigationHeaderProps) {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center space-x-2">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname.slice(3, pathname.length) === item.href;
             const IconComponent = iconMap[item.icon as keyof typeof iconMap];
             return (
-              <Link
+              <Button
                 key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary",
-                  isActive ? "text-primary" : "text-muted-foreground",
-                )}
+                variant={isActive ? "outline" : "ghost"}
+                size={"sm"}
+                asChild
               >
-                {IconComponent ? <IconComponent className="h-4 w-4" /> : null}
-                <span>{item.title}</span>
-              </Link>
+                <Link href={item.href}>
+                  {IconComponent ? <IconComponent className="h-4 w-4" /> : null}
+                  <span>{item.title}</span>
+                </Link>
+              </Button>
             );
           })}
         </nav>

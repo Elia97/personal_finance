@@ -111,6 +111,14 @@ export const monthlyExpenses = monthsData[currentMonthIndex].expenses;
 export const monthlyBalance = monthlyIncome - monthlyExpenses;
 
 export const averageMonthlySavings = totalBalance / completedMonths.length;
+export const currentStreak = completedMonths.reduce((streak, month) => {
+  if (month.status === "positive" || month.status === "neutral") {
+    return streak + 1;
+  }
+  return streak;
+}, 0);
+
+export const currentLevel = monthsData[currentMonthIndex].level;
 
 export const getHealthStatus = () => {
   if (savingRate >= 50)

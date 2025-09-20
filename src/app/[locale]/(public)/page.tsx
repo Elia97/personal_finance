@@ -34,19 +34,19 @@ export default async function Home(): Promise<React.JSX.Element> {
         <CallToAction />
       </section>
       <section id="features" className="h-screen"></section>
-      <div className="text-center mt-8 text-muted-foreground text-sm">
+      <div className="text-center mt-8 text-white text-sm">
         <p>{t("footerDescription")}</p>
         <p className="mt-1">
           <Button
             variant="link"
-            className="px-0 text-muted-foreground hover:text-white text-sm"
+            className="px-0 text-white hover:text-primary text-sm"
           >
             {t("privacyPolicy")}
           </Button>
           {" • "}
           <Button
             variant="link"
-            className="px-0 text-muted-foreground hover:text-white text-sm"
+            className="px-0 text-white hover:text-primary text-sm"
           >
             {t("termsOfService")}
           </Button>

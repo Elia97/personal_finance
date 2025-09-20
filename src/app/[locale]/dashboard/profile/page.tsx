@@ -16,12 +16,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          {t("title")}
-        </h1>
-        <p className="text-muted-foreground mt-1">{t("description")}</p>
-      </div>
+      <h1 className="hidden">{t("title")}</h1>
       <ProfileClient initialUserData={userData} />
     </div>
   );

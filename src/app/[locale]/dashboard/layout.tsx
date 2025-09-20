@@ -18,13 +18,17 @@ export default async function AppLayout({
 
   const navItems: NavigationItem[] = [
     { title: t("menu.dashboard"), href: "/dashboard", icon: "home" },
-    { title: t("menu.accounts"), href: "/accounts", icon: "wallet" },
+    { title: t("menu.accounts"), href: "/dashboard/accounts", icon: "wallet" },
     {
       title: t("menu.transactions"),
-      href: "/transactions",
+      href: "/dashboard/transactions",
       icon: "arrow-left-right",
     },
-    { title: t("menu.analytics"), href: "/analytics", icon: "bar-chart-3" },
+    {
+      title: t("menu.analytics"),
+      href: "/dashboard/analytics",
+      icon: "bar-chart-3",
+    },
   ];
 
   return (

@@ -56,7 +56,7 @@
   --secondary: oklch(0.596 0.1274 163.23); /* emerald-500 */
   --secondary-foreground: oklch(0.985 0 0); /* zinc-50 */
   --muted: oklch(0.949 0.003 257.7); /* zinc-100 */
-  --muted-foreground: oklch(0.552 0.016 285.938); /* zinc-500 */
+  --muted-foreground: oklch(0.442 0.017 285.786); /* zinc-600 */
   --accent: oklch(0.902 0.004 257.7); /* zinc-200 */
   --accent-foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
   --destructive: oklch(0.577 0.245 27.325); /* red-600 */

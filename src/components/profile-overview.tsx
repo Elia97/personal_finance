@@ -34,8 +34,8 @@ export default function ProfileOverview({
   if (!userData) return null;
 
   return (
-    <div className="lg:col-span-1 lg:sticky lg:top-20 lg:self-start space-y-4">
-      <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
+    <div className="lg:col-span-1 lg:sticky lg:top-20 lg:self-start space-y-4 lg:border-r">
+      <Card className="bg-transparent border-0 shadow-none">
         <CardHeader className="text-center">
           <div className="relative mx-auto">
             <Avatar className="size-24 border-4 border-primary/20">
@@ -55,7 +55,7 @@ export default function ProfileOverview({
           </div>
           <CardTitle className="text-xl">{userData.name}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 max-w-max mx-auto">
           <div className="flex items-center gap-3 text-sm">
             <Clock className="w-4 h-4 text-primary" />
             <span className="text-muted-foreground">{t("lastLogin")}</span>
@@ -77,7 +77,7 @@ export default function ProfileOverview({
         </CardContent>
       </Card>
 
-      <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
+      <Card className="bg-transparent border-0 shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center justify-center gap-2">
             {t("accountsOverview")}

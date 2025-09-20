@@ -219,7 +219,7 @@
     }
   },
   "dashboard": {
-    "title": "Overview",
+    "title": "Dashboard - Personal Finance",
     "description": "Complete dashboard for controlling your personal finances.",
     "addTransaction": "Add Transaction",
     "sidebar": {

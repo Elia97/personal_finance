@@ -56,7 +56,7 @@ export default function Timeline() {
                   >
                     <div className="flex justify-between gap-2 items-start">
                       <div>
-                        <h3 className="font-semibold flex justify-between items-center gap-2">
+                        <h3 className="font-semibold flex items-center gap-2">
                           {month.month.slice(0, 3)}
                           {index <= currentMonthIndex &&
                             month.level !== "pending" && (

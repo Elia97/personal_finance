@@ -1,9 +1,11 @@
-import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import AnnualSummary from "@/components/dashboard/annual-summary";
-import QuickActions from "@/components/dashboard/quick-actions";
-import StatsCards from "@/components/dashboard/stats-cards";
-import Timeline from "@/components/dashboard/timeline";
+import { getTranslations } from "next-intl/server";
+import {
+  AnnualSummary,
+  QuickActions,
+  StatsCards,
+  Timeline,
+} from "@/components/dashboard";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("metadata.dashboard");
@@ -13,20 +15,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage(): Promise<React.JSX.Element> {
   const t = await getTranslations("dashboard");
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header */}
-      <h1 className="text-4xl font-bold text-center">{t("title")}</h1>
-
+    <div className="space-y-6">
+      <h1 className="hidden">{t("title")}</h1>
       <AnnualSummary />
-
       <QuickActions />
-
       <StatsCards />
-
       <Timeline />
     </div>
   );

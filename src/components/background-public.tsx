@@ -6,7 +6,7 @@ export default function BackgroundPublic({
   return (
     <div className="relative w-full flex flex-col items-center justify-center min-h-screen overflow-hidden">
       {/* Professional gradient background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-zinc-800 via-blue-900 to-zinc-800"></div>
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-950 via-blue-800 to-blue-950"></div>
 
       {/* Geometric pattern overlay */}
       <div className="fixed inset-0 opacity-25">
@@ -42,13 +42,13 @@ export default function BackgroundPublic({
             width="100%"
             height="100%"
             fill="url(#grid)"
-            className="text-blue-300"
+            className="text-primary"
           />
           <rect
             width="100%"
             height="100%"
             fill="url(#dots)"
-            className="text-blue-400"
+            className="text-primary"
           />
         </svg>
       </div>
@@ -110,7 +110,7 @@ export default function BackgroundPublic({
       </div>
 
       {/* Bottom fade effect */}
-      <div className="fixed bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-zinc-900 to-transparent"></div>
+      <div className="fixed bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent"></div>
       <div className="w-full z-10 px-4">{children}</div>
     </div>
   );

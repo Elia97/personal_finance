@@ -24,13 +24,13 @@ export default function AuthButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative size-16 rounded-full">
-          <Avatar className="size-10">
+        <Button variant={"outline"} className="relative size-12 rounded-full">
+          <Avatar className="size-6">
             <AvatarImage
               src={session.user.image ?? ""}
               alt={session.user.name ?? "Avatar"}
             />
-            <AvatarFallback className="text-3xl font-serif">
+            <AvatarFallback className="text-2xl font-serif bg-transparent">
               {session.user.name?.charAt(0) ?? "U"}
             </AvatarFallback>
           </Avatar>

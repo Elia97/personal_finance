@@ -1,5 +1,12 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import {
+  Wallet,
+  PiggyBank,
+  CreditCard,
+  TrendingUp,
+  Building2,
+} from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -58,3 +65,37 @@ export function formatDateLocalized(
     return "";
   }
 }
+
+export const getAccountIcon = (type: string) => {
+  switch (type) {
+    case "checking":
+      return Wallet;
+    case "savings":
+      return PiggyBank;
+    case "credit":
+      return CreditCard;
+    case "investment":
+      return TrendingUp;
+    case "business":
+      return Building2;
+    default:
+      return Wallet;
+  }
+};
+
+export const getAccountTypeLabel = (type: string) => {
+  switch (type) {
+    case "checking":
+      return "Conto Corrente";
+    case "savings":
+      return "Conto Risparmio";
+    case "credit":
+      return "Carta di Credito";
+    case "investment":
+      return "Investimenti";
+    case "business":
+      return "Business";
+    default:
+      return "Altro";
+  }
+};

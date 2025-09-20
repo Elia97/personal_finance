@@ -12,6 +12,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -195,7 +196,7 @@ export default function ProfileForm({
   return (
     <form className="lg:col-span-2 space-y-4" id="profileForm">
       {/* Personal Information */}
-      <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserIcon className="w-5 h-5 text-primary" />
@@ -256,7 +257,7 @@ export default function ProfileForm({
       </Card>
 
       {/* Location & Language */}
-      <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="w-5 h-5 text-primary" />
@@ -341,7 +342,7 @@ export default function ProfileForm({
       </Card>
 
       {/* Security & Preferences */}
-      <Card className="bg-card/95 backdrop-blur-sm border-2 border-border/20">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-primary" />
@@ -457,42 +458,43 @@ export default function ProfileForm({
             </div>
           </div>
         </CardContent>
+        <CardFooter className="justify-end gap-4">
+          {isEditing ? (
+            <>
+              {isDirty && (
+                <Button
+                  type="button"
+                  onClick={handleCancel}
+                  className="bg-destructive hover:bg-destructive/90 text-zinc-100"
+                >
+                  {t("actionButtons.cancel")}
+                </Button>
+              )}
+              <Button
+                type="button"
+                onClick={handleSubmit(handleFormSubmit)}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                disabled={!isEditing}
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {t("actionButtons.saveChanges")}
+              </Button>
+            </>
+          ) : (
+            <Button
+              type="button"
+              onClick={() => setIsEditing(true)}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <Edit3 className="w-4 h-4 mr-2" />
+              {t("actionButtons.editProfile")}
+            </Button>
+          )}
+        </CardFooter>
       </Card>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-4 pt-6">
-        {isEditing ? (
-          <>
-            {isDirty && (
-              <Button
-                type="button"
-                onClick={handleCancel}
-                className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
-              >
-                {t("actionButtons.cancel")}
-              </Button>
-            )}
-            <Button
-              type="button"
-              onClick={handleSubmit(handleFormSubmit)}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              disabled={!isEditing}
-            >
-              <Save className="w-4 h-4 mr-2" />
-              {t("actionButtons.saveChanges")}
-            </Button>
-          </>
-        ) : (
-          <Button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          >
-            <Edit3 className="w-4 h-4 mr-2" />
-            {t("actionButtons.editProfile")}
-          </Button>
-        )}
-      </div>
+      <div className="flex justify-end gap-4 pt-6"></div>
     </form>
   );
 }

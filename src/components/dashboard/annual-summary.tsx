@@ -1,5 +1,11 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
   currentMonth,
@@ -14,11 +20,11 @@ import {
   totalIncome,
 } from "@/lib/dashboard";
 
-export default function AnnualSummary() {
+export default async function AnnualSummary() {
   const healthStatus = getHealthStatus();
 
   return (
-    <Card>
+    <Card className="bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 border-primary/20">
       <CardHeader className="text-center">
         <div className="flex flex-wrap justify-center items-center gap-4">
           <Avatar className="h-16 w-16">
@@ -27,7 +33,9 @@ export default function AnnualSummary() {
             </AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle className="text-2xl">Annual Summary 2024</CardTitle>
+            <CardTitle>
+              {`Annual Summary - ${new Date().getFullYear()}`}
+            </CardTitle>
             <p className="text-muted-foreground">{healthStatus.message}</p>
           </div>
         </div>
@@ -37,8 +45,8 @@ export default function AnnualSummary() {
           <div className="flex justify-between text-sm">
             <span>Annual Financial Progress</span>
             <span>
-              €{totalExpenses.toLocaleString("en-US")} / €
-              {totalIncome.toLocaleString("en-US")}
+              €{totalExpenses.toLocaleString("it-IT")} / €
+              {totalIncome.toLocaleString("it-IT")}
             </span>
           </div>
           <Progress
@@ -49,13 +57,13 @@ export default function AnnualSummary() {
             <div>
               <div className="text-muted-foreground">Total Income</div>
               <div className="font-bold text-green-600">
-                €{totalIncome.toLocaleString("en-US")}
+                €{totalIncome.toLocaleString("it-IT")}
               </div>
             </div>
             <div>
               <div className="text-muted-foreground">Total Expenses</div>
               <div className="font-bold text-red-600">
-                €{totalExpenses.toLocaleString("en-US")}
+                €{totalExpenses.toLocaleString("it-IT")}
               </div>
             </div>
             <div>
@@ -65,7 +73,7 @@ export default function AnnualSummary() {
                   totalBalance >= 0 ? "text-green-600" : "text-red-600"
                 }`}
               >
-                €{totalBalance.toLocaleString("en-US")}
+                €{totalBalance.toLocaleString("it-IT")}
               </div>
             </div>
             <div>
@@ -80,9 +88,10 @@ export default function AnnualSummary() {
             </div>
           </div>
         </div>
-
+      </CardContent>
+      <CardFooter>
         {/* Current Month Summary */}
-        <div className="border-t pt-4">
+        <div className="border-t border-primary/30 pt-4 w-full">
           <h3 className="text-lg font-semibold mb-3 text-center">
             {currentMonth} Summary
           </h3>
@@ -90,13 +99,13 @@ export default function AnnualSummary() {
             <div>
               <div className="text-sm text-muted-foreground">Income</div>
               <div className="text-2xl font-bold text-green-600">
-                €{monthlyIncome.toLocaleString("en-US")}
+                €{monthlyIncome.toLocaleString("it-IT")}
               </div>
             </div>
             <div>
               <div className="text-sm text-muted-foreground">Expenses</div>
               <div className="text-2xl font-bold text-red-600">
-                €{monthlyExpenses.toLocaleString("en-US")}
+                €{monthlyExpenses.toLocaleString("it-IT")}
               </div>
             </div>
             <div>
@@ -106,12 +115,12 @@ export default function AnnualSummary() {
                   monthlyBalance >= 0 ? "text-green-600" : "text-red-600"
                 }`}
               >
-                €{monthlyBalance.toLocaleString("en-US")}
+                €{monthlyBalance.toLocaleString("it-IT")}
               </div>
             </div>
           </div>
         </div>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 }
