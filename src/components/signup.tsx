@@ -15,7 +15,7 @@ import { signUpAction } from "@/app/actions/auth-actions";
 import { signIn } from "next-auth/react";
 
 export default function SignUp() {
-  const t = useTranslations("auth");
+  const t = useTranslations("app.public.auth.signIn.form.register");
   const router = useRouter();
 
   const [state, formAction, pending] = useActionState(
@@ -69,7 +69,7 @@ export default function SignUp() {
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="space-y-2">
         <Label htmlFor="name" className="text-sm font-medium flex-wrap">
-          {t("signup.name")}
+          {t("name.label")}
           {errors.name && (
             <p className="text-destructive text-xs">{errors.name.message}</p>
           )}
@@ -77,7 +77,7 @@ export default function SignUp() {
         <Input
           id="name"
           type="name"
-          placeholder={t("placeholder.name")}
+          placeholder={t("name.placeholder")}
           disabled={pending}
           className={`${
             errors.name
@@ -89,7 +89,7 @@ export default function SignUp() {
       </div>
       <div className="space-y-2">
         <Label htmlFor="email" className="text-sm font-medium flex-wrap">
-          {t("signup.email")}
+          {t("email.label")}
           {errors.email && (
             <p className="text-destructive text-xs">{errors.email.message}</p>
           )}
@@ -97,7 +97,7 @@ export default function SignUp() {
         <Input
           id="email"
           type="email"
-          placeholder={t("placeholder.email")}
+          placeholder={t("email.placeholder")}
           disabled={pending}
           className={`${
             errors.email
@@ -109,7 +109,7 @@ export default function SignUp() {
       </div>
       <div className="space-y-2">
         <Label htmlFor="password" className="text-sm font-medium flex-wrap">
-          {t("signup.password")}
+          {t("password.label")}
           {errors.password && (
             <p className="text-destructive text-xs">
               {errors.password.message}
@@ -119,7 +119,7 @@ export default function SignUp() {
         <Input
           id="password"
           type="password"
-          placeholder={t("placeholder.password")}
+          placeholder={t("password.placeholder")}
           disabled={pending}
           className={`${
             errors.password
@@ -131,10 +131,10 @@ export default function SignUp() {
       </div>
       <div className="space-y-2">
         <Label
-          htmlFor="password-repeat"
+          htmlFor="confirm-password"
           className="text-sm font-medium flex-wrap"
         >
-          {t("signup.repeatPassword")}
+          {t("confirmPassword.label")}
           {errors.confirmPassword && (
             <p className="text-destructive text-xs">
               {errors.confirmPassword.message}
@@ -142,9 +142,9 @@ export default function SignUp() {
           )}
         </Label>
         <Input
-          id="password-repeat"
+          id="confirm-password"
           type="password"
-          placeholder={t("placeholder.password")}
+          placeholder={t("confirmPassword.placeholder")}
           disabled={pending}
           className={`${
             errors.confirmPassword
@@ -172,9 +172,9 @@ export default function SignUp() {
             htmlFor="accept-terms"
             className="text-sm text-slate-600 flex-wrap"
           >
-            {t("signup.acceptTerms")}
+            {t("acceptTerms.label")}{" "}
             <a href="/terms" target="_blank" className="underline">
-              {t("signup.terms")}
+              {t("acceptTerms.terms")}
             </a>
             {errors.acceptTerms && (
               <p className="text-destructive text-xs">
@@ -197,10 +197,10 @@ export default function SignUp() {
         {pending ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {t("signup.registering")}
+            {t("pending")}
           </>
         ) : (
-          t("signup.signUp")
+          t("submit")
         )}
       </Button>
     </form>

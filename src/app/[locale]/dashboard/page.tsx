@@ -8,7 +8,7 @@ import {
 } from "@/components/dashboard";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("metadata.dashboard");
+  const t = await getTranslations("app.dashboard");
   return {
     title: t("title"),
     description: t("description"),
@@ -16,14 +16,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DashboardPage(): Promise<React.JSX.Element> {
-  const t = await getTranslations("dashboard");
+  const t = await getTranslations("app.dashboard");
 
   return (
     <div className="space-y-6">
       <h1 className="hidden">{t("title")}</h1>
       <AnnualSummary />
-      <QuickActions />
       <StatsCards />
+      <QuickActions />
       <Timeline />
     </div>
   );

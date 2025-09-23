@@ -15,7 +15,7 @@ export default function ProfileOverview({
   userData: UserProfile | null;
 }) {
   const [userLocale, setUserLocale] = useState<string>("en-US");
-  const t = useTranslations("profile.overview");
+  const t = useTranslations("app.dashboard.profile.overview");
 
   useEffect(() => {
     const fetchUserLocale = async () => {
@@ -24,7 +24,6 @@ export default function ProfileOverview({
         const localeString = `${language?.toLowerCase()}-${country?.toUpperCase()}`;
         setUserLocale(localeString);
       } catch {
-        console.error(t("errorFetchingLocale"));
         setUserLocale("en-US");
       }
     };
@@ -80,7 +79,7 @@ export default function ProfileOverview({
       <Card className="bg-transparent border-0 shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center justify-center gap-2">
-            {t("accountsOverview")}
+            {t("accountsOverview.title")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -90,7 +89,7 @@ export default function ProfileOverview({
                 {userData._count?.bankAccounts || 0}
               </div>
               <div className="text-xs text-muted-foreground">
-                {t("bankAccounts")}
+                {t("accountsOverview.bankAccounts")}
               </div>
             </div>
             <div className="text-center p-3 rounded-lg bg-secondary/10">
@@ -98,21 +97,23 @@ export default function ProfileOverview({
                 {userData._count?.transactions || 0}
               </div>
               <div className="text-xs text-muted-foreground">
-                {t("transactions")}
+                {t("accountsOverview.transactions")}
               </div>
             </div>
             <div className="text-center p-3 rounded-lg bg-secondary/10">
               <div className="text-2xl font-bold text-secondary">
                 {userData._count?.goals || 0}
               </div>
-              <div className="text-xs text-muted-foreground">{t("goals")}</div>
+              <div className="text-xs text-muted-foreground">
+                {t("accountsOverview.goals")}
+              </div>
             </div>
             <div className="text-center p-3 rounded-lg bg-primary/10">
               <div className="text-2xl font-bold text-primary">
                 {userData._count?.investments || 0}
               </div>
               <div className="text-xs text-muted-foreground">
-                {t("investments")}
+                {t("accountsOverview.investments")}
               </div>
             </div>
           </div>

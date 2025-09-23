@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 import { Shield, TrendingUp, CreditCard } from "lucide-react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("metadata.signin");
+  const t = await getTranslations("app.public.auth.signIn");
   return {
     title: t("title"),
     description: t("description"),
@@ -23,13 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SignInPage(): Promise<React.JSX.Element> {
-  const t = await getTranslations("signin");
+  const t = await getTranslations("app.public.auth.signIn");
 
   return (
     <div className="py-6">
       <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">{t("title")}</CardTitle>
+          <CardTitle>{t("title")}</CardTitle>
           <CardDescription className="text-muted-foreground">
             {t("description")}
           </CardDescription>
@@ -40,16 +40,20 @@ export default async function SignInPage(): Promise<React.JSX.Element> {
           <div className="grid grid-cols-3 gap-4 pt-4 border-t">
             <div className="text-center">
               <Shield className="h-6 w-6 text-green-600 mx-auto mb-1" />
-              <p className="text-xs text-zinc-600">{t("features.security")}</p>
+              <p className="text-xs text-zinc-600">
+                {t("features.secureData.description")}
+              </p>
             </div>
             <div className="text-center">
               <TrendingUp className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-              <p className="text-xs text-zinc-600">{t("features.analytics")}</p>
+              <p className="text-xs text-zinc-600">
+                {t("features.trackExpenses.description")}
+              </p>
             </div>
             <div className="text-center">
               <CreditCard className="h-6 w-6 text-purple-600 mx-auto mb-1" />
               <p className="text-xs text-zinc-600">
-                {t("features.management")}
+                {t("features.manageBudgets.description")}
               </p>
             </div>
           </div>

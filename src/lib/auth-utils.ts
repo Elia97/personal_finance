@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import type { Session } from "next-auth";
-import { redirect } from "@/i18n/navigation";
+import { redirect } from "next/navigation";
 import { sendEmail } from "./resend";
 
 /**
@@ -14,23 +14,19 @@ export async function getAuthSession(): Promise<Session | null> {
 /**
  * Richiedi autenticazione - redirect se non autenticato
  */
-export async function requireAuth(locale: string): Promise<Session> {
+export async function requireAuth(): Promise<Session> {
   const session = await getAuthSession();
-  if (!session) {
-    redirect({ href: "/auth/signin", locale });
-    throw new Error("Redirected to signin");
-  }
+  if (!session) redirect("/auth/signin");
   return session;
 }
 
 /**
  * Controlla se l'account è attivo
  */
-export async function requireActiveStatus(locale: string): Promise<Session> {
-  const session = await requireAuth(locale);
+export async function requireActiveStatus(): Promise<Session> {
+  const session = await requireAuth();
   if (!session.user || session.user.status !== "ACTIVE") {
-    redirect({ href: "/account-suspended", locale });
-    throw new Error("Redirected to account suspended");
+    redirect("/auth/account-suspended");
   }
   return session;
 }

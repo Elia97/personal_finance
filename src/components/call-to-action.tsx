@@ -5,13 +5,13 @@ import { Link as ScrollLink } from "react-scroll";
 import { useTranslations } from "next-intl";
 
 export default function CallToAction() {
-  const t = useTranslations("home");
+  const t = useTranslations("app.public.home.hero.callToAction");
   return (
     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in slide-in-from-bottom-translate-full fade-in-0 duration-1000 transition-discrete">
       <Link
         href="/dashboard"
         aria-label="Go to the dashboard to get started"
-        className="px-8 py-2 text-lg rounded-lg border-2 border-primary font-semibold bg-gradient-to-b from-primary to-primary hover:from-primary hover:to-secondary text-blue-100 hover:text-white shadow-2xl hover:shadow-accent transition-all duration-300"
+        className="px-8 py-2 text-lg rounded-lg border-2 border-transparent font-semibold bg-gradient-to-b from-primary to-primary text-blue-200 hover:text-white shadow-2xl hover:shadow-accent transition-all duration-300"
       >
         {t("getStarted")}
       </Link>
@@ -24,7 +24,7 @@ export default function CallToAction() {
         aria-label="Discover the features of the application"
         className="px-8 py-2 cursor-pointer text-lg rounded-lg text-secondary hover:text-secondary-foreground hover:bg-secondary font-semibold bg-transparent border-2 border-secondary shadow-2xl hover:shadow-accent transition-all duration-300"
       >
-        {t("discoverFeatures")}
+        {t("learnMore")}
       </ScrollLink>
     </div>
   );

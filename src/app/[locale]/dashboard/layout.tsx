@@ -6,26 +6,22 @@ import { requireActiveStatus } from "@/lib/auth-utils";
 
 export default async function AppLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const paramsList = await params;
-  const locale = paramsList.locale;
-  await requireActiveStatus(locale);
-  const t = await getTranslations("dashboard.sidebar");
+  await requireActiveStatus();
+  const t = await getTranslations("app.dashboard.navBar");
 
   const navItems: NavigationItem[] = [
-    { title: t("menu.dashboard"), href: "/dashboard", icon: "home" },
-    { title: t("menu.accounts"), href: "/dashboard/accounts", icon: "wallet" },
+    { title: t("dashboard"), href: "/dashboard", icon: "home" },
+    { title: t("accounts"), href: "/dashboard/accounts", icon: "wallet" },
     {
-      title: t("menu.transactions"),
+      title: t("transactions"),
       href: "/dashboard/transactions",
       icon: "arrow-left-right",
     },
     {
-      title: t("menu.analytics"),
+      title: t("analytics"),
       href: "/dashboard/analytics",
       icon: "bar-chart-3",
     },
@@ -33,15 +29,10 @@ export default async function AppLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header for desktop, hidden on mobile */}
       <NavigationHeader navItems={navItems} />
-
-      {/* Main content with padding for mobile bottom nav */}
       <main className="pb-16 md:pb-0">
         <div className="container mx-auto p-4 md:p-6">{children}</div>
       </main>
-
-      {/* Bottom navigation for mobile, hidden on desktop */}
       <BottomNavigation navItems={navItems} />
     </div>
   );

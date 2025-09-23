@@ -6,31 +6,29 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { getAuthSession } from "@/lib/auth-utils";
+import { requireAuth } from "@/lib/auth-utils";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata() {
-  const t = await getTranslations("metadata.change-password");
+  const t = await getTranslations("app.public.auth.changePassword");
   return {
     title: t("title"),
     description: t("description"),
+    robots: {
+      index: false,
+      follow: false,
+    },
   };
 }
 
 export default async function ChangePasswordPage() {
-  const session = await getAuthSession();
-  if (!session?.user) {
-    throw new Error("User not authenticated");
-  }
-
-  const t = await getTranslations("auth.changePassword");
+  await requireAuth();
+  const t = await getTranslations("app.public.auth.changePassword");
 
   return (
     <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
       <CardHeader className="text-center">
-        <CardTitle>
-          <h1 className="text-xl">{t("title")}</h1>
-        </CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
           <p>{t("description")}</p>
         </CardDescription>

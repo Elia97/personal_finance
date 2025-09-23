@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 export default function ForgotPasswordForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const t = useTranslations("auth");
+  const t = useTranslations("app.public.auth.forgotPassword.form");
 
   const handleAction = async (formData: FormData) => {
     setLoading(true);
@@ -20,9 +20,9 @@ export default function ForgotPasswordForm() {
     const result = await forgotPasswordAction(formData);
 
     if (result.success) {
-      toast.success(t("forgotPassword.success"));
+      toast.success(t("success"));
     } else {
-      toast.error(result.error || t("forgotPassword.serverError"));
+      toast.error(result?.error as string);
     }
     setLoading(false);
   };
@@ -30,13 +30,13 @@ export default function ForgotPasswordForm() {
   return (
     <form action={handleAction} className="space-y-4">
       <Label htmlFor="email" className="hidden" aria-hidden="true">
-        {t("forgotPassword.email")}
+        {t("email.label")}
       </Label>
       <Input
         id="email"
         name="email"
         type="email"
-        placeholder={t("placeholder.email")}
+        placeholder={t("email.placeholder")}
         required
       />
       <div className="gap-4 grid grid-cols-2">
@@ -45,10 +45,10 @@ export default function ForgotPasswordForm() {
           onClick={() => router.push("/auth/signin")}
           variant="secondary"
         >
-          {t("forgotPassword.backToSignIn")}
+          {t("goToSignIn")}
         </Button>
         <Button type="submit" disabled={loading}>
-          {loading ? t("forgotPassword.sending") : t("forgotPassword.submit")}
+          {loading ? t("pending") : t("submit")}
         </Button>
       </div>
     </form>

@@ -20,22 +20,22 @@ export default function AuthFormWrapper() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const urlError = searchParams.get("error");
-  const t = useTranslations("auth");
+  const t = useTranslations("app.public.auth.signIn.form");
 
   useEffect(() => {
     if (urlError) {
       switch (urlError) {
         case "CredentialsSignin":
-          setError(t("error.invalidCredentials"));
+          setError(t("oauth.errors.invalidCredentials"));
           break;
         case "OAuthAccountNotLinked":
-          setError(t("error.accountNotLinked"));
+          setError(t("oauth.errors.accountNotLinked"));
           break;
         case "OAuthCallback":
-          setError(t("error.oauthError"));
+          setError(t("oauth.errors.oauthError"));
           break;
         default:
-          setError(t("error.generic"));
+          setError(t("oauth.errors.generic"));
       }
     }
   }, [urlError, t]);
@@ -46,7 +46,7 @@ export default function AuthFormWrapper() {
     try {
       await signIn(provider, { callbackUrl });
     } catch {
-      setError(`Error during authentication with ${provider}`);
+      setError(t("oauth.errors.oauthSignIn"));
       setIsLoading(false);
     }
   };
@@ -71,7 +71,7 @@ export default function AuthFormWrapper() {
           <span className="mr-2 flex items-center">
             <Image src="/google.svg" alt="Google Logo" width={20} height={20} />
           </span>
-          {t("oauth.continueWithGoogle")}
+          {t("oauth.google")}
         </Button>
       </div>
 
@@ -99,7 +99,7 @@ export default function AuthFormWrapper() {
               onClick={() => setIsNewUser(false)}
               disabled={isLoading}
             >
-              {t("switch.signInHere")}
+              {t("switch.signIn")}
             </Button>
           </>
         ) : (
@@ -111,7 +111,7 @@ export default function AuthFormWrapper() {
               onClick={() => setIsNewUser(true)}
               disabled={isLoading}
             >
-              {t("switch.signUpHere")}
+              {t("switch.signUp")}
             </Button>
           </>
         )}

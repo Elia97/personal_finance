@@ -7,21 +7,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
 import { onBoardingAction } from "@/app/actions/user-actions";
+import toast from "react-hot-toast";
 
 export default function NewUserForm() {
-  const [loading, setLoading] = useState(false);
+  const [pending, setPending] = useState(false);
   const router = useRouter();
-  const t = useTranslations("auth.newUser");
+  const t = useTranslations("app.public.auth.newUser.form");
 
   const handleAction = async (formData: FormData) => {
-    setLoading(true);
+    setPending(true);
     const result = await onBoardingAction(formData);
     if (result.error) {
-      console.error(result.error);
+      toast.error(result.error);
     } else {
       router.push("/dashboard");
     }
-    setLoading(false);
+    setPending(false);
   };
 
   return (
@@ -50,8 +51,8 @@ export default function NewUserForm() {
           required
         />
       </div>
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? t("submitting") : t("submit")}
+      <Button type="submit" className="w-full" disabled={pending}>
+        {pending ? t("pending") : t("submit")}
       </Button>
     </form>
   );

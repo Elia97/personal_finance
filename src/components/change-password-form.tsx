@@ -16,7 +16,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ChangePasswordForm() {
-  const t = useTranslations("auth.changePassword.form");
+  const t = useTranslations("app.public.auth.changePassword.form");
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -117,7 +117,7 @@ export default function ChangePasswordForm() {
           {t("goBack")}
         </Button>
         <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? t("changing") : t("submit")}
+          {pending ? t("pending") : t("submit")}
         </Button>
       </div>
     </form>

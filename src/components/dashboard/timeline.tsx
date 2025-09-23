@@ -8,14 +8,22 @@ import {
 import { monthsData, currentMonthIndex } from "@/lib/dashboard";
 import { Badge } from "../ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { getTranslations } from "next-intl/server";
 
-export default function Timeline() {
+export default async function Timeline() {
+  const t = await getTranslations("app.dashboard.timeline");
+
+  const translatedMonthsData = monthsData.map((month) => ({
+    ...month,
+    month: t(`months.${month.month.toLowerCase()}`),
+  }));
+
   return (
-    <Card>
+    <Card className="bg-transparent border-transparent shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calendar className="h-5 w-5" />
-          Months Timeline
+          {t("title")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -24,7 +32,7 @@ export default function Timeline() {
           <div className="relative">
             <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border"></div>
             <div className="space-y-4">
-              {monthsData.map((month, index) => (
+              {translatedMonthsData.map((month, index) => (
                 <div
                   key={month.month}
                   className="relative flex items-center space-x-4"
@@ -72,7 +80,7 @@ export default function Timeline() {
                                     : "border-red-600 text-red-700"
                                 }
                               >
-                                {month.level}
+                                {t(`levels.${month.level}`)}
                               </Badge>
                             )}
                           {index > currentMonthIndex && (
@@ -80,7 +88,7 @@ export default function Timeline() {
                               variant="outline"
                               className="border-muted-foreground/30 text-muted-foreground"
                             >
-                              Coming soon
+                              {t("comingSoon")}
                             </Badge>
                           )}
                         </h3>
@@ -89,7 +97,7 @@ export default function Timeline() {
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2 text-sm">
                               <div>
                                 <span className="text-muted-foreground">
-                                  Income:
+                                  {t("income")}:
                                 </span>
                                 <div className="font-semibold text-green-600">
                                   €{month.income.toLocaleString("en-US")}
@@ -97,7 +105,7 @@ export default function Timeline() {
                               </div>
                               <div>
                                 <span className="text-muted-foreground">
-                                  Expenses:
+                                  {t("expenses")}:
                                 </span>
                                 <div className="font-semibold text-red-600">
                                   €{month.expenses.toLocaleString("en-US")}
@@ -105,7 +113,7 @@ export default function Timeline() {
                               </div>
                               <div>
                                 <span className="text-muted-foreground">
-                                  Savings:
+                                  {t("savings")}:
                                 </span>
                                 <div className="font-semibold text-primary">
                                   €{month.savings.toLocaleString("en-US")}
@@ -113,7 +121,7 @@ export default function Timeline() {
                               </div>
                               <div>
                                 <span className="text-muted-foreground">
-                                  Rate:
+                                  {t("rate")}:
                                 </span>
                                 <div className="font-semibold text-primary">
                                   {month.rate.toLocaleString("en-US", {
@@ -129,6 +137,9 @@ export default function Timeline() {
                       {index <= currentMonthIndex &&
                         month.status !== "pending" && (
                           <div className="flex flex-wrap justify-end items-center">
+                            {month.level === "gold" && (
+                              <Trophy className="h-5 w-5 text-yellow-600 mr-1" />
+                            )}
                             {month.status === "positive" && (
                               <TrendingUp className="h-5 w-5 text-green-600" />
                             )}
@@ -137,9 +148,6 @@ export default function Timeline() {
                             )}
                             {month.status === "neutral" && (
                               <Minus className="h-5 w-5 text-amber-600" />
-                            )}
-                            {month.level === "gold" && (
-                              <Trophy className="h-5 w-5 text-yellow-600 ml-1" />
                             )}
                           </div>
                         )}

@@ -7,12 +7,12 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
-import { getServerSession } from "next-auth";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import { requireAuth } from "@/lib/auth-utils";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("metadata.new-user");
+  const t = await getTranslations("app.public.auth.newUser");
   return {
     title: t("title"),
     description: t("description"),
@@ -24,21 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function NewUserPage(): Promise<React.JSX.Element | null> {
-  const session = await getServerSession();
-  if (!session) return null;
-
-  const t = await getTranslations("auth.newUser");
+  const session = await requireAuth();
+  const t = await getTranslations("app.public.auth.newUser");
 
   return (
     <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
       <CardHeader className="text-center">
-        <CardTitle>
-          <h1 className="text-xl">{t("title")}</h1>
-        </CardTitle>
+        <CardTitle>{`${t("subTitle")} ${
+          session.user.name || session.user.email
+        }`}</CardTitle>
         <CardDescription>
-          <p className="text-muted-foreground">{`${t("welcome")}, ${
-            session.user.name || session.user.email
-          }! ${t("description")}`}</p>
+          <p className="text-muted-foreground">{t("description")}</p>
         </CardDescription>
       </CardHeader>
       <CardContent>

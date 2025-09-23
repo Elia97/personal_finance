@@ -123,25 +123,25 @@ export const currentLevel = monthsData[currentMonthIndex].level;
 export const getHealthStatus = () => {
   if (savingRate >= 50)
     return {
-      status: "excellent",
+      status: "excellent" as const,
       emoji: "😎",
-      message: "Excellent annual financial management!",
+      message: "healthStatus.excellent",
     };
   if (savingRate >= 20)
     return {
-      status: "good",
+      status: "good" as const,
       emoji: "😊",
-      message: "Great financial progress this year!",
+      message: "healthStatus.good",
     };
   if (savingRate >= 0)
     return {
-      status: "ok",
+      status: "ok" as const,
       emoji: "🙂",
-      message: "Good annual balance, keep it up!",
+      message: "healthStatus.ok",
     };
   return {
-    status: "needs-attention",
+    status: "needs-attention" as const,
     emoji: "😐",
-    message: "Pay attention to your annual balance!",
+    message: "healthStatus.needsAttention",
   };
 };

@@ -23,14 +23,14 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: t("openGraph.locale"),
-      title: t("title"),
-      description: t("description"),
+      title: t("openGraph.title"),
+      description: t("openGraph.description"),
       siteName: t("openGraph.siteName"),
     },
     twitter: {
       card: "summary_large_image",
-      title: t("title"),
-      description: t("description"),
+      title: t("twitter.title"),
+      description: t("twitter.description"),
     },
   };
 }

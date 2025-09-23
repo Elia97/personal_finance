@@ -1,7 +1,5 @@
 {
   "metadata": {
-    "title": "Personal Finance - Manage Your Finances",
-    "description": "Professional platform for personal finance management.",
     "keywords": {
       "personalFinance": "personal finance",
       "moneyManagement": "money management",
@@ -16,316 +14,390 @@
     "creator": "Personal Finance App",
     "publisher": "Personal Finance",
     "openGraph": {
+      "title": "Personal Finance - Manage Your Money Wisely",
+      "description": "Take control of your finances with our easy-to-use personal finance management tools.",
       "locale": "en_US",
       "siteName": "Personal Finance"
     },
-    "error": {
-      "title": "Error - Personal Finance",
-      "description": "An error occurred during the process."
-    },
-    "forgot-password": {
-      "title": "Forgot Password - Personal Finance",
-      "description": "Reset your password to regain access to your personal finance account."
-    },
-    "reset-password": {
-      "title": "Reset Password - Personal Finance",
-      "description": "Set a new password for your personal finance account."
-    },
-    "change-password": {
-      "title": "Change Password - Personal Finance",
-      "description": "Change your current password to enhance your account security."
-    },
-    "new-user": {
-      "title": "Welcome - Personal Finance",
-      "description": "Your account has been successfully created. Start managing your finances now."
-    },
-    "signin": {
-      "title": "Sign In - Personal Finance",
-      "description": "Access your personal financial management platform."
-    },
-    "verify-request": {
-      "title": "Verify Request - Personal Finance",
-      "description": "Check your email for a sign-in link to access your personal finance account."
+    "twitter": {
+      "title": "Personal Finance - Manage Your Money Wisely",
+      "description": "Take control of your finances with our easy-to-use personal finance management tools."
+    }
+  },
+  "app": {
+    "public": {
+      "auth": {
+        "changePassword": {
+          "title": "Change Password - Personal Finance",
+          "description": "Change your password to keep your account secure.",
+          "form": {
+            "currentPassword": "Current Password",
+            "newPassword": "New Password",
+            "confirmNewPassword": "Confirm New Password",
+            "changePasswordButton": "Change Password",
+            "goBack": "Go Back",
+            "pending": "Changing Password...",
+            "submit": "Change Password",
+            "success": "Password changed successfully."
+          }
+        },
+        "errorPage": {
+          "title": "Authentication Error - Personal Finance",
+          "description": "An error occurred during authentication. Please try again.",
+          "backToSignin": "Back to Sign In"
+        },
+        "forgotPassword": {
+          "title": "Forgot Password - Personal Finance",
+          "description": "Reset your password by entering your email address.",
+          "note": "If an account with that email exists, a reset link will be sent.",
+          "form": {
+            "email": {
+              "label": "Email Address",
+              "placeholder": "Enter your email address"
+            },
+            "goToSignIn": "Go to Sign In",
+            "pending": "Sending...",
+            "submit": "Send Reset Link",
+            "success": "Email sent! Please check your inbox."
+          }
+        },
+        "newUser": {
+          "title": "Onboarding - Personal Finance",
+          "subTitle": "Welcome to Personal Finance! ",
+          "description": "Get started by completing your profile information below.",
+          "note": "This information can be updated later in your account settings.",
+          "form": {
+            "language": {
+              "label": "Favorite Language",
+              "placeholder": "e.g., en, it, fr, es"
+            },
+            "country": {
+              "label": "Country",
+              "placeholder": "e.g., US, IT, FR, ES"
+            },
+            "pending": "Submitting...",
+            "submit": "Get Started"
+          }
+        },
+        "resetPassword": {
+          "title": "Reset Password - Personal Finance",
+          "description": "Set a new password for your account.",
+          "form": {
+            "tokenInvalid": "The reset token is invalid or has expired.",
+            "passwordsMismatch": "Passwords do not match.",
+            "passwordShort": "Password must be at least 8 characters long.",
+            "serverError": "An error occurred. Please try again later.",
+            "requestNew": "Request a new password reset link.",
+            "tokenMissing": "Reset token is missing.",
+            "newPassword": {
+              "label": "New Password",
+              "placeholder": "Enter your new password"
+            },
+            "confirmNewPassword": {
+              "label": "Confirm New Password",
+              "placeholder": "Re-enter your new password"
+            },
+            "goBack": "Go Back",
+            "pending": "Resetting Password...",
+            "submit": "Reset Password",
+            "success": "Password reset successfully. You can now sign in."
+          }
+        },
+        "signIn": {
+          "title": "Sign In - Personal Finance",
+          "description": "Access your Personal Finance account.",
+          "form": {
+            "oauth": {
+              "errors": {
+                "oauthAccountNotLinked": "An account with the same email already exists. Please sign in using your email and password.",
+                "oauthSignin": "Error signing in with the selected provider. Please try again.",
+                "oauthCallback": "Error during authentication callback. Please try again.",
+                "oauthCreateAccount": "Error creating an account with the selected provider. Please try again.",
+                "emailCreateAccount": "Error creating an account with the provided email. Please try again.",
+                "emailSignin": "Error signing in with the provided email. Please try again.",
+                "credentialsSignin": "Invalid email or password. Please try again.",
+                "generic": "An unexpected error occurred. Please try again."
+              },
+              "google": "Continue with Google",
+              "or": "or"
+            },
+            "switch": {
+              "alreadyAccount": "Already have an account? ",
+              "signIn": "Sign In Here",
+              "noAccount": "Don't have an account? ",
+              "signUp": "Sign Up Here"
+            },
+            "login": {
+              "email": {
+                "label": "Email Address",
+                "placeholder": "example@domain.com"
+              },
+              "password": {
+                "label": "Password",
+                "placeholder": "••••••••"
+              },
+              "rememberMe": "Remember Me",
+              "forgotPassword": "Forgot Password?",
+              "pending": "Signing In...",
+              "submit": "Sign In",
+              "errors": {
+                "invalidCredentials": "Invalid email or password.",
+                "inactiveAccount": "Your account is inactive. Please contact support.",
+                "generic": "An error occurred during sign in. Please try again."
+              }
+            },
+            "register": {
+              "name": {
+                "label": "Full Name",
+                "placeholder": "John Doe"
+              },
+              "email": {
+                "label": "Email Address",
+                "placeholder": "example@domain.com"
+              },
+              "password": {
+                "label": "Password",
+                "placeholder": "••••••••"
+              },
+              "confirmPassword": {
+                "label": "Confirm Password",
+                "placeholder": "••••••••"
+              },
+              "acceptTerms": {
+                "label": "I accept the ",
+                "terms": "Terms and Conditions"
+              },
+              "pending": "Registering...",
+              "submit": "Sign Up"
+            }
+          },
+          "features": {
+            "secureData": {
+              "title": "Secure Data",
+              "description": "Your financial data is protected with top-notch security measures."
+            },
+            "trackExpenses": {
+              "title": "Track Expenses",
+              "description": "Easily monitor and categorize your spending habits."
+            },
+            "manageBudgets": {
+              "title": "Manage Budgets",
+              "description": "Set and manage budgets to achieve your financial goals."
+            }
+          }
+        },
+        "verifyRequest": {
+          "title": "Check Your Email - Personal Finance",
+          "description": "A sign-in link has been sent to your email address. Please check your inbox.",
+          "note": "If you don't see the email, please check your spam or junk folder.",
+          "resendEmail": {
+            "success": "Verification email resent successfully.",
+            "pending": "Resending...",
+            "submit": "Resend Email",
+            "backToSignIn": "Back to Sign In"
+          }
+        }
+      },
+      "home": {
+        "title": "Personal Finance - Manage Your Money Wisely",
+        "description": "Take control of your finances with our easy-to-use personal finance management tools.",
+        "hero": {
+          "title": "Welcome to Personal Finance",
+          "subtitle": "Your journey to financial freedom starts here.",
+          "callToAction": {
+            "getStarted": "Get Started",
+            "learnMore": "Learn More"
+          }
+        },
+        "footer": {
+          "description": "Your trusted partner in managing your finances.",
+          "termsOfService": "Terms of Service",
+          "privacyPolicy": "Privacy Policy"
+        }
+      }
     },
     "dashboard": {
       "title": "Dashboard - Personal Finance",
-      "description": "Complete dashboard for controlling your personal finances."
-    },
-    "profile": {
-      "title": "Profile - Personal Finance",
-      "description": "Manage your personal information and account settings."
-    }
-  },
-  "home": {
-    "title": "Personal Finance - Manage Your Finances",
-    "description": "Professional platform for personal finance management.\nMonitor, plan and optimize your financial resources.",
-    "getStarted": "Get Started",
-    "discoverFeatures": "Discover Features",
-    "footerDescription": "Protected by end-to-end encryption",
-    "privacyPolicy": "Privacy Policy",
-    "termsOfService": "Terms of Service"
-  },
-  "signin": {
-    "title": "Sign In - Personal Finance",
-    "description": "Access your personal financial management platform.",
-    "features": {
-      "security": "Bank-level\nSecurity",
-      "analytics": "Advanced\nAnalytics",
-      "management": "All-in-one\nManagement"
-    }
-  },
-  "auth": {
-    "error": {
-      "invalidCredentials": "Invalid credentials. Please check your email and password.",
-      "accountNotLinked": "This account is already linked with another provider.",
-      "oauthError": "An error occurred during OAuth authentication.",
-      "generic": "An error occurred during sign in. Please try again.",
-      "inactiveAccount": "Your account is not active. Please contact support.",
-      "connection": "Connection error. Please try again later.",
-      "registration": "Registration error",
-      "registrationSuccessButLogin": "Registration successful, but error during login."
-    },
-    "oauth": {
-      "continueWithGoogle": "Continue with Google",
-      "or": "or"
-    },
-    "login": {
-      "email": "Email",
-      "password": "Password",
-      "rememberMe": "Remember me",
-      "forgotPassword": "Forgot password?",
-      "signIn": "Sign in",
-      "signingIn": "Signing in..."
-    },
-    "signup": {
-      "name": "Name",
-      "email": "Email",
-      "password": "Password",
-      "repeatPassword": "Repeat password",
-      "acceptTerms": "I accept the",
-      "terms": "terms of service",
-      "signUp": "Sign up",
-      "registering": "Registering...",
-      "success": "Registration successful!"
-    },
-    "switch": {
-      "noAccount": "Don't have an account? ",
-      "alreadyAccount": "Already have an account? ",
-      "signUpHere": "Sign up here",
-      "signInHere": "Sign in here"
-    },
-    "placeholder": {
-      "email": "email@example.com",
-      "password": "••••••••",
-      "name": "John Doe"
-    },
-    "forgotPassword": {
-      "title": "Forgot Password",
-      "description": "Please enter your email to reset the password.",
-      "emailRequired": "Email is required",
-      "emailNotSent": "If an account with that email exists, a password reset link has been sent.",
-      "resetEmail": {
-        "subject": "Reset Your Password",
-        "body": "Click the following link to reset your password: {resetUrl}"
-      },
-      "email": "Email",
-      "emailSent": "Reset link sent to your email.",
-      "serverError": "An error occurred. Please try again later.",
-      "sendLink": "Send Reset Link",
-      "backToSignIn": "Back to Sign In",
-      "submit": "Submit",
-      "sending": "Sending...",
-      "success": "Email sent successfully!",
-      "note": "If you don't receive an email, please check your spam folder or try again."
-    },
-    "resetPassword": {
-      "token": {
-        "invalid": "Invalid or expired token.",
-        "missing": "Token is required."
-      },
-      "passwords": {
-        "mismatch": "Passwords do not match.",
-        "short": "Password must be at least 6 characters long."
-      },
-      "success": "Password reset successfully. Redirecting to sign in...",
-      "error": "An error occurred. Please try again later.",
-      "title": "Reset Password",
-      "description": "Please enter your new password below.",
-      "newPassword": "New Password",
-      "confirmPassword": "Confirm Password",
-      "submit": "Reset Password",
-      "resetting": "Resetting...",
-      "requestNew": "Request a new link"
-    },
-    "changePassword": {
-      "title": "Change Password",
-      "description": "Please enter your new password below.",
-      "form": {
-        "success": "Password changed successfully. Redirecting to dashboard...",
-        "currentPassword": "Current Password",
-        "newPassword": "New Password",
-        "confirmNewPassword": "Confirm New Password",
-        "submit": "Change Password",
-        "changing": "Changing...",
-        "goBack": "Go Back",
-        "errors": {
-          "user": "User not authenticated.",
-          "fields": "All fields are required.",
-          "mismatch": "New passwords do not match.",
-          "short": "New password must be at least 8 characters long.",
-          "sameAsOld": "New password must be different from the current password.",
-          "generic": "An error occurred. Please try again later."
-        }
-      }
-    },
-    "errorPage": {
-      "title": "Authentication Error",
-      "description": "An error occurred during authentication. Please try again.",
-      "backToHome": "Back to Home"
-    },
-    "newUser": {
-      "title": "Complete Your Profile",
-      "welcome": "Welcome",
-      "description": "To continue, please fill in the missing information.",
-      "note": "You can also edit this information later from the profile settings.",
-      "formError": "Error occurred while updating your profile. Please try again.",
-      "phone": {
-        "label": "Phone Number",
-        "placeholder": "Enter your phone number"
-      },
-      "language": {
-        "label": "Preferred Language",
-        "placeholder": "e.g., en, it, fr"
-      },
-      "country": {
-        "label": "Country",
-        "placeholder": "e.g., US, IT, FR"
-      },
-      "dateOfBirth": {
-        "label": "Date of Birth"
-      },
-      "submit": "Complete Profile",
-      "submitting": "Submitting..."
-    },
-    "verifyRequest": {
-      "title": "Check Your Email",
-      "description": "A sign-in link has been sent to your email address. Please check your inbox and click the link to sign in.",
-      "note": "You can also edit this information later from the profile settings.",
-      "error": "An error occurred while resending the email. Please try again later.",
-      "resendSuccess": "Email resent successfully!",
-      "submitting": "Resending...",
-      "submit": "Resend Email",
-      "backToLogin": "Back to Login"
-    }
-  },
-  "dashboard": {
-    "title": "Dashboard - Personal Finance",
-    "description": "Complete dashboard for controlling your personal finances.",
-    "addTransaction": "Add Transaction",
-    "sidebar": {
-      "menu": {
+      "description": "Overview of your financial status and recent activities.",
+      "navBar": {
         "dashboard": "Dashboard",
         "accounts": "Accounts",
         "transactions": "Transactions",
-        "analytics": "Analytics",
-        "investments": "Investments",
-        "settings": "Settings",
-        "more": "More",
-        "moreOptions": "More Options"
+        "analytics": "Analytics"
       },
-      "footer": {
-        "backToHome": "Back to Home"
-      }
-    },
-    "header": {
-      "title": "Dashboard",
-      "description": "Overview of your personal finances"
-    },
-    "summary": {
-      "title": "Monthly Summary",
-      "income": "Income",
-      "expenses": "Expenses",
-      "balance": "Balance",
-      "viewByMonth": "View summary by month"
-    },
-    "accounts": {
-      "title": "Your Accounts",
-      "description": "Overview of your financial accounts",
-      "type": {
-        "checking": "Checking Account",
-        "savings": "Savings Account",
-        "investment": "Investment Account"
-      },
-      "totalBalance": "Total Balance",
-      "emptyState": "No accounts found. Add an account to get started."
-    }
-  },
-  "profile": {
-    "title": "User Profile",
-    "description": "Manage your personal information and account settings.",
-    "overview": {
-      "errorFetchLocale": "Error fetching user locale. Defaulting to English (US).",
-      "email": "Email: ",
-      "lastLogin": "Last Login: ",
-      "memberSince": "Member Since: ",
-      "accountsOverview": "Accounts Overview",
-      "bankAccounts": "Accounts",
-      "transactions": "Transactions",
-      "goals": "Goals",
-      "investments": "Investments"
-    },
-    "form": {
-      "errorUpdatingProfile": "Error updating profile. Please try again.",
-      "profileUpdatedSuccessfully": "Profile updated successfully.",
-      "personalInformation": {
-        "title": "Personal Information",
-        "description": "Update your personal details below.",
-        "fullName": "Full Name",
-        "emailAddress": "Email Address",
-        "phoneNumber": "Phone Number",
-        "dateOfBirth": "Date of Birth"
-      },
-      "location&language": {
-        "title": "Location & Language",
-        "description": "Set your location and preferred language.",
-        "country": {
-          "label": "Country",
-          "US": "United States",
-          "IT": "Italy",
-          "loading": "Loading countries..."
+      "annualSummary": {
+        "title": "Annual Summary",
+        "progress": "Annual Financial Progress",
+        "totalIncome": "Total Income",
+        "totalExpenses": "Total Expenses",
+        "annualBalance": "Annual Balance",
+        "savingRate": "Saving Rate",
+        "monthlySummary": {
+          "title": "Monthly Summary",
+          "income": "Income",
+          "expenses": "Expenses",
+          "balance": "Balance",
+          "months": {
+            "january": "January",
+            "february": "February",
+            "march": "March",
+            "april": "April",
+            "may": "May",
+            "june": "June",
+            "july": "July",
+            "august": "August",
+            "september": "September",
+            "october": "October",
+            "november": "November",
+            "december": "December"
+          }
         },
-        "language": {
-          "label": "Language",
-          "en": "English",
-          "it": "Italian",
-          "loading": "Loading languages..."
+        "healthStatus": {
+          "excellent": "Excellent annual financial management!",
+          "good": "Great financial progress this year!",
+          "ok": "Good annual balance, keep it up!",
+          "needsAttention": "Pay attention to your annual balance!"
         }
       },
-      "security&preferences": {
-        "title": "Security & Preferences",
-        "description": "Manage your security settings and app preferences.",
-        "twoFactorAuth": {
-          "label": "Two-Factor Authentication",
-          "description": "Add an extra layer of security to your account"
+      "quickActions": {
+        "title": "Quick Actions",
+        "addTransaction": "Add Transaction",
+        "newBudget": "New Budget",
+        "newGoal": "New Goal",
+        "investments": "Investments"
+      },
+      "statsCards": {
+        "averageMonthlySavings": {
+          "title": "Average Monthly Savings",
+          "note": "Based on the last 6 months"
         },
-        "changePassword": {
-          "label": "Change Password",
-          "description": "Update your account password regularly",
-          "buttonText": "Change Password"
+        "currentStreak": {
+          "title": "Current Savings Streak",
+          "note": "Months of consistent savings",
+          "months": "months"
         },
-        "pushNotifications": {
-          "label": "Push Notifications",
-          "description": "Receive notifications about important account activity"
-        },
-        "marketingEmails": {
-          "label": "Marketing Emails",
-          "description": "Get updates on new features and offers"
+        "currentLevel": {
+          "title": "Current Level",
+          "note": "Based on your financial habits",
+          "levels": {
+            "bronze": "Bronze",
+            "silver": "Silver",
+            "gold": "Gold",
+            "danger": "Danger",
+            "pending": "Pending"
+          }
         }
       },
-      "actionButtons": {
-        "cancel": "Cancel",
-        "saveChanges": "Save Changes",
-        "editProfile": "Edit Profile"
+      "timeline": {
+        "title": "Months Timeline",
+        "months": {
+          "january": "January",
+          "february": "February",
+          "march": "March",
+          "april": "April",
+          "may": "May",
+          "june": "June",
+          "july": "July",
+          "august": "August",
+          "september": "September",
+          "october": "October",
+          "november": "November",
+          "december": "December"
+        },
+        "levels": {
+          "danger": "Danger",
+          "pending": "Pending",
+          "bronze": "Bronze",
+          "silver": "Silver",
+          "gold": "Gold"
+        },
+        "comingSoon": "Coming soon!",
+        "income": "Income",
+        "expenses": "Expenses",
+        "savings": "Savings",
+        "rate": "Rate"
+      },
+      "profile": {
+        "title": "User Profile",
+        "description": "Manage your personal information and account settings.",
+        "overview": {
+          "lastLogin": "Last Login",
+          "memberSince": "Member Since",
+          "accountsOverview": {
+            "title": "Accounts Overview",
+            "bankAccounts": "Bank Accounts",
+            "transactions": "Transactions",
+            "goals": "Goals",
+            "investments": "Investments"
+          }
+        },
+        "form": {
+          "noChanges": "No changes detected.",
+          "success": "Profile updated successfully.",
+          "error": "An error occurred while updating your profile. Please try again.",
+          "personalInformation": {
+            "title": "Personal Information",
+            "description": "Update your personal details below.",
+            "fullName": "Full Name",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "dateOfBirth": "Date of Birth"
+          },
+          "location&language": {
+            "title": "Location & Language",
+            "description": "Set your location and preferred language.",
+            "country": {
+              "label": "Country",
+              "placeholder": "Select your country",
+              "items": {
+                "US": "United States",
+                "IT": "Italy"
+              },
+              "loading": "Loading countries..."
+            },
+            "language": {
+              "label": "Language",
+              "placeholder": "Select your language",
+              "items": {
+                "en": "English",
+                "it": "Italian"
+              },
+              "loading": "Loading languages..."
+            }
+          },
+          "security&preferences": {
+            "title": "Security & Preferences",
+            "description": "Manage your security settings and preferences.",
+            "emailVerification": {
+              "label": "Email Verification",
+              "description": "Your email address verification status.",
+              "verified": "Verified",
+              "notVerified": "Unverified"
+            },
+            "twoFactorAuth": {
+              "label": "Two-Factor Authentication",
+              "description": "Enhance the security of your account by requiring a second form of verification when signing in."
+            },
+            "changePassword": {
+              "label": "Change Password",
+              "description": "Update your account password regularly to keep your account secure.",
+              "button": "Change Password"
+            },
+            "notifications": {
+              "label": "Email Notifications",
+              "description": "Receive email notifications for important account activities and updates."
+            },
+            "marketingEmails": {
+              "label": "Marketing Emails",
+              "description": "Opt-in to receive promotional emails and updates about new features."
+            }
+          },
+          "footer": {
+            "cancel": "Cancel",
+            "edit": "Edit",
+            "save": "Save Changes"
+          }
+        }
       }
     }
   }

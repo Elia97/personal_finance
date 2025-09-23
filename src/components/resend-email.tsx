@@ -12,7 +12,7 @@ export default function ResendEmail() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
-  const t = useTranslations("auth.verifyRequest");
+  const t = useTranslations("app.public.auth.verifyRequest.resendEmail");
   const [resendSuccess, setResendSuccess] = useState(false);
   const [resendError, setResendError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,19 +29,18 @@ export default function ResendEmail() {
       });
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || t("error"));
+        throw new Error(errorData.message);
       }
       setResendSuccess(true);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setResendError(err.message || t("error"));
-      } else {
-        setResendError(t("error"));
+        setResendError(err.message);
       }
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <CardContent className="space-y-6 pt-6">
       {resendError && (
@@ -51,19 +50,19 @@ export default function ResendEmail() {
       )}
       {resendSuccess && (
         <Alert variant="default">
-          <AlertDescription>{t("resendSuccess")}</AlertDescription>
+          <AlertDescription>{t("success")}</AlertDescription>
         </Alert>
       )}
-      <CardAction className="text-center mx-auto">
+      <CardAction className="grid grid-cols-2 mx-auto">
+        <Button onClick={() => router.push("/auth/signin")} variant="link">
+          {t("backToSignIn")}
+        </Button>
         <Button
           onClick={handleResendEmail}
           className="w-full"
           disabled={loading}
         >
-          {loading ? t("submitting") : t("submit")}
-        </Button>
-        <Button onClick={() => router.push("/auth/signin")} variant="link">
-          {t("backToLogin")}
+          {loading ? t("pending") : t("submit")}
         </Button>
       </CardAction>
     </CardContent>

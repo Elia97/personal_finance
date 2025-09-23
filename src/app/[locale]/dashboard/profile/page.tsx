@@ -3,7 +3,7 @@ import ProfileClient from "@/components/profile-client";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata() {
-  const t = await getTranslations("metadata.profile");
+  const t = await getTranslations("app.dashboard.profile");
   return {
     title: t("title"),
     description: t("description"),
@@ -12,7 +12,7 @@ export async function generateMetadata() {
 
 export default async function ProfilePage() {
   const userData = await getUserProfile();
-  const t = await getTranslations("profile");
+  const t = await getTranslations("app.dashboard.profile");
 
   return (
     <div className="min-h-screen">

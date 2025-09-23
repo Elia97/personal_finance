@@ -10,7 +10,7 @@ import {
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("metadata.reset-password");
+  const t = await getTranslations("app.public.auth.resetPassword");
   return {
     title: t("title"),
     description: t("description"),
@@ -22,14 +22,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ResetPasswordPage(): Promise<React.JSX.Element> {
-  const t = await getTranslations("auth.resetPassword");
+  const t = await getTranslations("app.public.auth.resetPassword");
 
   return (
     <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
       <CardHeader className="text-center">
-        <CardTitle>
-          <h1 className="text-xl">{t("title")}</h1>
-        </CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
           <p className="text-muted-foreground">{t("description")}</p>
         </CardDescription>

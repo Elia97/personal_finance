@@ -13,7 +13,7 @@ import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("metadata.error");
+  const t = await getTranslations("app.public.auth.errorPage");
   return {
     title: t("title"),
     description: t("description"),
@@ -24,15 +24,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function AuthErrorPage(): Promise<React.JSX.Element> {
-  const t = await getTranslations("auth.errorPage");
+export default async function ErrorPage(): Promise<React.JSX.Element> {
+  const t = await getTranslations("app.public.auth.errorPage");
 
   return (
     <Card className="max-w-lg mx-auto shadow-2xl shadow-primary text-center">
       <CardHeader>
-        <CardTitle>
-          <h1 className="text-xl">{t("title")}</h1>
-        </CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription className="text-destructive">
@@ -41,7 +39,7 @@ export default async function AuthErrorPage(): Promise<React.JSX.Element> {
       </CardContent>
       <CardFooter className="justify-center">
         <Button asChild variant="link" className="p-0">
-          <Link href="/">{t("backToHome")}</Link>
+          <Link href="/auth/signin">{t("backToSignin")}</Link>
         </Button>
       </CardFooter>
     </Card>

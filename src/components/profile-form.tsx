@@ -44,10 +44,10 @@ export default function ProfileForm({
   const { update } = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  const t = useTranslations("profile.form");
   const [initialLanguage, setInitialLanguage] = useState<string>("");
   const [isClient, setIsClient] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const t = useTranslations("app.dashboard.profile.form");
 
   useEffect(() => {
     setIsClient(true);
@@ -70,7 +70,7 @@ export default function ProfileForm({
       language: userData?.language || "en",
       settings: {
         twoFactorEnabled: false,
-        notifications: true,
+        notifications: false,
         marketingEmail: false,
       },
     },
@@ -78,13 +78,12 @@ export default function ProfileForm({
 
   const handleFormSubmit = async (data: ProfileUser) => {
     if (!isDirty) {
-      toast("No changes detected.");
+      toast(t("noChanges"), { icon: "ℹ️" });
       setIsEditing(false);
       return;
     }
 
     try {
-      // Crea FormData per la server action
       const formData = new FormData();
 
       if (data.name) formData.append("name", data.name);
@@ -94,7 +93,6 @@ export default function ProfileForm({
       if (data.country) formData.append("country", data.country);
       if (data.language) formData.append("language", data.language);
 
-      // Aggiungi settings
       if (data.settings) {
         formData.append(
           "settings.twoFactorEnabled",
@@ -117,7 +115,6 @@ export default function ProfileForm({
       }
 
       if ("user" in result && result.user) {
-        // Aggiorna solo i campi che sono cambiati, mantenendo la struttura UserProfile
         const updatedUserData = {
           ...userData,
           ...result.user,
@@ -142,7 +139,7 @@ export default function ProfileForm({
             }) || {}),
           },
         });
-        toast.success(t("profileUpdatedSuccessfully"));
+        toast.success(t("success"));
 
         if (data.language !== initialLanguage) {
           await update({ language: data.language });
@@ -160,9 +157,8 @@ export default function ProfileForm({
 
         setIsEditing(false);
       }
-    } catch (error) {
-      console.error("Profile update error:", error);
-      toast.error(t("errorUpdatingProfile"));
+    } catch {
+      toast.error(t("error"));
     }
   };
 
@@ -218,9 +214,7 @@ export default function ProfileForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">
-                {t("personalInformation.emailAddress")}
-              </Label>
+              <Label htmlFor="email">{t("personalInformation.email")}</Label>
               <Input
                 id="email"
                 type="email"
@@ -230,9 +224,7 @@ export default function ProfileForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">
-                {t("personalInformation.phoneNumber")}
-              </Label>
+              <Label htmlFor="phone">{t("personalInformation.phone")}</Label>
               <Input
                 id="phone"
                 {...register("phone")}
@@ -284,14 +276,18 @@ export default function ProfileForm({
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your country" />
+                        <SelectValue
+                          placeholder={t(
+                            "location&language.country.placeholder",
+                          )}
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="US">
-                          {t("location&language.country.US")}
+                          {t("location&language.country.items.US")}
                         </SelectItem>
                         <SelectItem value="IT">
-                          {t("location&language.country.IT")}
+                          {t("location&language.country.items.IT")}
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -318,14 +314,18 @@ export default function ProfileForm({
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your language" />
+                        <SelectValue
+                          placeholder={t(
+                            "location&language.language.placeholder",
+                          )}
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="en">
-                          {t("location&language.language.en")}
+                          {t("location&language.language.items.en")}
                         </SelectItem>
                         <SelectItem value="it">
-                          {t("location&language.language.it")}
+                          {t("location&language.language.items.it")}
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -356,15 +356,19 @@ export default function ProfileForm({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <Label>Email Verification</Label>
+                <Label>
+                  {t("security&preferences.emailVerification.label")}
+                </Label>
                 <p className="text-sm text-muted-foreground">
-                  Your email address verification status
+                  {t("security&preferences.emailVerification.description")}
                 </p>
               </div>
               <Badge
                 variant={userData.emailVerified ? "secondary" : "destructive"}
               >
-                {userData.emailVerified ? "Verified" : "Unverified"}
+                {userData.emailVerified
+                  ? t("security&preferences.emailVerification.verified")
+                  : t("security&preferences.emailVerification.unverified")}
               </Badge>
             </div>
 
@@ -405,7 +409,7 @@ export default function ProfileForm({
                 disabled={!isEditing}
                 onClick={() => router.push("/auth/change-password")}
               >
-                {t("security&preferences.changePassword.buttonText")}
+                {t("security&preferences.changePassword.button")}
               </Button>
             </div>
 
@@ -414,10 +418,10 @@ export default function ProfileForm({
             <div className="flex items-center justify-between">
               <div>
                 <Label htmlFor="notifications">
-                  {t("security&preferences.pushNotifications.label")}
+                  {t("security&preferences.notifications.label")}
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  {t("security&preferences.pushNotifications.description")}
+                  {t("security&preferences.notifications.description")}
                 </p>
               </div>
               <Controller
@@ -467,7 +471,7 @@ export default function ProfileForm({
                   onClick={handleCancel}
                   className="bg-destructive hover:bg-destructive/90 text-zinc-100"
                 >
-                  {t("actionButtons.cancel")}
+                  {t("footer.cancel")}
                 </Button>
               )}
               <Button
@@ -477,7 +481,7 @@ export default function ProfileForm({
                 disabled={!isEditing}
               >
                 <Save className="w-4 h-4 mr-2" />
-                {t("actionButtons.saveChanges")}
+                {t("footer.save")}
               </Button>
             </>
           ) : (
@@ -487,14 +491,11 @@ export default function ProfileForm({
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Edit3 className="w-4 h-4 mr-2" />
-              {t("actionButtons.editProfile")}
+              {t("footer.edit")}
             </Button>
           )}
         </CardFooter>
       </Card>
-
-      {/* Action Buttons */}
-      <div className="flex justify-end gap-4 pt-6"></div>
     </form>
   );
 }

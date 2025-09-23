@@ -15,14 +15,14 @@ export default function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
-  const t = useTranslations("auth");
+  const t = useTranslations("app.public.auth.resetPassword.form");
 
   const handleAction = async (formData: FormData) => {
     setError("");
     setLoading(true);
 
     if (!token) {
-      setError(t("resetPassword.token.invalid"));
+      setError(t("tokenInvalid"));
       setLoading(false);
       return;
     }
@@ -31,13 +31,13 @@ export default function ResetPasswordForm() {
     const confirmPassword = formData.get("confirmPassword") as string;
 
     if (newPassword !== confirmPassword) {
-      setError(t("resetPassword.passwords.mismatch"));
+      setError(t("passwordsMismatch"));
       setLoading(false);
       return;
     }
 
-    if (newPassword.length < 6) {
-      setError(t("resetPassword.passwords.short"));
+    if (newPassword.length < 8) {
+      setError(t("passwordShort"));
       setLoading(false);
       return;
     }
@@ -47,13 +47,13 @@ export default function ResetPasswordForm() {
     try {
       const result = await resetPasswordAction(formData);
       if (result.success) {
-        toast.success(t("resetPassword.success"));
+        toast.success(t("success"));
         setTimeout(() => router.push("/auth/signin"), 2000);
       } else {
-        toast.error(result.error || t("resetPassword.serverError"));
+        toast.error(result.error as string);
       }
     } catch {
-      toast.error(t("resetPassword.serverError"));
+      toast.error(t("serverError"));
     } finally {
       setLoading(false);
     }
@@ -62,13 +62,13 @@ export default function ResetPasswordForm() {
   if (!token) {
     return (
       <div className="text-center">
-        <p className="text-destructive">{t("resetPassword.token.missing")}</p>
+        <p className="text-destructive">{t("tokenMissing")}</p>
         <Button
           type="button"
           onClick={() => router.push("/auth/forgot-password")}
           className="w-full mt-2"
         >
-          {t("resetPassword.requestNew")}
+          {t("requestNew")}
         </Button>
       </div>
     );
@@ -78,31 +78,31 @@ export default function ResetPasswordForm() {
     <form action={handleAction} className="space-y-4">
       <div>
         <Label htmlFor="newPassword" className="mb-2">
-          {t("resetPassword.newPassword")}
+          {t("newPassword.label")}
         </Label>
         <Input
           id="newPassword"
           name="newPassword"
           type="password"
-          placeholder={t("placeholder.password")}
+          placeholder={t("newPassword.placeholder")}
           required
         />
       </div>
       <div>
         <Label htmlFor="confirmPassword" className="mb-2">
-          {t("resetPassword.confirmPassword")}
+          {t("confirmPassword.label")}
         </Label>
         <Input
           id="confirmPassword"
           name="confirmPassword"
           type="password"
-          placeholder={t("placeholder.password")}
+          placeholder={t("confirmPassword.placeholder")}
           required
         />
       </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-destructive text-sm">{error}</p>}
       <Button type="submit" disabled={loading || !token} className="w-full">
-        {loading ? t("resetPassword.resetting") : t("resetPassword.submit")}
+        {loading ? t("pending") : t("submit")}
       </Button>
     </form>
   );

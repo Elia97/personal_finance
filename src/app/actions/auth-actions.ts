@@ -13,13 +13,13 @@ import {
   createUser,
   findUserById,
   updateUser,
-} from "@/app/repositories/user-repository";
+} from "@/repositories/user-repository";
 import { randomBytes } from "crypto";
 import {
   createVerificationToken,
   deleteVerificationToken,
   findVerificationToken,
-} from "../repositories/auth-repository";
+} from "../../repositories/auth-repository";
 
 export async function signUpAction(formData: FormData) {
   const { name, email, password } = Object.fromEntries(formData.entries()) as {

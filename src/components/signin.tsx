@@ -31,7 +31,7 @@ export default function SignIn(): React.JSX.Element {
     defaultValues: { rememberMe: false },
   });
 
-  const t = useTranslations("auth");
+  const t = useTranslations("app.public.auth.signIn.form.login");
 
   const onSubmit = async (data: SignInFormValues) => {
     setIsLoading(true);
@@ -44,18 +44,18 @@ export default function SignIn(): React.JSX.Element {
         redirect: false,
       });
       if (result?.error) {
-        setError(t("error.invalidCredentials"));
+        setError(t("errors.invalidCredentials"));
       } else if (result?.ok) {
         const session = await getSession();
         if (session?.user?.status !== "ACTIVE") {
-          setError(t("error.inactiveAccount"));
+          setError(t("errors.inactiveAccount"));
           return;
         }
 
         router.push(callbackUrl);
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : t("error.generic"));
+      setError(error instanceof Error ? error.message : t("errors.generic"));
     } finally {
       setIsLoading(false);
     }
@@ -66,12 +66,12 @@ export default function SignIn(): React.JSX.Element {
       {error && <div className="text-destructive text-sm">{error}</div>}
       <div className="space-y-2">
         <Label htmlFor="email" className="text-sm font-medium">
-          {t("login.email")}
+          {t("email.label")}
         </Label>
         <Input
           id="email"
           type="email"
-          placeholder={t("placeholder.email")}
+          placeholder={t("email.placeholder")}
           className=""
           {...register("email")}
         />
@@ -84,12 +84,12 @@ export default function SignIn(): React.JSX.Element {
 
       <div className="space-y-2">
         <Label htmlFor="password" className="text-sm font-medium">
-          {t("login.password")}
+          {t("password.label")}
         </Label>
         <Input
           id="password"
           type="password"
-          placeholder={t("placeholder.password")}
+          placeholder={t("password.placeholder")}
           className=" pr-10"
           {...register("password")}
         />
@@ -115,7 +115,7 @@ export default function SignIn(): React.JSX.Element {
             )}
           />
           <Label htmlFor="rememberMe" className="text-sm text-slate-600">
-            {t("login.rememberMe")}
+            {t("rememberMe")}
           </Label>
         </div>
         <Button
@@ -125,7 +125,7 @@ export default function SignIn(): React.JSX.Element {
           onClick={() => router.push("/auth/forgot-password")}
           disabled={isLoading}
         >
-          {t("login.forgotPassword")}
+          {t("forgotPassword")}
         </Button>
       </div>
 
@@ -137,10 +137,10 @@ export default function SignIn(): React.JSX.Element {
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {t("login.signingIn")}
+            {t("pending")}
           </>
         ) : (
-          t("login.signIn")
+          t("submit")
         )}
       </Button>
     </form>

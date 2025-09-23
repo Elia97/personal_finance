@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("metadata.forgot-password");
+  const t = await getTranslations("app.public.auth.forgotPassword");
   return {
     title: t("title"),
     description: t("description"),
@@ -23,14 +23,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ForgotPasswordPage(): Promise<React.JSX.Element> {
-  const t = await getTranslations("auth.forgotPassword");
+  const t = await getTranslations("app.public.auth.forgotPassword");
 
   return (
     <Card className="max-w-lg mx-auto shadow-2xl shadow-primary">
       <CardHeader className="text-center">
-        <CardTitle>
-          <h1 className="text-xl">{t("title")}</h1>
-        </CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
           <p>{t("description")}</p>
         </CardDescription>

@@ -24,14 +24,18 @@ export default function AuthButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={"outline"} className="relative size-12 rounded-full">
-          <Avatar className="size-6">
+        <Button
+          variant={"outline"}
+          className="relative size-12 rounded-full p-0"
+        >
+          <Avatar className="size-12">
             <AvatarImage
               src={session.user.image ?? ""}
               alt={session.user.name ?? "Avatar"}
+              className="object-cover"
             />
-            <AvatarFallback className="text-2xl font-serif bg-transparent">
-              {session.user.name?.charAt(0) ?? "U"}
+            <AvatarFallback className="text-sm font-semibold bg-primary/10 text-primary">
+              {session.user.name?.charAt(0).toUpperCase() ?? "U"}
             </AvatarFallback>
           </Avatar>
         </Button>
