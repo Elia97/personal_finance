@@ -2,12 +2,8 @@
 
 import { getAuthSession } from "@/lib/auth-utils";
 import { CategoriesService, GoalsService } from "@/lib/services/settings";
-import {
-  Category,
-  Goal,
-  CreateGoalData,
-  UpdateGoalData,
-} from "@/lib/types/settings";
+import type { Category, Goal } from "@/lib/services/settings";
+import type { CategoryType } from "@/generated/prisma";
 import { revalidatePath } from "next/cache";
 
 // Actions per le categorie
@@ -18,7 +14,7 @@ export async function getCategoriesAction(): Promise<Category[]> {
   }
 
   try {
-    return await CategoriesService.getAll();
+    return await CategoriesService.getAllByUserId(session.user.id);
   } catch (error) {
     console.error("Error fetching categories:", error);
     throw new Error("Failed to fetch categories");
@@ -34,14 +30,15 @@ export async function addSubcategoryAction(formData: FormData) {
   try {
     const categoryId = formData.get("categoryId") as string;
     const name = formData.get("name") as string;
+    const type = formData.get("type") as string;
 
-    if (!categoryId || !name?.trim()) {
-      return { error: "Category ID and name are required." };
+    if (!categoryId || !name?.trim() || !type) {
+      return { error: "Category ID, name and type are required." };
     }
 
-    await CategoriesService.addSubcategory(categoryId, {
+    await CategoriesService.addSubcategory(session.user.id, categoryId, {
       name: name.trim(),
-      parentId: categoryId,
+      type: type as CategoryType,
     });
 
     revalidatePath("/dashboard/settings");
@@ -59,14 +56,13 @@ export async function deleteSubcategoryAction(formData: FormData) {
   }
 
   try {
-    const categoryId = formData.get("categoryId") as string;
     const subcategoryId = formData.get("subcategoryId") as string;
 
-    if (!categoryId || !subcategoryId) {
-      return { error: "Category ID and subcategory ID are required." };
+    if (!subcategoryId) {
+      return { error: "Subcategory ID is required." };
     }
 
-    await CategoriesService.deleteSubcategory(categoryId, subcategoryId);
+    await CategoriesService.deleteSubcategory(subcategoryId);
 
     revalidatePath("/dashboard/settings");
     return { success: true };
@@ -84,7 +80,7 @@ export async function getGoalsAction(): Promise<Goal[]> {
   }
 
   try {
-    return await GoalsService.getAll();
+    return await GoalsService.getAllByUserId(session.user.id);
   } catch (error) {
     console.error("Error fetching goals:", error);
     throw new Error("Failed to fetch goals");
@@ -111,13 +107,11 @@ export async function createGoalAction(formData: FormData) {
       return { error: "Target must be a positive number." };
     }
 
-    const goalData: CreateGoalData = {
+    await GoalsService.create(session.user.id, {
       name: name.trim(),
-      target: targetValue,
+      targetAmount: targetValue,
       deadline,
-    };
-
-    await GoalsService.create(goalData);
+    });
 
     revalidatePath("/dashboard/settings");
     return { success: true };
@@ -140,12 +134,7 @@ export async function deleteGoalAction(formData: FormData) {
       return { error: "Goal ID is required." };
     }
 
-    const goalIdNumber = Number.parseInt(goalId);
-    if (isNaN(goalIdNumber)) {
-      return { error: "Invalid goal ID." };
-    }
-
-    await GoalsService.delete(goalIdNumber);
+    await GoalsService.delete(goalId);
 
     revalidatePath("/dashboard/settings");
     return { success: true };
@@ -172,12 +161,13 @@ export async function updateGoalAction(formData: FormData) {
       return { error: "Goal ID is required." };
     }
 
-    const goalIdNumber = Number.parseInt(goalId);
-    if (isNaN(goalIdNumber)) {
-      return { error: "Invalid goal ID." };
-    }
-
-    const updateData: UpdateGoalData = { id: goalIdNumber };
+    const updateData: {
+      id: string;
+      name?: string;
+      targetAmount?: number;
+      currentAmount?: number;
+      deadline?: string;
+    } = { id: goalId };
 
     if (name?.trim()) updateData.name = name.trim();
     if (target) {
@@ -185,14 +175,14 @@ export async function updateGoalAction(formData: FormData) {
       if (isNaN(targetValue) || targetValue <= 0) {
         return { error: "Target must be a positive number." };
       }
-      updateData.target = targetValue;
+      updateData.targetAmount = targetValue;
     }
     if (current) {
       const currentValue = Number.parseInt(current);
       if (isNaN(currentValue) || currentValue < 0) {
         return { error: "Current amount cannot be negative." };
       }
-      updateData.current = currentValue;
+      updateData.currentAmount = currentValue;
     }
     if (deadline) updateData.deadline = deadline;
 
@@ -218,8 +208,8 @@ export async function getSettingsDataAction(): Promise<{
 
   try {
     const [categories, goals] = await Promise.all([
-      CategoriesService.getAll(),
-      GoalsService.getAll(),
+      CategoriesService.getAllByUserId(session.user.id),
+      GoalsService.getAllByUserId(session.user.id),
     ]);
 
     return { categories, goals };

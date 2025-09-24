@@ -1,131 +1,88 @@
 "use server";
 
-import {
-  getAuthSession,
-  verifyPassword,
-  hashPassword,
-  sendVerificationEmail,
-  sendPasswordResetEmail,
-} from "@/lib/auth-utils";
-import { createUserEvent } from "@/lib/auth-events";
-import {
-  findUserByEmail,
-  createUser,
-  findUserById,
-  updateUser,
-} from "@/repositories/user-repository";
-import { randomBytes } from "crypto";
-import {
-  createVerificationToken,
-  deleteVerificationToken,
-  findVerificationToken,
-} from "../../repositories/auth-repository";
+import { getAuthSession } from "@/lib/auth-utils";
+import { AuthService, handleAuthServiceError } from "@/lib/services/auth";
 
 export async function signUpAction(formData: FormData) {
-  const { name, email, password } = Object.fromEntries(formData.entries()) as {
-    name: string;
-    email: string;
-    password: string;
-  };
+  try {
+    const { name, email, password } = Object.fromEntries(
+      formData.entries(),
+    ) as {
+      name: string;
+      email: string;
+      password: string;
+    };
 
-  const existingUser = await findUserByEmail(email);
-  if (existingUser) return { error: "User with this email already exists." };
-  const user = await createUser(name, email, password);
-  if (user.email) {
-    await createUserEvent({ user });
-    const token = randomBytes(32).toString("hex");
-    const expires = new Date(Date.now() + 604800000); // 7 days from now
-    await createVerificationToken(user.email, token, expires);
-    await sendVerificationEmail(user.email, token);
+    await AuthService.signUp({ name, email, password });
     return { success: true };
-  } else {
-    return { error: "Error creating user." };
+  } catch (error) {
+    console.error("Sign up error:", error);
+    return {
+      error: handleAuthServiceError(error, "Errore durante la registrazione"),
+    };
   }
 }
 
 export async function forgotPasswordAction(formData: FormData) {
-  const email = formData.get("email") as string;
-  if (!email) return { error: "Email is required." };
-  const user = await findUserByEmail(email);
-  if (user?.email) {
-    const resetToken = "reset_" + randomBytes(32).toString("hex");
-    const expires = new Date(Date.now() + 3600000); // 1 hour from now
-    await createVerificationToken(user.email, resetToken, expires);
-    await sendPasswordResetEmail(user.email, resetToken);
+  try {
+    const email = formData.get("email") as string;
+
+    await AuthService.forgotPassword(email);
     return { success: true };
-  } else {
-    return { error: "No user found with this email." };
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    return {
+      error: handleAuthServiceError(
+        error,
+        "Errore nell'invio dell'email di reset",
+      ),
+    };
   }
 }
 
 export async function resetPasswordAction(formData: FormData) {
-  const { token, newPassword } = Object.fromEntries(formData.entries()) as {
-    token: string;
-    newPassword: string;
-  };
-  if (!token || !newPassword) {
-    return { error: "Token and new password are required." };
-  }
-  if (!token.startsWith("reset_")) {
-    return { error: "Invalid token." };
-  }
   try {
-    const verificationToken = await findVerificationToken(token);
-    if (!verificationToken || verificationToken.expires < new Date()) {
-      return { error: "Invalid or expired token." };
-    }
+    const { token, newPassword } = Object.fromEntries(formData.entries()) as {
+      token: string;
+      newPassword: string;
+    };
 
-    const user = await findUserByEmail(verificationToken.identifier);
-    if (!user) return { error: "User not found." };
-
-    await updateUser(user.id, {
-      password: await hashPassword(newPassword),
-    }).catch(() => {
-      return { error: "Error updating password." };
-    });
-
-    await deleteVerificationToken(token).catch(() => {
-      return { error: "Error deleting token." };
-    });
-
+    await AuthService.resetPassword({ token, newPassword });
     return { success: true };
-  } catch {
-    return { error: "An error occurred while resetting the password." };
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return {
+      error: handleAuthServiceError(error, "Errore nel reset della password"),
+    };
   }
 }
 
 export async function changePasswordAction(formData: FormData) {
-  const session = await getAuthSession();
-
-  if (!session?.user?.id) {
-    return { error: "User is not authenticated." };
-  }
-
-  const { oldPassword, newPassword } = Object.fromEntries(
-    formData.entries(),
-  ) as {
-    oldPassword: string;
-    newPassword: string;
-  };
-
   try {
-    const user = await findUserById(session.user.id, {
-      id: true,
-      password: true,
+    const session = await getAuthSession();
+
+    if (!session?.user?.id) {
+      return { error: "Utente non autenticato" };
+    }
+
+    const { oldPassword, newPassword } = Object.fromEntries(
+      formData.entries(),
+    ) as {
+      oldPassword: string;
+      newPassword: string;
+    };
+
+    await AuthService.changePassword({
+      userId: session.user.id,
+      oldPassword,
+      newPassword,
     });
 
-    if (!user) return { error: "User not found." };
-    const isOldPasswordValid = await verifyPassword(
-      oldPassword,
-      user.password || "",
-    );
-
-    if (!isOldPasswordValid) return { error: "Invalid old password." };
-    await updateUser(user.id, { password: await hashPassword(newPassword) });
     return { success: true };
-  } catch (e: unknown) {
-    return e instanceof Error
-      ? { error: e.message }
-      : { error: "An error occurred." };
+  } catch (error) {
+    console.error("Change password error:", error);
+    return {
+      error: handleAuthServiceError(error, "Errore nel cambio della password"),
+    };
   }
 }

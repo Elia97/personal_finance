@@ -11,12 +11,21 @@ export default async function middleware(request: NextRequest) {
   });
 
   const cookieStore = await cookies();
-  const userLanguage =
-    cookieStore.get("user-language")?.value || token?.language;
-  const pathnameParts = request.nextUrl.pathname.split("/");
-  const currentLocale = pathnameParts[1];
+  let userLanguage = cookieStore.get("user-language")?.value || token?.language;
 
-  // If user has a preferred language and it's different from current locale, redirect
+  // Se non abbiamo una lingua dalle preferenze utente/cookie, usa quella del browser
+  if (!userLanguage) {
+    const acceptLanguage = request.headers.get("accept-language") || "";
+    // Estrai la prima lingua preferita del browser
+    const browserLang = acceptLanguage.split(",")[0]?.split("-")[0];
+    // Se la lingua del browser è supportata, usala, altrimenti usa il default
+    userLanguage = routing.locales.includes(browserLang as "en" | "it")
+      ? browserLang
+      : routing.defaultLocale;
+  }
+
+  const pathnameParts = request.nextUrl.pathname.split("/");
+  const currentLocale = pathnameParts[1]; // If user has a preferred language and it's different from current locale, redirect
   if (
     userLanguage &&
     userLanguage !== currentLocale &&
